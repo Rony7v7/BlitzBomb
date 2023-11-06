@@ -12,7 +12,11 @@ import java.io.IOException;
 public class MainApp extends Application {
     private static Stage stage;
 
-    @Override
+    /**
+	 * 
+	 * @param s
+	 */
+	@Override
     public void start(@SuppressWarnings("exports") Stage s) throws IOException {
         stage=s;
         setRoot("primary","");
