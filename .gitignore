@@ -10,7 +10,6 @@
 # .idea folder
 .idea/
 *.idea
-*.xml
 
 
 # Mobile Tools for Java (J2ME)
