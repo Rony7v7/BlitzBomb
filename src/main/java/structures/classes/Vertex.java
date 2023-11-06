@@ -45,22 +45,27 @@ public class Vertex<K,V> implements IVertex<K,V> {
         return value;
     }
 
+    @Override
     public Color getColor() {
         return color;
     }
 
+    @Override
     public int getDistance() {
         return distance;
     }
 
+    @Override
     public Vertex<K,V> getPredecessor() {
         return predecessor;
     }
 
+    @Override
     public int getTimeStampD() {
         return timeStampD;
     }
 
+    @Override
     public int getTimeStampF() {
         return timeStampF;
     }
@@ -75,27 +80,32 @@ public class Vertex<K,V> implements IVertex<K,V> {
         this.value = value;
     }
 
+    @Override
     public void setColor(Color white) {
         this.color = white;
     }
 
+    @Override
     public void setDistance(int distance) {
         this.distance = distance;
     }
 
+    @Override
     public void setPredecessor(Vertex<K,V> predecessor) {
         this.predecessor = predecessor;
     }
 
+    @Override
     public void setTimeStampD(int timeStampD) {
         this.timeStampD = timeStampD;
     }
 
+    @Override
     public void setTimeStampF(int timeStampF) {
         this.timeStampF = timeStampF;
     }
 
-
+    @Override
     public void disconnect() {
         ArrayList<Edge<K,V>> toRemove = new ArrayList<>(edges);
 
@@ -105,6 +115,7 @@ public class Vertex<K,V> implements IVertex<K,V> {
 
     }
 
+    @Override
     public void disconnectFrom(Vertex<K,V> vertex) {
         if (isConnected(vertex)) {
             this.edges.remove(getEdgeFrom(vertex));
@@ -116,10 +127,7 @@ public class Vertex<K,V> implements IVertex<K,V> {
         }
     }
 
-    public void removeEdge(Edge<K,V> edge) {
-        this.edges.remove(edge);
-    }
-
+    @Override
     public void removeEdge(Vertex<K,V> vertex) {
         for (Edge<K,V> edge : edges) {
             if (edge.getVertex2().equals(vertex)) {
@@ -129,14 +137,17 @@ public class Vertex<K,V> implements IVertex<K,V> {
         }
     }
     
+    @Override
     public ArrayList<Edge<K,V>> getEdges() {
         return edges;
     }
 
+    @Override
     public boolean isConnected(Vertex<K,V> vertex) {
         return getEdgeFrom(vertex) != null ? true:false;
     }
 
+    @Override
     public Edge<K,V> getEdgeFrom(Vertex<K,V> vertex) {
         for (Edge<K,V> edge : edges) {
             if (edge.getVertex2().equals(vertex)) {
