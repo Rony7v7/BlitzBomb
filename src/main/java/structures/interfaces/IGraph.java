@@ -1,6 +1,7 @@
 package structures.interfaces;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import structures.classes.Edge;
 import structures.classes.Vertex;
@@ -21,5 +22,10 @@ public interface IGraph<K,V> {
     public Vertex<K,V> removeVertex(Vertex<K,V> vertex);
     public Vertex<K,V> searchVertex(K key);
     public void BFS(Vertex<K,V> s);
+    public void DFS();
+    public List<Edge<K,V>> Dijkstra(Vertex<K,V> s);
+    public void FloydWarshall();
+    public void Prim(Vertex<K,V> s);
+    public void Kruskal();
 
 }

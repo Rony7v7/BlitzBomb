@@ -1,6 +1,8 @@
 package structures.classes;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.PriorityQueue;
 
 import structures.enums.Color;
 import structures.enums.GraphType;
@@ -251,6 +253,10 @@ public class GraphAM<K,V> implements IGraph<K,V> {
         return adjacents;
     }
 
+    private Edge<K,V> getEdge(Vertex<K,V> vertex1, Vertex<K,V> vertex2) {
+        return adjacencyMatrix.get(vertexList.indexOf(vertex1)).get(vertexList.indexOf(vertex2));
+    }
+
     private boolean areConnected(Vertex<K,V> vertex1, Vertex<K,V> vertex2) {
         return adjacencyMatrix.get(vertexList.indexOf(vertex1)).get(vertexList.indexOf(vertex2)) != null;
     }
@@ -266,6 +272,83 @@ public class GraphAM<K,V> implements IGraph<K,V> {
     private void disconnect(Vertex<K,V> vertex1, Vertex<K,V> vertex2) {
         edgeList.remove(adjacencyMatrix.get(vertexList.indexOf(vertex1)).get(vertexList.indexOf(vertex2)));
         adjacencyMatrix.get(vertexList.indexOf(vertex1)).set(vertexList.indexOf(vertex2), null);
+    }
+
+    @Override
+    public void DFS() {
+        for (Vertex<K,V> vertex : vertexList) {
+            vertex.setColor(Color.WHITE);
+            vertex.setPredecessor(null);
+        }
+
+        for (Vertex<K,V> vertex : vertexList) {
+            if (vertex.getColor() == Color.WHITE) {
+                DFSVisit(vertex);
+            }
+        }
+
+    }
+
+    private void DFSVisit(Vertex<K,V> u) {
+        u.setColor(Color.GRAY);
+        u.setTimeStampD(u.getTimeStampD() + 1);
+        for (Vertex<K,V> v : getAdjacents(u)) {
+            if (v.getColor() == Color.WHITE) {
+                v.setPredecessor(u);
+                DFSVisit(v);
+            }
+        }
+        u.setTimeStampF(u.getTimeStampF() + 1);
+        u.setColor(Color.BLACK);
+    }
+
+    @Override
+    public List<Edge<K,V>> Dijkstra(Vertex<K, V> s) {
+        s.setDistance(0);
+        s.setPredecessor(null);
+
+        PriorityQueue <Vertex<K,V>> q = new PriorityQueue<>();
+
+        for (Vertex<K,V> vertex : vertexList) {
+            if (!vertex.equals(s)) {
+                vertex.setDistance(Integer.MAX_VALUE);
+            }
+            vertex.setPredecessor(null);
+            q.add(vertex);
+        }
+
+        while (!q.isEmpty()) {
+            Vertex<K,V> u = q.poll();
+            for (Vertex<K,V> v : getAdjacents(u)) {
+                if (v.getDistance() > u.getDistance() + getEdge(u, v).getWeight()) {
+                    v.setDistance(u.getDistance() + getEdge(u, v).getWeight());
+                    v.setPredecessor(u);
+                    q.remove(v);
+                }
+            }
+        }
+    
+        List<Edge<K,V>> edgeList = new ArrayList<>();
+        for (Vertex<K,V> vertex : vertexList) {
+            if (vertex.getPredecessor() != null) {
+                edgeList.add(getEdge(vertex.getPredecessor(), vertex));
+            }
+        }
+
+        return edgeList;
+        
+    }
+
+    @Override
+    public void FloydWarshall() {
+    }
+
+    @Override
+    public void Prim(Vertex<K, V> s) {
+    }
+
+    @Override
+    public void Kruskal() {
     }
 
     
