@@ -139,7 +139,12 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             return null;
         }
 
-        edge.getVertex2().addEdge(new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight()));
+        Vertex<K, V> vertex1 = edge.getVertex1();
+        Vertex<K, V> vertex2 = edge.getVertex2();
+
+        vertex1.getEdges().add(edge);
+        vertex2.getEdges().add(new Edge<>(vertex2, vertex1, edge.getWeight()));
+
         edgeList.add(edge);
 
         return edge;
