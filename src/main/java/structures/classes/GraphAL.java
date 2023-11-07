@@ -97,7 +97,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
     }
 
     @Override
-    public Edge<K,V> insertEdge(Edge<K,V> edge) {
+    public Edge<K, V> insertEdge(Edge<K, V> edge) {
 
         if (!vertexList.contains(edge.getVertex1())) {
             vertexList.add(edge.getVertex1());
@@ -108,13 +108,25 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         }
 
         switch (this.type) {
-            case Simple -> {return insertSimpleEdge(edge);}
-            case Directed -> {return insertDirectedEdge(edge);}
-            case Multigraph -> {return insertMultigraphEdge(edge);}
-            case Pseudograph -> {return insertPseudographEdge(edge);}
-            case DirectedMultigraph -> {return insertMultiDirectedEdge(edge);}
+            case Simple -> {
+                return insertSimpleEdge(edge);
+            }
+            case Directed -> {
+                return insertDirectedEdge(edge);
+            }
+            case Multigraph -> {
+                return insertMultigraphEdge(edge);
+            }
+            case Pseudograph -> {
+                return insertPseudographEdge(edge);
+            }
+            case DirectedMultigraph -> {
+                return insertMultiDirectedEdge(edge);
+            }
 
-            default -> {return null;}
+            default -> {
+                return null;
+            }
         }
 
     }
@@ -129,13 +141,18 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             return null;
         }
 
-        edge.getVertex2().addEdge(new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight()));
+        Vertex<K, V> vertex1 = edge.getVertex1();
+        Vertex<K, V> vertex2 = edge.getVertex2();
+
+        vertex1.getEdges().add(edge);
+        vertex2.getEdges().add(new Edge<>(vertex2, vertex1, edge.getWeight()));
+
         edgeList.add(edge);
 
         return edge;
     }
 
-    private Edge<K, V> insertDirectedEdge(Edge<K,V> edge) {
+    private Edge<K, V> insertDirectedEdge(Edge<K, V> edge) {
 
         if (edge.getVertex1().isConnected(edge.getVertex2())) {
             return null;
@@ -147,7 +164,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return edge;
     }
 
-    private Edge<K,V> insertMultigraphEdge(Edge<K,V> edge) {
+    private Edge<K, V> insertMultigraphEdge(Edge<K, V> edge) {
 
         if (edge.getVertex2().equals(edge.getVertex1())) {
             return null;
@@ -158,15 +175,15 @@ public class GraphAL<K, V> implements IGraph<K, V> {
 
         return edge;
     }
-    
-    private Edge<K,V> insertPseudographEdge(Edge<K,V> edge) {
+
+    private Edge<K, V> insertPseudographEdge(Edge<K, V> edge) {
         edge.getVertex1().addEdge(edge);
         edge.getVertex2().addEdge(new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight()));
         edgeList.add(edge);
         return edge;
     }
 
-    private Edge<K,V> insertMultiDirectedEdge(Edge<K,V> edge) {
+    private Edge<K, V> insertMultiDirectedEdge(Edge<K, V> edge) {
         edgeList.add(edge);
         return edge;
     }

@@ -2,18 +2,17 @@ package structures.classes;
 
 import structures.interfaces.IEdge;
 
-public class Edge<K,V> implements IEdge<K,V> {
+public class Edge<K, V> implements IEdge<K, V> {
 
-    private Vertex<K,V> vertex1;
-    private Vertex<K,V> vertex2;
+    private Vertex<K, V> vertex1;
+    private Vertex<K, V> vertex2;
     private int weight;
 
     // GraphAM
-    private Edge<K,V> nextEdge;
+    private Edge<K, V> nextEdge;
 
-    public Edge(Vertex<K,V> vertex1, Vertex<K,V> vertex2, int weight) {
+    public Edge(Vertex<K, V> vertex1, Vertex<K, V> vertex2, int weight) {
         this.vertex1 = vertex1;
-        this.vertex1.addEdge(this);
         this.vertex2 = vertex2;
         this.weight = weight;
         this.nextEdge = null;
@@ -48,12 +47,12 @@ public class Edge<K,V> implements IEdge<K,V> {
     public void setWeight(int weight) {
         this.weight = weight;
     }
-    
-    public Edge<K,V> getNextEdge() {
+
+    public Edge<K, V> getNextEdge() {
         return nextEdge;
     }
 
-    public void setNextEdge(Edge<K,V> nextEdge) {
+    public void setNextEdge(Edge<K, V> nextEdge) {
         this.nextEdge = nextEdge;
     }
 }
