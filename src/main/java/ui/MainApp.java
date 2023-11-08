@@ -8,22 +8,21 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-
 public class MainApp extends Application {
     private static Stage stage;
 
     /**
-	 * 
-	 * @param s
-	 */
-	@Override
+     * 
+     * @param s
+     */
+    @Override
     public void start(@SuppressWarnings("exports") Stage s) throws IOException {
-        stage=s;
-        setRoot("primary","");
+        stage = s;
+        setRoot("primary", "");
     }
 
     static void setRoot(String fxml) throws IOException {
-        setRoot(fxml,stage.getTitle());
+        setRoot(fxml, stage.getTitle());
     }
 
     static void setRoot(String fxml, String title) throws IOException {
@@ -34,10 +33,17 @@ public class MainApp extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/fxml/"+fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/fxml/" + fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
+    public static void loadWindow(String fxml) throws IOException {
+        Scene scene = new Scene(loadFXML(fxml));
+        stage = new Stage();
+        stage.setTitle("Blitz Bomb");
+        stage.setScene(scene);
+        stage.show();
+    }
 
     public static void main(String[] args) {
         launch(args);

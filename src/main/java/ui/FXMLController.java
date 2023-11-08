@@ -1,5 +1,6 @@
 package ui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -14,7 +15,11 @@ public class FXMLController implements Initializable {
 
     @FXML
     private void btnClickAction(ActionEvent event) {
-        lblOut.setText("Hello World!");
+        try {
+            MainApp.loadWindow("MainGameScene");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
