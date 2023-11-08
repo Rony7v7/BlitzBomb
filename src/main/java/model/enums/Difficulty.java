@@ -1,4 +1,4 @@
-package Controller.enums;
+package model.enums;
 
 public enum Difficulty {
     EASY,
