@@ -8,18 +8,29 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 
-public class FXMLController implements Initializable {
+public class MainViewController implements Initializable {
 
     @FXML
     private Label lblOut;
 
     @FXML
-    private void btnClickAction(ActionEvent event) {
+    private void play(ActionEvent event) {
+        lblOut.setText("tas jugando");
         try {
-            MainApp.loadWindow("MainGameScene");
+            MainApp.showWindow("game-view");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void setDifficulty(ActionEvent event) throws IOException {
+        MainApp.showWindow("setDifficulty-view");
+    }
+
+    @FXML
+    private void setGraph(ActionEvent event) throws IOException {
+        MainApp.showWindow("setGraph-view");
     }
 
     @Override

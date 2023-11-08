@@ -10,15 +10,12 @@ import java.io.IOException;
 
 public class MainApp extends Application {
     private static Stage stage;
+    private static Stage auxStage;
 
-    /**
-     * 
-     * @param s
-     */
     @Override
     public void start(@SuppressWarnings("exports") Stage s) throws IOException {
         stage = s;
-        setRoot("primary", "");
+        setRoot("main-view", "Blitz Bomb");
     }
 
     static void setRoot(String fxml) throws IOException {
@@ -37,12 +34,20 @@ public class MainApp extends Application {
         return fxmlLoader.load();
     }
 
-    public static void loadWindow(String fxml) throws IOException {
+    public static void showWindow(String fxml) throws IOException {
+
+        if (MainApp.isAuxStageOpen()) {
+            return;
+        }
+
+        auxStage = new Stage();
         Scene scene = new Scene(loadFXML(fxml));
-        stage = new Stage();
-        stage.setTitle("Blitz Bomb");
-        stage.setScene(scene);
-        stage.show();
+        auxStage.setScene(scene);
+        auxStage.show();
+    }
+
+    private static boolean isAuxStageOpen() {
+        return auxStage != null;
     }
 
     public static void main(String[] args) {
