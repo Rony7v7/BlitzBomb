@@ -17,7 +17,7 @@ public class MainViewController implements Initializable {
     private void play(ActionEvent event) {
         lblOut.setText("tas jugando");
         try {
-            MainApp.showWindow("game-view");
+            MainApp.setRoot("game-view", "Blitz Bomb");
         } catch (IOException e) {
             e.printStackTrace();
         }
