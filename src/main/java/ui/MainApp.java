@@ -11,8 +11,9 @@ import java.io.IOException;
 
 public class MainApp extends Application {
     private static Stage stage;
+    private static Stage auxStage;
 
-	@Override
+    @Override
     public void start(@SuppressWarnings("exports") Stage s) throws IOException {
         stage=s;
         setRoot("main-view","");
@@ -34,6 +35,21 @@ public class MainApp extends Application {
         return fxmlLoader.load();
     }
 
+    public static void showWindow(String fxml) throws IOException {
+
+        if (MainApp.isAuxStageOpen()) {
+            return;
+        }
+
+        auxStage = new Stage();
+        Scene scene = new Scene(loadFXML(fxml));
+        auxStage.setScene(scene);
+        auxStage.show();
+    }
+
+    private static boolean isAuxStageOpen(){
+        return auxStage!=null;
+    }
 
     public static void main(String[] args) {
         launch(args);

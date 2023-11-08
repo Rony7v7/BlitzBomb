@@ -20,12 +20,12 @@ public class MainViewController implements Initializable {
 
     @FXML
     private void setDifficulty(ActionEvent event) throws IOException {
-        MainApp.setRoot("setDifficulty-view");
+        MainApp.showWindow("setDifficulty-view");
     }
 
     @FXML
     private void setGraph(ActionEvent event) throws IOException {
-        MainApp.setRoot("setGraph-view");
+        MainApp.showWindow("setGraph-view");
     }
 
 
