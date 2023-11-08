@@ -1,10 +1,7 @@
 package Controller;
 
 import structures.classes.Edge;
-import structures.classes.GraphAL;
-import structures.classes.GraphAM;
 import structures.classes.Vertex;
-import structures.enums.GraphType;
 import structures.interfaces.IGraph;
 import model.BombWrapper;
 
@@ -51,15 +48,6 @@ public class LevelGenerator {
             }
         }
         return graph;
-    }
-
-    public static void main(String args[]) {
-
-        LevelGenerator levelGenerator = new LevelGenerator(new GraphAL<>(GraphType.Simple));
-
-        IGraph<String, BombWrapper> randomLevel = levelGenerator.generateRandomLevel(51, 4);
-
-        levelGenerator.printGraphInConsole(randomLevel);
     }
 
     public void printGraphInConsole(IGraph<String, BombWrapper> graph) {
