@@ -6,6 +6,6 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.GameViewController">
    <children>
-      <Canvas fx:id="canvas" height="382.0" layoutX="14.0" layoutY="8.0" width="577.0" />
+      <Canvas fx:id="canvas" height="579.0" layoutX="14.0" layoutY="8.0" width="960.0" />
    </children>
 </AnchorPane>

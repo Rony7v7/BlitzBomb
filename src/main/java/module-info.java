@@ -7,4 +7,5 @@ module ui {
     opens Controller to javafx.fxml;
 
     exports ui;
+    exports model;
 }

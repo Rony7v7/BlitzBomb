@@ -3,6 +3,7 @@ package Controller;
 import structures.classes.Edge;
 import structures.classes.Vertex;
 import structures.interfaces.IGraph;
+import model.Bomb;
 import model.BombWrapper;
 
 import java.util.ArrayList;
@@ -17,14 +18,19 @@ public class LevelGenerator {
 
     }
 
-    public IGraph<String, BombWrapper> generateRandomLevel(int numVertices, int maxEdgesPerVertex) {
+    public IGraph<String, BombWrapper> generateRandomLevel(int numVertices, int maxEdgesPerVertex, double centerX,
+            double centerY) {
         Random random = new Random();
 
         ArrayList<Vertex<String, BombWrapper>> vertices = new ArrayList<>();
 
         // Agregar vértices al grafo
         for (int i = 0; i < numVertices; i++) {
-            vertices.add(graph.insertVertex("Vertex " + i, new BombWrapper()));
+            double angle = 2 * Math.PI * random.nextDouble(); // Random angle
+            double radius = random.nextDouble() * Math.min(centerX, centerY); // Random radius
+            double x = centerX + radius * Math.cos(angle); // Calculate X position
+            double y = centerY + radius * Math.sin(angle); // Calculate Y position
+            vertices.add(graph.insertVertex("Vertex " + i, new BombWrapper(x, y, new Bomb())));
         }
 
         Collections.shuffle(vertices);
