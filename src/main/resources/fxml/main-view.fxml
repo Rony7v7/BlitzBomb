@@ -14,7 +14,7 @@
         <Button layoutX="45.0" layoutY="325.0" onAction="#play" prefHeight="37.0" prefWidth="192.0" text="Play" />
       <Button layoutX="45.0" layoutY="376.0" onAction="#setDifficulty" prefHeight="37.0" prefWidth="192.0" text="Set Difficulty" />
       <Button layoutX="45.0" layoutY="430.0" onAction="#setGraph" prefHeight="37.0" prefWidth="192.0" text="Set Graph" />
-      <Text layoutX="44.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SplitBomb" wrappingWidth="385.13671875">
+      <Text layoutX="44.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BlitzBomb" wrappingWidth="385.13671875">
          <font>
             <Font name="Cooper Black" size="70.0" />
          </font>
