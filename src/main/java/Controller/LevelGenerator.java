@@ -19,10 +19,6 @@ public class LevelGenerator {
     private ArrayList<Vertex<String, BombWrapper>> row4;
     private ArrayList<Vertex<String, BombWrapper>> row5;
 
-    private ArrayList<Vertex<String, BombWrapper>> vertices = new ArrayList<>();
-
-    private static int amountOfVertecesInGrapg = 0;
-
     public LevelGenerator(IGraph<String, BombWrapper> graph) {
         this.graph = graph;
         this.row1 = new ArrayList<>();
@@ -36,11 +32,11 @@ public class LevelGenerator {
             double canvasWidth) {
         double radius = 15.0;
         int amountOfRows = 5;
-        row1 = createVertexRow(canvasHeight / 6, numVertices / amountOfRows, radius, canvasWidth);
-        row2 = createVertexRow(canvasHeight / 5, numVertices / amountOfRows, radius, canvasWidth);
-        row3 = createVertexRow(canvasHeight / 4, numVertices / amountOfRows, radius, canvasWidth);
-        row4 = createVertexRow(canvasHeight / 3, numVertices / amountOfRows, radius, canvasWidth);
-        row5 = createVertexRow(canvasHeight / 2, numVertices / amountOfRows, radius, canvasWidth);
+        row1 = createVertexRow(canvasHeight / 2 + 200, numVertices / amountOfRows, radius, canvasWidth);
+        row2 = createVertexRow(canvasHeight / 2 + 100, numVertices / amountOfRows, radius, canvasWidth);
+        row3 = createVertexRow(canvasHeight / 2, numVertices / amountOfRows, radius, canvasWidth);
+        row4 = createVertexRow(canvasHeight / 2 - 100, numVertices / amountOfRows, radius, canvasWidth);
+        row5 = createVertexRow(canvasHeight / 2 - 200, numVertices / amountOfRows, radius, canvasWidth);
         for (int i = 0; i < numVertices - 1; i++) {
             if (i < numVertices / amountOfRows) {
                 Vertex<String, BombWrapper> vertex = row1.get(i);
@@ -65,29 +61,11 @@ public class LevelGenerator {
             }
 
         }
+        linkVertices(row1, row2, 3);
+        linkVertices(row2, row3, 4);
+        linkVertices(row3, row4, 4);
+        linkVertices(row4, row5, 4);
 
-        // Collections.shuffle(vertices);
-
-        // while (vertices.size() >= maxEdgesPerVertex) {
-        // Vertex<String, BombWrapper> vertex = vertices.get(0);
-
-        // while (vertex.getEdges().size() < maxEdgesPerVertex) {
-        // int randomIndex = random.nextInt(vertices.size());
-        // int randomWeight = random.nextInt(10) + 1;
-        // if (!vertex.isConnected(vertices.get(randomIndex)) && vertex !=
-        // vertices.get(randomIndex)) {
-        // Edge<String, BombWrapper> edge = new Edge<>(vertex,
-        // vertices.get(randomIndex), randomWeight);
-        // graph.insertEdge(edge);
-        // }
-        // }
-
-        // for (int j = 0; j < vertices.size(); j++) {
-        // if (vertices.get(j).getEdges().size() >= maxEdgesPerVertex) {
-        // vertices.remove(j);
-        // }
-        // }
-        // }
         return graph;
     }
 
@@ -104,6 +82,33 @@ public class LevelGenerator {
                     new BombWrapper(positionX, positionY, new Bomb(), radius)));
         }
         return row;
+    }
+
+    private void linkVertices(ArrayList<Vertex<String, BombWrapper>> row1,
+            ArrayList<Vertex<String, BombWrapper>> row2, int maxEdgesPerVertex) {
+        Random random = new Random();
+        Collections.shuffle(row1);
+
+        while (row1.size() >= maxEdgesPerVertex) {
+            Vertex<String, BombWrapper> vertex = row1.get(0);
+
+            while (vertex.getEdges().size() < maxEdgesPerVertex) {
+                int randomIndex = random.nextInt(row2.size());
+                int randomWeight = random.nextInt(10) + 1;
+                if (!vertex.isConnected(row2.get(randomIndex))
+                        && row2.get(randomIndex).getEdges().size() < maxEdgesPerVertex) {
+                    Edge<String, BombWrapper> edge = new Edge<>(vertex,
+                            row2.get(randomIndex), randomWeight);
+                    graph.insertEdge(edge);
+                }
+            }
+
+            for (int j = 0; j < row1.size(); j++) {
+                if (row1.get(j).getEdges().size() >= maxEdgesPerVertex) {
+                    row1.remove(j);
+                }
+            }
+        }
     }
 
     public void printGraphInConsole(IGraph<String, BombWrapper> graph) {
