@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import structures.classes.Edge;
 import structures.classes.GraphAL;
 import structures.classes.Vertex;
@@ -51,6 +52,11 @@ public class GameViewController implements Initializable {
 
     private void drawGraph(IGraph<String, BombWrapper> graph) {
         for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
+            Text grade = new Text(vertex.getEdges().size()+ "");
+            grade.setX(vertex.getValue().X);
+            grade.setY(vertex.getValue().Y);
+            gc.setFill(Color.BLACK);
+            gc.fillText(grade.getText(), vertex.getValue().X, vertex.getValue().Y);
             double x = vertex.getValue().X;
             double y = vertex.getValue().Y;
             double radius = vertex.getValue().radius;
