@@ -11,40 +11,47 @@ import java.util.Collections;
 import java.util.Random;
 
 public class LevelGenerator {
-    IGraph<String, BombWrapper> graph;
+    private IGraph<String, BombWrapper> graph;
+
+    private ArrayList<Vertex<String, BombWrapper>> row1;
+    private ArrayList<Vertex<String, BombWrapper>> row2;
+    private ArrayList<Vertex<String, BombWrapper>> row3;
+    private ArrayList<Vertex<String, BombWrapper>> row4;
+    private ArrayList<Vertex<String, BombWrapper>> row5;
+
+    private ArrayList<Vertex<String, BombWrapper>> vertices = new ArrayList<>();
 
     public LevelGenerator(IGraph<String, BombWrapper> graph) {
         this.graph = graph;
-
+        this.row1 = new ArrayList<>();
+        this.row2 = new ArrayList<>();
+        this.row3 = new ArrayList<>();
+        this.row4 = new ArrayList<>();
+        this.row5 = new ArrayList<>();
     }
 
-    public IGraph<String, BombWrapper> generateRandomLevel(int numVertices, int maxEdgesPerVertex, double centerX,
-            double centerY) {
+    public IGraph<String, BombWrapper> generateRandomLevel(int numVertices, int maxEdgesPerVertex, double canvasHeight,
+            double canvasWidth) {
         Random random = new Random();
-
-        ArrayList<Vertex<String, BombWrapper>> vertices = new ArrayList<>();
+        double radius = 15.0;
 
         // Agregar vértices al grafo
         for (int i = 0; i < numVertices; i++) {
-            for (int j = 0; j < numVertices; j++) {
-                double angle = 2 * Math.PI * random.nextDouble(); // Random angle
-                double radius = random.nextDouble() * Math.min(centerX, centerY); // Random radius
-                double x = centerX + radius * Math.cos(angle); // Calculate X position
-                double y = centerY + radius * Math.sin(angle); // Calculate Y position
+            double x = random.nextDouble() * (canvasWidth - 2 * radius) + radius; // Random X position within canvas
+            double y = random.nextDouble() * (canvasHeight - 2 * radius) + radius; // Random Y position within canvas
+            // Adjust vertex position to prevent intersections
 
-                // Adjust vertex position to prevent intersections
-                for (Vertex<String, BombWrapper> existingVertex : vertices) {
-                    double distance = Math.sqrt(Math.pow(x - existingVertex.getValue().X, 2) +
-                            Math.pow(y - existingVertex.getValue().Y, 2));
-                    if (distance < radius * 2) {
-                        double newAngle = random.nextDouble() * 2 * Math.PI;
-                        x = centerX + radius * Math.cos(newAngle);
-                        y = centerY + radius * Math.sin(newAngle);
-                        break; // Break out of the loop if adjusted
-                    }
+            for (Vertex<String, BombWrapper> existingVertex : vertices) {
+                double distance = Math.sqrt(Math.pow(x - existingVertex.getValue().X, 2) +
+                        Math.pow(y - existingVertex.getValue().Y, 2));
+
+                if (distance < radius * 2) {
+                    // Random X position within canvas
+                    y = random.nextDouble() * (canvasHeight - 2 * radius) + radius; // Random Y position within canvas
                 }
-                vertices.add(graph.insertVertex("Vertex " + i, new BombWrapper(x, y, new Bomb())));
             }
+
+            vertices.add(graph.insertVertex("Vertex " + i, new BombWrapper(x, y, new Bomb(), radius)));
         }
 
         Collections.shuffle(vertices);
@@ -68,6 +75,17 @@ public class LevelGenerator {
             }
         }
         return graph;
+    }
+
+    private ArrayList<Vertex<String, BombWrapper>> createVertexRow(double positionY, int amountVertex, int radius,
+            int canvasWidth) {
+        ArrayList<Vertex<String, BombWrapper>> row = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i < amountVertex; i++) {
+            row.add(graph.insertVertex("Vertex " + i, new BombWrapper(
+                    random.nextDouble() * (canvasWidth - 2 * radius) + radius, positionY, new Bomb(), radius)));
+        }
+        return row;
     }
 
     public void printGraphInConsole(IGraph<String, BombWrapper> graph) {

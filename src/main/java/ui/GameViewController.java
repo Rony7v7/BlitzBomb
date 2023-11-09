@@ -25,16 +25,12 @@ public class GameViewController implements Initializable {
     private static final int NUM_VERTICES = 51;
     private static final int MAX_EDGES = 4;
 
-    private double centerCanvasX;
-    private double centerCanvasY;
-
     private static GraphicsContext gc;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gc = this.canvas.getGraphicsContext2D();
-        centerCanvasX = this.canvas.getWidth() / 2;
-        centerCanvasY = this.canvas.getHeight() / 2;
+
         IGraph<String, BombWrapper> graph = generateRandomGraph();
         drawGraph(graph);
     }
@@ -47,8 +43,9 @@ public class GameViewController implements Initializable {
         IGraph<String, BombWrapper> graph = new GraphAL<>(GraphType.Simple); // You need to provide the appropriate
                                                                              // graph type
         LevelGenerator levelGenerator = new LevelGenerator(graph);
-        return levelGenerator.generateRandomLevel(NUM_VERTICES, MAX_EDGES, this.centerCanvasX, this.centerCanvasY); // You
-                                                                                                                    // can
+        return levelGenerator.generateRandomLevel(NUM_VERTICES, MAX_EDGES, this.canvas.getHeight(),
+                this.canvas.getWidth()); // You
+        // can
 
     }
 
@@ -56,10 +53,10 @@ public class GameViewController implements Initializable {
         for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
             double x = vertex.getValue().X;
             double y = vertex.getValue().Y;
-
+            double radius = vertex.getValue().radius;
             // Draw vertex at (x, y) on the Canvas
             gc.setFill(Color.BLUE);
-            gc.fillOval(x - 25, y - 25, 50, 50);
+            gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
 
             for (Edge<String, BombWrapper> edge : vertex.getEdges()) {
                 double targetX = edge.getVertex2().getValue().X;
