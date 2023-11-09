@@ -2,7 +2,6 @@ package ui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -13,7 +12,7 @@ public class MainApp extends Application {
     private static Stage auxStage;
 
     @Override
-    public void start(@SuppressWarnings("exports") Stage s) throws IOException {
+    public void start(Stage s) throws IOException {
         stage = s;
         setRoot("main-view", "Blitz Bomb");
     }
@@ -22,16 +21,18 @@ public class MainApp extends Application {
         setRoot(fxml, stage.getTitle());
     }
 
-    static void setRoot(String fxml, String title) throws IOException {
-        Scene scene = new Scene(loadFXML(fxml));
+    public static FXMLLoader setRoot(String fxml, String title) throws IOException {
+        FXMLLoader loader = loadFXML(fxml);
+        Scene scene = new Scene(loader.load());
         stage.setTitle(title);
         stage.setScene(scene);
         stage.show();
+        return loader;
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/fxml/" + fxml + ".fxml"));
-        return fxmlLoader.load();
+    private static FXMLLoader loadFXML(String fxml) throws IOException {
+        return new FXMLLoader(MainApp.class.getResource("/fxml/" + fxml + ".fxml"));
+
     }
 
     public static void showWindow(String fxml) throws IOException {
@@ -41,7 +42,7 @@ public class MainApp extends Application {
         }
 
         auxStage = new Stage();
-        Scene scene = new Scene(loadFXML(fxml));
+        Scene scene = new Scene(loadFXML(fxml).load());
         auxStage.setScene(scene);
         auxStage.show();
     }
