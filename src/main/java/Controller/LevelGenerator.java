@@ -26,11 +26,25 @@ public class LevelGenerator {
 
         // Agregar vértices al grafo
         for (int i = 0; i < numVertices; i++) {
-            double angle = 2 * Math.PI * random.nextDouble(); // Random angle
-            double radius = random.nextDouble() * Math.min(centerX, centerY); // Random radius
-            double x = centerX + radius * Math.cos(angle); // Calculate X position
-            double y = centerY + radius * Math.sin(angle); // Calculate Y position
-            vertices.add(graph.insertVertex("Vertex " + i, new BombWrapper(x, y, new Bomb())));
+            for (int j = 0; j < numVertices; j++) {
+                double angle = 2 * Math.PI * random.nextDouble(); // Random angle
+                double radius = random.nextDouble() * Math.min(centerX, centerY); // Random radius
+                double x = centerX + radius * Math.cos(angle); // Calculate X position
+                double y = centerY + radius * Math.sin(angle); // Calculate Y position
+
+                // Adjust vertex position to prevent intersections
+                for (Vertex<String, BombWrapper> existingVertex : vertices) {
+                    double distance = Math.sqrt(Math.pow(x - existingVertex.getValue().X, 2) +
+                            Math.pow(y - existingVertex.getValue().Y, 2));
+                    if (distance < radius * 2) {
+                        double newAngle = random.nextDouble() * 2 * Math.PI;
+                        x = centerX + radius * Math.cos(newAngle);
+                        y = centerY + radius * Math.sin(newAngle);
+                        break; // Break out of the loop if adjusted
+                    }
+                }
+                vertices.add(graph.insertVertex("Vertex " + i, new BombWrapper(x, y, new Bomb())));
+            }
         }
 
         Collections.shuffle(vertices);
