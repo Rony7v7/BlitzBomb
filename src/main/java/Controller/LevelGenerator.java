@@ -14,7 +14,6 @@ public class LevelGenerator {
 
     public LevelGenerator(IGraph<String, BombWrapper> graph) {
         this.graph = graph;
-
     }
 
     public IGraph<String, BombWrapper> generateRandomLevel(int numVertices, int maxEdgesPerVertex) {

@@ -344,10 +344,67 @@ public class GraphAL<K, V> implements IGraph<K, V> {
     @Override
     public void FloydWarshall() {
 
+
+
     }
 
     @Override
-    public void Prim(Vertex<K, V> s) {
+    public IGraph<K, V> prim(Vertex<K, V> begin) {
+
+        // Create a new graph to store the minimum spanning tree
+        IGraph<K, V> graph = new GraphAL<>(GraphType.Simple);
+
+        // Set all the vertices to white, infinite distance and null predecessor
+        for (Vertex<K, V> vertex : vertexList) {
+            // Set the color to white to indicate that the vertex has not been visited
+            vertex.setColor(Color.WHITE);
+            // Set the distance to infinite because we don't know the distance yet
+            vertex.setDistance(Integer.MAX_VALUE);
+            // Set the predecessor to null because we don't know the predecessor yet
+            vertex.setPredecessor(null);
+        }
+
+        // Set the distance of the begin vertex to 0 because it is the first vertex 
+        begin.setDistance(0);
+
+        // Create a priority queue to store the vertices, the priority is the distance
+        PriorityQueue<Vertex<K, V>> q = new PriorityQueue<>();
+
+        // Add all the vertices to the priority queue
+        for (Vertex<K, V> vertex : vertexList) {
+            q.add(vertex);
+        }
+
+        // While the priority queue is not empty
+        while (!q.isEmpty()) {
+
+            // Get the vertex with the minimum distance
+            Vertex<K, V> u = q.poll();
+
+            // Iterate over the edges of the vertex
+            for (Edge<K, V> edge : u.getEdges()) {
+                // Get the vertex connected to the current vertex by the edge
+                Vertex<K, V> v = edge.getVertex2();
+
+                // if the priority queue contains the vertex and the distance of the vertex is greater than the edge weight
+                // because if the distance is less than the edge weight, it means that the vertex has already been visited
+                if (q.contains(v) && v.getDistance() > edge.getWeight()) {
+                    // Update the distance of the vertex with the edge weight
+                    v.setDistance(edge.getWeight());
+                    // Update the predecessor of the vertex with the current vertex
+                    v.setPredecessor(u);
+                }
+            }
+        }
+
+        // Build the minimum spanning tree
+        for (Vertex<K, V> vertex : vertexList) {
+            if (vertex.getPredecessor() != null) {
+                graph.insertEdge(new Edge<>(vertex.getPredecessor(), vertex, vertex.getDistance()));
+            }
+        }
+
+        return graph;
     }
 
     @Override

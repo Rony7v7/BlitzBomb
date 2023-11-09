@@ -41,7 +41,7 @@ public interface IGraph<K, V> {
 
     public void FloydWarshall();
 
-    public void Prim(Vertex<K, V> s);
+    public IGraph<K, V> prim(Vertex<K, V> begin);
 
     public void Kruskal();
 
