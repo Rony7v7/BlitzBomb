@@ -21,6 +21,8 @@ public class LevelGenerator {
 
     private ArrayList<Vertex<String, BombWrapper>> vertices = new ArrayList<>();
 
+    private static int amountOfVertecesInGrapg = 0;
+
     public LevelGenerator(IGraph<String, BombWrapper> graph) {
         this.graph = graph;
         this.row1 = new ArrayList<>();
@@ -32,58 +34,74 @@ public class LevelGenerator {
 
     public IGraph<String, BombWrapper> generateRandomLevel(int numVertices, int maxEdgesPerVertex, double canvasHeight,
             double canvasWidth) {
-        Random random = new Random();
         double radius = 15.0;
-
-        // Agregar vértices al grafo
-        for (int i = 0; i < numVertices; i++) {
-            double x = random.nextDouble() * (canvasWidth - 2 * radius) + radius; // Random X position within canvas
-            double y = random.nextDouble() * (canvasHeight - 2 * radius) + radius; // Random Y position within canvas
-            // Adjust vertex position to prevent intersections
-
-            for (Vertex<String, BombWrapper> existingVertex : vertices) {
-                double distance = Math.sqrt(Math.pow(x - existingVertex.getValue().X, 2) +
-                        Math.pow(y - existingVertex.getValue().Y, 2));
-
-                if (distance < radius * 2) {
-                    // Random X position within canvas
-                    y = random.nextDouble() * (canvasHeight - 2 * radius) + radius; // Random Y position within canvas
-                }
+        int amountOfRows = 5;
+        row1 = createVertexRow(canvasHeight / 6, numVertices / amountOfRows, radius, canvasWidth);
+        row2 = createVertexRow(canvasHeight / 5, numVertices / amountOfRows, radius, canvasWidth);
+        row3 = createVertexRow(canvasHeight / 4, numVertices / amountOfRows, radius, canvasWidth);
+        row4 = createVertexRow(canvasHeight / 3, numVertices / amountOfRows, radius, canvasWidth);
+        row5 = createVertexRow(canvasHeight / 2, numVertices / amountOfRows, radius, canvasWidth);
+        for (int i = 0; i < numVertices - 1; i++) {
+            if (i < numVertices / amountOfRows) {
+                Vertex<String, BombWrapper> vertex = row1.get(i);
+                vertex.setKey("Vertex " + i);
+                graph.insertVertex(vertex);
+            } else if (i < 2 * numVertices / amountOfRows) {
+                Vertex<String, BombWrapper> vertex = row2.get(i - numVertices / amountOfRows);
+                vertex.setKey("Vertex " + i);
+                graph.insertVertex(vertex);
+            } else if (i < 3 * numVertices / amountOfRows) {
+                Vertex<String, BombWrapper> vertex = row3.get(i - 2 * numVertices / amountOfRows);
+                vertex.setKey("Vertex " + i);
+                graph.insertVertex(vertex);
+            } else if (i < 4 * numVertices / amountOfRows) {
+                Vertex<String, BombWrapper> vertex = row4.get(i - 3 * numVertices / amountOfRows);
+                vertex.setKey("Vertex " + i);
+                graph.insertVertex(vertex);
+            } else if (i < 5 * numVertices / amountOfRows) {
+                Vertex<String, BombWrapper> vertex = row5.get(i - 4 * numVertices / amountOfRows);
+                vertex.setKey("Vertex " + i);
+                graph.insertVertex(vertex);
             }
 
-            vertices.add(graph.insertVertex("Vertex " + i, new BombWrapper(x, y, new Bomb(), radius)));
         }
 
-        Collections.shuffle(vertices);
+        // Collections.shuffle(vertices);
 
-        while (vertices.size() >= maxEdgesPerVertex) {
-            Vertex<String, BombWrapper> vertex = vertices.get(0);
+        // while (vertices.size() >= maxEdgesPerVertex) {
+        // Vertex<String, BombWrapper> vertex = vertices.get(0);
 
-            while (vertex.getEdges().size() < maxEdgesPerVertex) {
-                int randomIndex = random.nextInt(vertices.size());
-                int randomWeight = random.nextInt(10) + 1;
-                if (!vertex.isConnected(vertices.get(randomIndex)) && vertex != vertices.get(randomIndex)) {
-                    Edge<String, BombWrapper> edge = new Edge<>(vertex, vertices.get(randomIndex), randomWeight);
-                    graph.insertEdge(edge);
-                }
-            }
+        // while (vertex.getEdges().size() < maxEdgesPerVertex) {
+        // int randomIndex = random.nextInt(vertices.size());
+        // int randomWeight = random.nextInt(10) + 1;
+        // if (!vertex.isConnected(vertices.get(randomIndex)) && vertex !=
+        // vertices.get(randomIndex)) {
+        // Edge<String, BombWrapper> edge = new Edge<>(vertex,
+        // vertices.get(randomIndex), randomWeight);
+        // graph.insertEdge(edge);
+        // }
+        // }
 
-            for (int j = 0; j < vertices.size(); j++) {
-                if (vertices.get(j).getEdges().size() >= maxEdgesPerVertex) {
-                    vertices.remove(j);
-                }
-            }
-        }
+        // for (int j = 0; j < vertices.size(); j++) {
+        // if (vertices.get(j).getEdges().size() >= maxEdgesPerVertex) {
+        // vertices.remove(j);
+        // }
+        // }
+        // }
         return graph;
     }
 
-    private ArrayList<Vertex<String, BombWrapper>> createVertexRow(double positionY, int amountVertex, int radius,
-            int canvasWidth) {
+    private ArrayList<Vertex<String, BombWrapper>> createVertexRow(double positionY, int amountVertex, double radius,
+            double canvasWidth) {
         ArrayList<Vertex<String, BombWrapper>> row = new ArrayList<>();
-        Random random = new Random();
+        double positionX = 0;
+        double spaceBweteenVertex = (canvasWidth - 2 * radius) / amountVertex;
         for (int i = 0; i < amountVertex; i++) {
-            row.add(graph.insertVertex("Vertex " + i, new BombWrapper(
-                    random.nextDouble() * (canvasWidth - 2 * radius) + radius, positionY, new Bomb(), radius)));
+
+            positionX = spaceBweteenVertex * i + radius;
+
+            row.add(new Vertex<String, BombWrapper>("Vertex " + i,
+                    new BombWrapper(positionX, positionY, new Bomb(), radius)));
         }
         return row;
     }

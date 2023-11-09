@@ -27,6 +27,8 @@ public interface IGraph<K, V> {
 
     public Vertex<K, V> insertVertex(K key, V value);
 
+    public Vertex<K, V> insertVertex(Vertex<K, V> vertex);
+
     public Edge<K, V> insertEdge(Edge<K, V> edge);
 
     public Vertex<K, V> removeVertex(Vertex<K, V> vertex);
