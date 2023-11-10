@@ -4,7 +4,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import structures.classes.Edge;
@@ -23,31 +25,39 @@ public class GameViewController implements Initializable {
 
     @FXML
     private Canvas canvas;
-
+    @FXML
+    private AnchorPane pane;
     private static final int NUM_VERTICES = 51;
     private static final int MAX_EDGES = 4;
+
+    private IGraph<String, BombWrapper> graph;
 
     private static GraphicsContext gc;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gc = this.canvas.getGraphicsContext2D();
-
-        IGraph<String, BombWrapper> graph = generateRandomGraph();
-        drawGraph(graph);
+        this.graph = generateRandomGraph();
+        gc.setFill(Color.web("#f7efd8")); // Set your desired background color
+        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        init();
     }
 
     // Use this method to send all the data that you need.
     public void init() {
+        gc.setStroke(Color.RED);
+
+        // Draw a rectangle around the Canvas to represent the borders
+        gc.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawGraph(graph);
+
     }
 
     private IGraph<String, BombWrapper> generateRandomGraph() {
-        IGraph<String, BombWrapper> graph = new GraphAL<>(GraphType.Simple); // You need to provide the appropriate
-                                                                             // graph type
+        IGraph<String, BombWrapper> graph = new GraphAL<>(GraphType.Simple);
         LevelGenerator levelGenerator = new LevelGenerator(graph);
         return levelGenerator.generateRandomLevel(NUM_VERTICES, MAX_EDGES, this.canvas.getHeight(),
-                this.canvas.getWidth()); // You
-        // can
+                this.canvas.getWidth() + 50);
 
     }
 
@@ -80,7 +90,7 @@ public class GameViewController implements Initializable {
                 double endY = targetY - radius * Math.sin(Math.atan2(targetY - y, targetX - x));
 
                 // Draw edge from (startX, startY) to (endX, endY) on the Canvas
-                gc.setStroke(Color.GREY);
+                gc.setStroke(Color.web("#273142"));
                 gc.strokeLine(startX, startY, endX, endY);
             }
         }

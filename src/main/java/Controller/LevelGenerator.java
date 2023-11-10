@@ -37,11 +37,15 @@ public class LevelGenerator {
     public IGraph<String, BombWrapper> generateRandomLevel(int numVertices, int maxEdgesPerVertex, double canvasHeight,
             double canvasWidth) {
         int amountOfRows = 5;
-        row1 = createVertexRow(canvasHeight / 2 + 300, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
-        row2 = createVertexRow(canvasHeight / 2 + 150, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
+        row1 = createVertexRow(canvasHeight / 2 + 300, numVertices / amountOfRows,
+                VERTEX_RADIUS, canvasWidth);
+        row2 = createVertexRow(canvasHeight / 2 + 150, numVertices / amountOfRows,
+                VERTEX_RADIUS, canvasWidth);
         row3 = createVertexRow(canvasHeight / 2, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
-        row4 = createVertexRow(canvasHeight / 2 - 150, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
-        row5 = createVertexRow(canvasHeight / 2 - 300, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
+        row4 = createVertexRow(canvasHeight / 2 - 150, numVertices / amountOfRows,
+                VERTEX_RADIUS, canvasWidth);
+        row5 = createVertexRow(canvasHeight / 2 - 300, numVertices / amountOfRows,
+                VERTEX_RADIUS, canvasWidth);
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
@@ -53,19 +57,23 @@ public class LevelGenerator {
                 vertex.setKey("Vertex " + i);
                 graph.insertVertex(vertex);
             } else if (i < 2 * numVertices / amountOfRows) {
-                Vertex<String, BombWrapper> vertex = row2.get(i - numVertices / amountOfRows);
+                Vertex<String, BombWrapper> vertex = row2.get(i - numVertices /
+                        amountOfRows);
                 vertex.setKey("Vertex " + i);
                 graph.insertVertex(vertex);
             } else if (i < 3 * numVertices / amountOfRows) {
-                Vertex<String, BombWrapper> vertex = row3.get(i - 2 * numVertices / amountOfRows);
+                Vertex<String, BombWrapper> vertex = row3.get(i - 2 * numVertices /
+                        amountOfRows);
                 vertex.setKey("Vertex " + i);
                 graph.insertVertex(vertex);
             } else if (i < 4 * numVertices / amountOfRows) {
-                Vertex<String, BombWrapper> vertex = row4.get(i - 3 * numVertices / amountOfRows);
+                Vertex<String, BombWrapper> vertex = row4.get(i - 3 * numVertices /
+                        amountOfRows);
                 vertex.setKey("Vertex " + i);
                 graph.insertVertex(vertex);
             } else if (i < 5 * numVertices / amountOfRows) {
-                Vertex<String, BombWrapper> vertex = row5.get(i - 4 * numVertices / amountOfRows);
+                Vertex<String, BombWrapper> vertex = row5.get(i - 4 * numVertices /
+                        amountOfRows);
                 vertex.setKey("Vertex " + i);
                 graph.insertVertex(vertex);
             }
@@ -86,6 +94,7 @@ public class LevelGenerator {
         }
 
         return graph;
+
     }
 
     private void generateRandomBombs(List<Vertex<String, BombWrapper>> row, double percentage) {
