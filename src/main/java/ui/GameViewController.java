@@ -10,7 +10,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import structures.classes.Edge;
 import structures.classes.GraphAL;
-import structures.classes.GraphAM;
+// import structures.classes.GraphAM;
 import structures.classes.Vertex;
 import structures.enums.GraphType;
 import structures.interfaces.IGraph;
