@@ -22,6 +22,7 @@ public class LevelGenerator {
     private ArrayList<List<Vertex<String, BombWrapper>>> rows;
 
     private static final double VERTEX_RADIUS = 20.0;
+    private static final double BOMBS_PERCENTAGE = 0.5;
 
     public LevelGenerator(IGraph<String, BombWrapper> graph) {
         this.graph = graph;
@@ -81,7 +82,27 @@ public class LevelGenerator {
             connectRow(rows.get(i));
         }
 
+        for (int i = 0; i < 5; i++) {
+            generateRandomBombs(rows.get(i), BOMBS_PERCENTAGE);
+        }
+
         return graph;
+    }
+
+    private void generateRandomBombs(List<Vertex<String, BombWrapper>> row, double percentage) {
+        Random random = new Random();
+
+        for (int i = 0; i < (int) (row.size() * percentage); i++) {
+            boolean hasBomb = false;
+            do {
+                int randomIndex = random.nextInt(row.size());
+                if (row.get(randomIndex).getValue().getBomb() == null) {
+                    row.get(randomIndex).getValue().setBomb(new Bomb());
+                    hasBomb = true;
+                }
+            } while (!hasBomb);
+        }
+
     }
 
     private ArrayList<Vertex<String, BombWrapper>> createVertexRow(double positionY, int amountVertex, double radius,
@@ -94,7 +115,7 @@ public class LevelGenerator {
             positionX = spaceBweteenVertex * i + radius;
 
             row.add(new Vertex<String, BombWrapper>("Vertex " + i,
-                    new BombWrapper(positionX, positionY, new Bomb(), radius)));
+                    new BombWrapper(positionX, positionY, null, radius)));
         }
         return row;
     }

@@ -58,7 +58,7 @@ public class GameViewController implements Initializable {
             double y = vertex.getValue().Y;
             double radius = vertex.getValue().radius;
             // Draw vertex at (x, y) on the Canvas
-            gc.drawImage(vertex.getValue().idle, x - radius, y - radius, radius * 2, radius * 2);
+            gc.drawImage(vertex.getValue().getIdle(), x - radius, y - radius, radius * 2 + 5, radius * 2 + 5);
 
             Text grade = new Text(vertex.getEdges().size() + "");
             grade.setX(vertex.getValue().X);
@@ -74,9 +74,15 @@ public class GameViewController implements Initializable {
                 double targetX = edge.getVertex2().getValue().X;
                 double targetY = edge.getVertex2().getValue().Y;
 
-                // Draw edge from (x, y) to (targetX, targetY) on the Canvas
+                // Calculate the coordinates to start and end the line at the vertex borders
+                double startX = x + radius * Math.cos(Math.atan2(targetY - y, targetX - x));
+                double startY = y + radius * Math.sin(Math.atan2(targetY - y, targetX - x));
+                double endX = targetX - radius * Math.cos(Math.atan2(targetY - y, targetX - x));
+                double endY = targetY - radius * Math.sin(Math.atan2(targetY - y, targetX - x));
+
+                // Draw edge from (startX, startY) to (endX, endY) on the Canvas
                 gc.setStroke(Color.GREY);
-                gc.strokeLine(x, y, targetX, targetY);
+                gc.strokeLine(startX, startY, endX, endY);
             }
         }
     }

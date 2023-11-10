@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 
 public class BombWrapper {
     private Bomb bomb;
-    public Image idle;
+    private Image idle;
     public double X;
     public double Y;
 
@@ -18,14 +18,18 @@ public class BombWrapper {
         this.idle = new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm());
     }
 
-    public BombWrapper(double x, double y, double radius) {
-        this.X = x;
-        this.Y = y;
-        this.bomb = null;
-        this.radius = radius;
+    public Image getIdle() {
+        if (this.bomb == null) {
+            return new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm());
+        }
+        return new Image(getClass().getResource("/assets/Graph/bomb.png").toExternalForm());
     }
 
     public Bomb getBomb() {
         return bomb;
+    }
+
+    public void setBomb(Bomb bomb) {
+        this.bomb = bomb;
     }
 }
