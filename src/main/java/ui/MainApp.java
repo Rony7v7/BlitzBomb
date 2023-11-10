@@ -26,6 +26,7 @@ public class MainApp extends Application {
         Scene scene = new Scene(loader.load());
         stage.setTitle(title);
         stage.setScene(scene);
+        stage.setFullScreen(true);
         stage.show();
         return loader;
     }
