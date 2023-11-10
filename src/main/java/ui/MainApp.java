@@ -57,11 +57,11 @@ public class MainApp extends Application {
         launch(args);
     }
 
-    public static void setDifficulty(@SuppressWarnings("exports")Difficulty difficulty) {
+    public static void setDifficulty(Difficulty difficulty) {
         auxStage.close();
     }
 
-    public static void setGraph(@SuppressWarnings("exports")String graph) {
+    public static void setGraph(String graph) {
         auxStage.close();
     }
 

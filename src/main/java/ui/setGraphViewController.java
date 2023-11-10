@@ -48,12 +48,12 @@ public class setGraphViewController implements Initializable {
     }
 
     @FXML
-    public void save(@SuppressWarnings("exports") ActionEvent event) {
+    public void save( ActionEvent event) {
         MainApp.setGraph(graphSpinner.getValue());
     }
 
     @FXML
-    public void cancel(@SuppressWarnings("exports") ActionEvent event) {
+    public void cancel(ActionEvent event) {
         MainApp.setGraph("ADJACENCY LIST");
     }
     

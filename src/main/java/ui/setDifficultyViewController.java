@@ -53,13 +53,13 @@ public class setDifficultyViewController implements Initializable {
     }
 
     @FXML
-    public void save(@SuppressWarnings("exports") ActionEvent event) {
+    public void save( ActionEvent event) {
         Difficulty difficulty = difficultySpinner.getValue();
         MainApp.setDifficulty(difficulty);
     }
 
     @FXML
-    public void cancel(@SuppressWarnings("exports") ActionEvent event) {
+    public void cancel(ActionEvent event) {
         MainApp.setDifficulty(Difficulty.MEDIUM);
     }
     
