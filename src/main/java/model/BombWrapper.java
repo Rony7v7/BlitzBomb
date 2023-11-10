@@ -1,7 +1,10 @@
 package model;
 
+import javafx.scene.image.Image;
+
 public class BombWrapper {
     private Bomb bomb;
+    public Image idle;
     public double X;
     public double Y;
 
@@ -12,6 +15,7 @@ public class BombWrapper {
         this.Y = y;
         this.bomb = bomb;
         this.radius = radius;
+        this.idle = new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm());
     }
 
     public BombWrapper(double x, double y, double radius) {
