@@ -304,7 +304,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
     }
 
     @Override
-    public List<Edge<K,V>> Dijkstra(Vertex<K, V> s) {
+    public List<Edge<K, V>> Dijkstra(Vertex<K, V> s) {
         s.setDistance(0);
 
         PriorityQueue<Vertex<K, V>> q = new PriorityQueue<>();
@@ -329,7 +329,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             }
         }
 
-        List<Edge<K,V>> edgeList = new ArrayList<>();
+        List<Edge<K, V>> edgeList = new ArrayList<>();
 
         for (Vertex<K, V> vertex : vertexList) {
             if (!vertex.equals(s)) {
@@ -353,6 +353,16 @@ public class GraphAL<K, V> implements IGraph<K, V> {
     @Override
     public void Kruskal() {
 
+    }
+
+    @Override
+    public Vertex<K, V> insertVertex(Vertex<K, V> vertex) {
+        if (searchVertex(vertex.getKey()) != null) {
+            return null;
+        }
+
+        this.vertexList.add(vertex);
+        return vertex;
     }
 
 }

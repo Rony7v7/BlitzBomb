@@ -1,12 +1,13 @@
 package ui;
 
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import structures.classes.Edge;
 import structures.classes.GraphAL;
 import structures.classes.Vertex;
@@ -21,49 +22,63 @@ import Controller.LevelGenerator;
 
 public class GameViewController implements Initializable {
 
+    @FXML
+    private Canvas canvas;
+
+    private static final int NUM_VERTICES = 51;
+    private static final int MAX_EDGES = 4;
+
+    private static GraphicsContext gc;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        gc = this.canvas.getGraphicsContext2D();
 
         IGraph<String, BombWrapper> graph = generateRandomGraph();
-        displayGraph(graph);
+        drawGraph(graph);
+    }
+
+    // Use this method to send all the data that you need.
+    public void init() {
     }
 
     private IGraph<String, BombWrapper> generateRandomGraph() {
         IGraph<String, BombWrapper> graph = new GraphAL<>(GraphType.Simple); // You need to provide the appropriate
                                                                              // graph type
         LevelGenerator levelGenerator = new LevelGenerator(graph);
-        return levelGenerator.generateRandomLevel(10, 4); // You can adjust the number of vertices and edges as needed
+        return levelGenerator.generateRandomLevel(NUM_VERTICES, MAX_EDGES, this.canvas.getHeight(),
+                this.canvas.getWidth()); // You
+        // can
+
     }
 
-    private void displayGraph(IGraph<String, BombWrapper> graph) {
-        Pane root = new Pane();
-
+    private void drawGraph(IGraph<String, BombWrapper> graph) {
         for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
-            double centerX = Math.random() * 400;
-            double centerY = Math.random() * 400;
+            double x = vertex.getValue().X;
+            double y = vertex.getValue().Y;
+            double radius = vertex.getValue().radius;
+            // Draw vertex at (x, y) on the Canvas
+            gc.drawImage(vertex.getValue().idle, x - radius, y - radius, radius * 2, radius * 2);
 
-            Circle circle = new Circle(centerX, centerY, 20);
-            Text text = new Text(centerX - 5, centerY + 5, vertex.getKey());
-            root.getChildren().addAll(circle, text);
+            Text grade = new Text(vertex.getEdges().size() + "");
+            grade.setX(vertex.getValue().X);
+            grade.setY(vertex.getValue().Y + 30);
+            grade.setFont(Font.font(20));
+            gc.setFill(Color.BLACK);
+            gc.fillText(grade.getText(), vertex.getValue().X, vertex.getValue().Y);
+
+            // Image image = new
+            // Image(getClass().getResource("/assets/Graph/edge.png").toExternalForm());
+
+            for (Edge<String, BombWrapper> edge : vertex.getEdges()) {
+                double targetX = edge.getVertex2().getValue().X;
+                double targetY = edge.getVertex2().getValue().Y;
+
+                // Draw edge from (x, y) to (targetX, targetY) on the Canvas
+                gc.setStroke(Color.GREY);
+                gc.strokeLine(x, y, targetX, targetY);
+            }
         }
-
-        for (Edge<String, BombWrapper> edge : graph.getEdgeList()) {
-            Vertex<String, BombWrapper> vertex1 = edge.getVertex1();
-            Vertex<String, BombWrapper> vertex2 = edge.getVertex2();
-            double x1 = Math.random() * 400; // Random x position for vertex 1
-            double y1 = Math.random() * 400; // Random y position for vertex 1
-            double x2 = Math.random() * 400; // Random x position for vertex 2
-            double y2 = Math.random() * 400;
-
-            Line line = new Line(x1, y1, x2, y2);
-            root.getChildren().add(line);
-        }
-
-        Scene scene = new Scene(root, 800, 600);
-
-        Stage stage = new Stage();
-        stage.setTitle("Graph Visualization");
-        stage.setScene(scene);
-        stage.show();
     }
+
 }
