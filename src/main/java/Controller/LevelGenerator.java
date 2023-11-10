@@ -37,11 +37,11 @@ public class LevelGenerator {
     public IGraph<String, BombWrapper> generateRandomLevel(int numVertices, int maxEdgesPerVertex, double canvasHeight,
             double canvasWidth) {
         int amountOfRows = 5;
-        row1 = createVertexRow(canvasHeight / 2 + 200, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
-        row2 = createVertexRow(canvasHeight / 2 + 100, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
+        row1 = createVertexRow(canvasHeight / 2 + 300, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
+        row2 = createVertexRow(canvasHeight / 2 + 150, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
         row3 = createVertexRow(canvasHeight / 2, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
-        row4 = createVertexRow(canvasHeight / 2 - 100, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
-        row5 = createVertexRow(canvasHeight / 2 - 200, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
+        row4 = createVertexRow(canvasHeight / 2 - 150, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
+        row5 = createVertexRow(canvasHeight / 2 - 300, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
