@@ -6,11 +6,11 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import structures.classes.Edge;
 import structures.classes.GraphAL;
+import structures.classes.GraphAM;
 import structures.classes.Vertex;
 import structures.enums.GraphType;
 import structures.interfaces.IGraph;
@@ -54,7 +54,9 @@ public class GameViewController implements Initializable {
     }
 
     private IGraph<String, BombWrapper> generateRandomGraph() {
+
         IGraph<String, BombWrapper> graph = new GraphAL<>(GraphType.Simple);
+
         LevelGenerator levelGenerator = new LevelGenerator(graph);
         return levelGenerator.generateRandomLevel(NUM_VERTICES, MAX_EDGES, this.canvas.getHeight(),
                 this.canvas.getWidth() + 50);

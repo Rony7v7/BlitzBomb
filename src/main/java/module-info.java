@@ -8,4 +8,5 @@ module ui {
 
     exports ui;
     exports model;
+    exports model.enums;
 }

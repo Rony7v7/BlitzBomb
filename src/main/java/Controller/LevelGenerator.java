@@ -5,6 +5,7 @@ import structures.classes.Vertex;
 import structures.interfaces.IGraph;
 import model.Bomb;
 import model.BombWrapper;
+import model.enums.TypeOfNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,8 @@ public class LevelGenerator {
 
         }
 
+        createSpawnAndEnd();
+
         linkVertices(row1, row2);
         linkVertices(row2, row3);
         linkVertices(row3, row4);
@@ -97,13 +100,23 @@ public class LevelGenerator {
 
     }
 
+    private void createSpawnAndEnd() {
+        graph.getVertexList().get(0).getValue().setType(TypeOfNode.SPAWN);
+        graph.getVertexList().get(graph.getVertexList().size() - 1).getValue().setType(TypeOfNode.END);
+    }
+
     private void generateRandomBombs(List<Vertex<String, BombWrapper>> row, double percentage) {
         Random random = new Random();
 
         for (int i = 0; i < (int) (row.size() * percentage); i++) {
+
             boolean hasBomb = false;
             do {
                 int randomIndex = random.nextInt(row.size());
+                if (row.get(randomIndex).getValue().getType().equals(TypeOfNode.SPAWN)
+                        || row.get(randomIndex).getValue().getType().equals(TypeOfNode.END)) {
+                    break;
+                }
                 if (row.get(randomIndex).getValue().getBomb() == null) {
                     row.get(randomIndex).getValue().setBomb(new Bomb());
                     hasBomb = true;
