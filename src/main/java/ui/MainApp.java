@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.enums.Difficulty;
 
 import java.io.IOException;
 
@@ -37,10 +38,11 @@ public class MainApp extends Application {
 
     public static void showWindow(String fxml) throws IOException {
 
-        if (MainApp.isAuxStageOpen()) {
-            return;
+        //Cerrar ventana auxiliar si esta abierta
+        if (isAuxStageOpen()) {
+            auxStage.close();
         }
-
+        
         auxStage = new Stage();
         Scene scene = new Scene(loadFXML(fxml).load());
         auxStage.setScene(scene);
@@ -53,6 +55,14 @@ public class MainApp extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public static void setDifficulty(@SuppressWarnings("exports")Difficulty difficulty) {
+        auxStage.close();
+    }
+
+    public static void setGraph(@SuppressWarnings("exports")String graph) {
+        auxStage.close();
     }
 
 }
