@@ -20,7 +20,7 @@ public class BombWrapper {
 
     public Image getIdle() {
         if (this.bomb == null) {
-            return new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm());
+            return idle;
         }
         return new Image(getClass().getResource("/assets/Graph/bomb.png").toExternalForm());
     }
