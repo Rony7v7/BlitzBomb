@@ -1,6 +1,8 @@
 package Controller;
 
 import structures.classes.Edge;
+import structures.classes.GraphAL;
+import structures.classes.GraphAM;
 import structures.classes.Vertex;
 import structures.interfaces.IGraph;
 import model.Bomb;
@@ -83,10 +85,17 @@ public class LevelGenerator {
 
         createSpawnAndEnd();
 
-        linkVertices(row1, row2);
-        linkVertices(row2, row3);
-        linkVertices(row3, row4);
-        linkVertices(row4, row5);
+        if (graph instanceof GraphAL) {
+            linkVerticesAL(row1, row2);
+            linkVerticesAL(row2, row3);
+            linkVerticesAL(row3, row4);
+            linkVerticesAL(row4, row5);
+        } else {
+            linkVerticesAM(row1, row2);
+            linkVerticesAM(row2, row3);
+            linkVerticesAM(row3, row4);
+            linkVerticesAM(row4, row5);
+        }
 
         for (int i = 0; i < 5; i++) {
             connectRow(rows.get(i));
@@ -158,7 +167,7 @@ public class LevelGenerator {
         }
     }
 
-    private void linkVertices(ArrayList<Vertex<String, BombWrapper>> row1,
+    private void linkVerticesAL(ArrayList<Vertex<String, BombWrapper>> row1,
             ArrayList<Vertex<String, BombWrapper>> row2) {
 
         Random random = new Random();
@@ -180,6 +189,42 @@ public class LevelGenerator {
 
         }
 
+    }
+
+    private void linkVerticesAM(ArrayList<Vertex<String, BombWrapper>> row1,
+            ArrayList<Vertex<String, BombWrapper>> row2) {
+
+        Random random = new Random();
+
+        for (int i = 0; i < row1.size(); i++) {
+            boolean isLinked = false;
+            Vertex<String, BombWrapper> vertex = row1.get(i);
+            do {
+
+                int randomIndex = random.nextInt(row2.size());
+                int randomWeight = random.nextInt(10) + 1;
+                if (calculateAmountOfConnections(row2.get(randomIndex)) < 1) {
+                    Edge<String, BombWrapper> edge = new Edge<>(vertex,
+                            row2.get(randomIndex), randomWeight);
+                    graph.insertEdge(edge);
+                    isLinked = true;
+                }
+            } while (!isLinked);
+
+        }
+    }
+
+    private int calculateAmountOfConnections(Vertex<String, BombWrapper> vertex) {
+        int vertexIndex = graph.getVertexList().indexOf(vertex);
+        int amountOfConnections = 0;
+        GraphAM<String, BombWrapper> graphAM = (GraphAM<String, BombWrapper>) graph;
+        ArrayList<Edge<String, BombWrapper>> edges = graphAM.getAdjacencyMatrix().get(vertexIndex);
+        for (Edge<String, BombWrapper> edge : edges) {
+            if (edge != null) {
+                amountOfConnections++;
+            }
+        }
+        return amountOfConnections;
     }
 
     public void printGraphInConsole(IGraph<String, BombWrapper> graph) {

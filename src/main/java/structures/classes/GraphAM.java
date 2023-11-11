@@ -20,14 +20,11 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         this.edgeList = new ArrayList<>();
         this.adjacencyMatrix = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
-            adjacencyMatrix.add(new ArrayList<>());
-            for (int j = 0; j < 10; j++) {
-                adjacencyMatrix.get(i).add(null);
-            }
-        }
-
         this.type = type;
+    }
+
+    public ArrayList<ArrayList<Edge<K, V>>> getAdjacencyMatrix() {
+        return adjacencyMatrix;
     }
 
     @Override
@@ -79,6 +76,18 @@ public class GraphAM<K, V> implements IGraph<K, V> {
 
         Vertex<K, V> vertex = new Vertex<K, V>(key, value);
 
+        // Add new row to adjacency matrix
+        ArrayList<Edge<K, V>> newRow = new ArrayList<>();
+        for (int i = 0; i < adjacencyMatrix.size(); i++) {
+            newRow.add(null);
+        }
+        adjacencyMatrix.add(newRow);
+
+        // Add new column to adjacency matrix
+        for (ArrayList<Edge<K, V>> row : adjacencyMatrix) {
+            row.add(null);
+        }
+
         this.vertexList.add(vertex);
         return vertex;
     }
@@ -128,10 +137,15 @@ public class GraphAM<K, V> implements IGraph<K, V> {
             return null;
         }
 
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1())).set(vertexList.indexOf(edge.getVertex2()), edge);
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex2())).set(vertexList.indexOf(edge.getVertex1()),
-                new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight()));
+        int index1 = vertexList.indexOf(edge.getVertex1());
+        int index2 = vertexList.indexOf(edge.getVertex2());
 
+        if (index1 == -1 || index2 == -1) {
+            return null;
+        }
+
+        adjacencyMatrix.get(index1).set(index2, edge);
+        adjacencyMatrix.get(index2).set(index1, new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight()));
         edgeList.add(edge);
 
         return edge;
@@ -373,6 +387,18 @@ public class GraphAM<K, V> implements IGraph<K, V> {
     public Vertex<K, V> insertVertex(Vertex<K, V> vertex) {
         if (searchVertex(vertex.getKey()) != null) {
             return null;
+        }
+
+        // Add new row to adjacency matrix
+        ArrayList<Edge<K, V>> newRow = new ArrayList<>();
+        for (int i = 0; i < adjacencyMatrix.size(); i++) {
+            newRow.add(null);
+        }
+        adjacencyMatrix.add(newRow);
+
+        // Add new column to adjacency matrix
+        for (ArrayList<Edge<K, V>> row : adjacencyMatrix) {
+            row.add(null);
         }
 
         this.vertexList.add(vertex);
