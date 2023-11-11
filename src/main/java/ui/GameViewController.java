@@ -30,7 +30,6 @@ public class GameViewController implements Initializable {
     @FXML
     private AnchorPane pane;
     private static final int NUM_VERTICES = 51;
-    private static final int MAX_EDGES = 4;
 
     private IGraph<String, BombWrapper> graph;
 
@@ -63,7 +62,7 @@ public class GameViewController implements Initializable {
         }
 
         LevelGenerator levelGenerator = new LevelGenerator(graph);
-        return levelGenerator.generateRandomLevel(NUM_VERTICES, MAX_EDGES, this.canvas.getHeight(),
+        return levelGenerator.generateRandomLevel(NUM_VERTICES, this.canvas.getHeight(),
                 this.canvas.getWidth() + 50);
 
     }
@@ -82,7 +81,6 @@ public class GameViewController implements Initializable {
         System.out.println(matrix.size());
         // Draw vertex
         for (int i = 0; i < matrix.size(); i++) {
-            System.out.println("Vertice:" + auxGraph.getVertexList().get(i).getKey());
             double x = auxGraph.getVertexList().get(i).getValue().X;
             double y = auxGraph.getVertexList().get(i).getValue().Y;
             double radius = auxGraph.getVertexList().get(i).getValue().radius;

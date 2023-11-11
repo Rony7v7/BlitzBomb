@@ -19,7 +19,7 @@ public class GraphALTest {
     public GraphAL<Integer, Integer> graph;
 
     public void setupSimple1() {
-        graph = new GraphAL<Integer,Integer>(GraphType.Simple);
+        graph = new GraphAL<Integer, Integer>(GraphType.Simple);
     }
 
     public void setupSimple2() {
@@ -65,12 +65,12 @@ public class GraphALTest {
         graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
     }
 
-    public void setup3(){
-        Vertex<Integer, Integer> vertex1 = new Vertex<Integer,Integer>(1, 100);
-        Vertex<Integer, Integer> vertex2 = new Vertex<Integer,Integer>(2, 200);
+    public void setup3() {
+        Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 100);
+        Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 200);
 
         graph.insertEdge(new Edge<>(vertex1, vertex2, 10));
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 20));
+        graph.insertEdge(new Edge<>(vertex2, vertex1, 20));
     }
 
     public void setUp4() {
@@ -252,11 +252,10 @@ public class GraphALTest {
     @Test
     public void testInsertEdgeAndIsConnectedDirectedGraph() {
         setupDirected1();
-        
+
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 100);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 200);
         Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 300);
-        
 
         Edge<Integer, Integer> edge12 = new Edge<>(vertex1, vertex2, 10);
         Edge<Integer, Integer> edge23 = new Edge<>(vertex2, vertex3, 20);
@@ -300,8 +299,8 @@ public class GraphALTest {
 
         Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
         Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
-
-        assertTrue(vertex1.isConnected(vertex2));
+        boolean connected = vertex1.isConnected(vertex2);
+        assertEquals(true, connected);
         assertFalse(vertex2.isConnected(vertex1));
     }
 
@@ -310,18 +309,18 @@ public class GraphALTest {
         setUp5();
 
         int[][] expectedDistances = {
-                {0, 8, 13, 9, 2},
-                {8, 0, 5, 11, 5},
-                {13, 5, 0, 6, 11},
-                {9, 11, 6, 0, 6},
-                {2, 5, 11, 6, 0}
+                { 0, 8, 13, 9, 2 },
+                { 8, 0, 5, 11, 5 },
+                { 13, 5, 0, 6, 11 },
+                { 9, 11, 6, 0, 6 },
+                { 2, 5, 11, 6, 0 }
         };
 
         int[][] distances = graph.floydWarshall();
 
         assertEquals(expectedDistances.length, distances.length);
         assertEquals(expectedDistances[0].length, distances[0].length);
- 
+
     }
 
     @Test
@@ -330,11 +329,11 @@ public class GraphALTest {
         setUp5();
 
         int[][] expectedDistances = {
-                {0, 8, 13, 9, 2},
-                {Integer.MAX_VALUE, 0, 5, 11, 5},
-                {Integer.MAX_VALUE, Integer.MAX_VALUE, 0, 6, 11},
-                {Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, 0, 6},
-                {Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, 0}
+                { 0, 8, 13, 9, 2 },
+                { Integer.MAX_VALUE, 0, 5, 11, 5 },
+                { Integer.MAX_VALUE, Integer.MAX_VALUE, 0, 6, 11 },
+                { Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, 0, 6 },
+                { Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, 0 }
         };
 
         int[][] distances = graph.floydWarshall();
@@ -347,11 +346,11 @@ public class GraphALTest {
         setUp5();
 
         int[][] expectedDistances = {
-                {0, 8, 13, 9, 2},
-                {Integer.MAX_VALUE, 0, 5, 11, 5},
-                {Integer.MAX_VALUE, Integer.MAX_VALUE, 0, 6, 11},
-                {Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, 0, 6},
-                {Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, 0}
+                { 0, 8, 13, 9, 2 },
+                { Integer.MAX_VALUE, 0, 5, 11, 5 },
+                { Integer.MAX_VALUE, Integer.MAX_VALUE, 0, 6, 11 },
+                { Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, 0, 6 },
+                { Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, 0 }
         };
 
         int[][] distances = graph.floydWarshall();
@@ -472,8 +471,5 @@ public class GraphALTest {
         assertNotNull(mstVertex4);
         assertNotNull(mstVertex5);
     }
-
-
-
 
 }

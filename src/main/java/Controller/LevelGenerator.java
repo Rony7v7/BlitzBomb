@@ -1,53 +1,41 @@
 package Controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import model.Bomb;
+import model.BombWrapper;
+import model.enums.TypeOfNode;
 import structures.classes.Edge;
 import structures.classes.GraphAL;
 import structures.classes.GraphAM;
 import structures.classes.Vertex;
 import structures.interfaces.IGraph;
-import model.Bomb;
-import model.BombWrapper;
-import model.enums.TypeOfNode;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class LevelGenerator {
-    private IGraph<String, BombWrapper> graph;
-
-    private ArrayList<Vertex<String, BombWrapper>> row1;
-    private ArrayList<Vertex<String, BombWrapper>> row2;
-    private ArrayList<Vertex<String, BombWrapper>> row3;
-    private ArrayList<Vertex<String, BombWrapper>> row4;
-    private ArrayList<Vertex<String, BombWrapper>> row5;
-    private ArrayList<List<Vertex<String, BombWrapper>>> rows;
-
+    private final IGraph<String, BombWrapper> graph;
+    private final List<List<Vertex<String, BombWrapper>>> rows;
     private static final double VERTEX_RADIUS = 20.0;
     private static final double BOMBS_PERCENTAGE = 0.5;
 
     public LevelGenerator(IGraph<String, BombWrapper> graph) {
         this.graph = graph;
-        this.row1 = new ArrayList<>();
-        this.row2 = new ArrayList<>();
-        this.row3 = new ArrayList<>();
-        this.row4 = new ArrayList<>();
-        this.row5 = new ArrayList<>();
         this.rows = new ArrayList<>();
-
     }
 
-    public IGraph<String, BombWrapper> generateRandomLevel(int numVertices, int maxEdgesPerVertex, double canvasHeight,
+    public IGraph<String, BombWrapper> generateRandomLevel(int numVertices, double canvasHeight,
             double canvasWidth) {
         int amountOfRows = 5;
-        row1 = createVertexRow(canvasHeight / 2 + 300, numVertices / amountOfRows,
+        List<Vertex<String, BombWrapper>> row1 = createVertexRow(canvasHeight / 2 + 300, numVertices / amountOfRows,
                 VERTEX_RADIUS, canvasWidth);
-        row2 = createVertexRow(canvasHeight / 2 + 150, numVertices / amountOfRows,
+        List<Vertex<String, BombWrapper>> row2 = createVertexRow(canvasHeight / 2 + 150, numVertices / amountOfRows,
                 VERTEX_RADIUS, canvasWidth);
-        row3 = createVertexRow(canvasHeight / 2, numVertices / amountOfRows, VERTEX_RADIUS, canvasWidth);
-        row4 = createVertexRow(canvasHeight / 2 - 150, numVertices / amountOfRows,
+        List<Vertex<String, BombWrapper>> row3 = createVertexRow(canvasHeight / 2, numVertices / amountOfRows,
                 VERTEX_RADIUS, canvasWidth);
-        row5 = createVertexRow(canvasHeight / 2 - 300, numVertices / amountOfRows,
+        List<Vertex<String, BombWrapper>> row4 = createVertexRow(canvasHeight / 2 - 150, numVertices / amountOfRows,
+                VERTEX_RADIUS, canvasWidth);
+        List<Vertex<String, BombWrapper>> row5 = createVertexRow(canvasHeight / 2 - 300, numVertices / amountOfRows,
                 VERTEX_RADIUS, canvasWidth);
         rows.add(row1);
         rows.add(row2);
@@ -55,32 +43,20 @@ public class LevelGenerator {
         rows.add(row4);
         rows.add(row5);
         for (int i = 0; i < numVertices - 1; i++) {
+            Vertex<String, BombWrapper> vertex;
             if (i < numVertices / amountOfRows) {
-                Vertex<String, BombWrapper> vertex = row1.get(i);
-                vertex.setKey("Vertex " + i);
-                graph.insertVertex(vertex);
+                vertex = row1.get(i);
             } else if (i < 2 * numVertices / amountOfRows) {
-                Vertex<String, BombWrapper> vertex = row2.get(i - numVertices /
-                        amountOfRows);
-                vertex.setKey("Vertex " + i);
-                graph.insertVertex(vertex);
+                vertex = row2.get(i - numVertices / amountOfRows);
             } else if (i < 3 * numVertices / amountOfRows) {
-                Vertex<String, BombWrapper> vertex = row3.get(i - 2 * numVertices /
-                        amountOfRows);
-                vertex.setKey("Vertex " + i);
-                graph.insertVertex(vertex);
+                vertex = row3.get(i - 2 * numVertices / amountOfRows);
             } else if (i < 4 * numVertices / amountOfRows) {
-                Vertex<String, BombWrapper> vertex = row4.get(i - 3 * numVertices /
-                        amountOfRows);
-                vertex.setKey("Vertex " + i);
-                graph.insertVertex(vertex);
-            } else if (i < 5 * numVertices / amountOfRows) {
-                Vertex<String, BombWrapper> vertex = row5.get(i - 4 * numVertices /
-                        amountOfRows);
-                vertex.setKey("Vertex " + i);
-                graph.insertVertex(vertex);
+                vertex = row4.get(i - 3 * numVertices / amountOfRows);
+            } else {
+                vertex = row5.get(i - 4 * numVertices / amountOfRows);
             }
-
+            vertex.setKey("Vertex " + i);
+            graph.insertVertex(vertex);
         }
 
         createSpawnAndEnd();
@@ -97,16 +73,12 @@ public class LevelGenerator {
             linkVerticesAM(row4, row5);
         }
 
-        for (int i = 0; i < 5; i++) {
-            connectRow(rows.get(i));
-        }
-
-        for (int i = 0; i < 5; i++) {
-            generateRandomBombs(rows.get(i), BOMBS_PERCENTAGE);
+        for (List<Vertex<String, BombWrapper>> row : rows) {
+            connectRow(row);
+            generateRandomBombs(row, BOMBS_PERCENTAGE);
         }
 
         return graph;
-
     }
 
     private void createSpawnAndEnd() {
@@ -114,11 +86,11 @@ public class LevelGenerator {
         graph.getVertexList().get(graph.getVertexList().size() - 1).getValue().setType(TypeOfNode.END);
     }
 
-    private void generateRandomBombs(List<Vertex<String, BombWrapper>> row, double percentage) {
+    public void generateRandomBombs(List<Vertex<String, BombWrapper>> row, double percentage) {
         Random random = new Random();
-
-        for (int i = 0; i < (int) (row.size() * percentage); i++) {
-
+        int numBombs = (int) (row.size() * percentage);
+        int attempts = 0;
+        for (int i = 0; i < numBombs; i++) {
             boolean hasBomb = false;
             do {
                 int randomIndex = random.nextInt(row.size());
@@ -130,27 +102,27 @@ public class LevelGenerator {
                     row.get(randomIndex).getValue().setBomb(new Bomb());
                     hasBomb = true;
                 }
+                attempts++;
+                if (attempts >= 100) {
+                    break;
+                }
             } while (!hasBomb);
         }
-
     }
 
-    private ArrayList<Vertex<String, BombWrapper>> createVertexRow(double positionY, int amountVertex, double radius,
+    public List<Vertex<String, BombWrapper>> createVertexRow(double positionY, int amountVertex, double radius,
             double canvasWidth) {
-        ArrayList<Vertex<String, BombWrapper>> row = new ArrayList<>();
-        double positionX = 0;
+        List<Vertex<String, BombWrapper>> row = new ArrayList<>();
+        double positionX;
         double spaceBweteenVertex = (canvasWidth - 2 * radius) / amountVertex;
         for (int i = 0; i < amountVertex; i++) {
-
             positionX = spaceBweteenVertex * i + radius;
-
-            row.add(new Vertex<String, BombWrapper>("Vertex " + i,
-                    new BombWrapper(positionX, positionY, null, radius)));
+            row.add(new Vertex<>("Vertex " + i, new BombWrapper(positionX, positionY, null, radius)));
         }
         return row;
     }
 
-    private void connectRow(List<Vertex<String, BombWrapper>> row) {
+    public void connectRow(List<Vertex<String, BombWrapper>> row) {
         for (int i = 0; i < row.size(); i++) {
             if (i == 0) {
                 Edge<String, BombWrapper> edge = new Edge<>(row.get(i), row.get(i + 1), 1);
@@ -167,50 +139,35 @@ public class LevelGenerator {
         }
     }
 
-    private void linkVerticesAL(ArrayList<Vertex<String, BombWrapper>> row1,
-            ArrayList<Vertex<String, BombWrapper>> row2) {
-
+    private void linkVerticesAL(List<Vertex<String, BombWrapper>> row1, List<Vertex<String, BombWrapper>> row2) {
         Random random = new Random();
-
-        for (int i = 0; i < row1.size(); i++) {
+        for (Vertex<String, BombWrapper> vertex : row1) {
             boolean isLinked = false;
-            Vertex<String, BombWrapper> vertex = row1.get(i);
             do {
-
                 int randomIndex = random.nextInt(row2.size());
                 int randomWeight = random.nextInt(10) + 1;
                 if (row2.get(randomIndex).getEdges().size() < 1) {
-                    Edge<String, BombWrapper> edge = new Edge<>(vertex,
-                            row2.get(randomIndex), randomWeight);
+                    Edge<String, BombWrapper> edge = new Edge<>(vertex, row2.get(randomIndex), randomWeight);
                     graph.insertEdge(edge);
                     isLinked = true;
                 }
             } while (!isLinked);
-
         }
-
     }
 
-    private void linkVerticesAM(ArrayList<Vertex<String, BombWrapper>> row1,
-            ArrayList<Vertex<String, BombWrapper>> row2) {
-
+    private void linkVerticesAM(List<Vertex<String, BombWrapper>> row1, List<Vertex<String, BombWrapper>> row2) {
         Random random = new Random();
-
-        for (int i = 0; i < row1.size(); i++) {
+        for (Vertex<String, BombWrapper> vertex : row1) {
             boolean isLinked = false;
-            Vertex<String, BombWrapper> vertex = row1.get(i);
             do {
-
                 int randomIndex = random.nextInt(row2.size());
                 int randomWeight = random.nextInt(10) + 1;
                 if (calculateAmountOfConnections(row2.get(randomIndex)) < 1) {
-                    Edge<String, BombWrapper> edge = new Edge<>(vertex,
-                            row2.get(randomIndex), randomWeight);
+                    Edge<String, BombWrapper> edge = new Edge<>(vertex, row2.get(randomIndex), randomWeight);
                     graph.insertEdge(edge);
                     isLinked = true;
                 }
             } while (!isLinked);
-
         }
     }
 
@@ -225,17 +182,6 @@ public class LevelGenerator {
             }
         }
         return amountOfConnections;
-    }
-
-    public void printGraphInConsole(IGraph<String, BombWrapper> graph) {
-        for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
-            System.out.print("Vértice " + vertex.getKey() + ": ");
-            for (Edge<String, BombWrapper> edge : vertex.getEdges()) {
-                Vertex<String, BombWrapper> targetVertex = edge.getVertex2();
-                System.out.print(targetVertex.getKey() + " ");
-            }
-            System.out.println();
-        }
     }
 
 }

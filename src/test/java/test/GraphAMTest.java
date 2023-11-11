@@ -18,7 +18,7 @@ public class GraphAMTest {
     public GraphAM<Integer, Integer> graph;
 
     public void setupSimple1() {
-        graph = new GraphAM<Integer,Integer>(GraphType.Simple);
+        graph = new GraphAM<Integer, Integer>(GraphType.Simple);
     }
 
     public void setupSimple2() {
@@ -29,6 +29,12 @@ public class GraphAMTest {
         Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 1);
         Vertex<Integer, Integer> vertex4 = new Vertex<Integer, Integer>(4, 1);
         Vertex<Integer, Integer> vertex5 = new Vertex<Integer, Integer>(5, 1);
+
+        graph.insertVertex(vertex1);
+        graph.insertVertex(vertex2);
+        graph.insertVertex(vertex3);
+        graph.insertVertex(vertex4);
+        graph.insertVertex(vertex5);
 
         graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
         graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
@@ -54,6 +60,12 @@ public class GraphAMTest {
         Vertex<Integer, Integer> vertex4 = new Vertex<Integer, Integer>(4, 1);
         Vertex<Integer, Integer> vertex5 = new Vertex<Integer, Integer>(5, 1);
 
+        graph.insertVertex(vertex1);
+        graph.insertVertex(vertex2);
+        graph.insertVertex(vertex3);
+        graph.insertVertex(vertex4);
+        graph.insertVertex(vertex5);
+
         graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
         graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
         graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
@@ -64,9 +76,12 @@ public class GraphAMTest {
         graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
     }
 
-    public void setup3(){
-        Vertex<Integer, Integer> vertex1 = new Vertex<Integer,Integer>(1, 100);
-        Vertex<Integer, Integer> vertex2 = new Vertex<Integer,Integer>(2, 200);
+    public void setup3() {
+        Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 100);
+        Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 200);
+
+        graph.insertVertex(vertex1);
+        graph.insertVertex(vertex2);
 
         graph.insertEdge(new Edge<>(vertex1, vertex2, 10));
         graph.insertEdge(new Edge<>(vertex1, vertex2, 20));
@@ -190,11 +205,10 @@ public class GraphAMTest {
     @Test
     public void testInsertEdgeAndIsConnectedDirectedGraph() {
         setupDirected1();
-        
+
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 100);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 200);
         Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 300);
-        
 
         Edge<Integer, Integer> edge12 = new Edge<>(vertex1, vertex2, 10);
         Edge<Integer, Integer> edge23 = new Edge<>(vertex2, vertex3, 20);
