@@ -106,6 +106,19 @@ public class GraphAM<K,V> implements IGraph<K,V> {
 
     }
 
+    @Override
+    public Edge<K,V> insertEdgePrim(Edge<K,V> edge) {
+        if (!vertexList.contains(edge.getVertex1())) {
+            vertexList.add(edge.getVertex1());
+        }
+
+        if (!vertexList.contains(edge.getVertex2())) {
+            vertexList.add(edge.getVertex2());
+        }
+
+        return insertSimpleEdge(edge);   
+    }
+
     private Edge<K, V> insertSimpleEdge(Edge<K, V> edge) {
 
         if (edge.getVertex2().equals(edge.getVertex1())) {
@@ -340,15 +353,47 @@ public class GraphAM<K,V> implements IGraph<K,V> {
     }
 
     @Override
-    public void FloydWarshall() {
+    public int[][] floydWarshall() {
+
+        // TODO
+        int[][] distanceMatrix = new int[vertexList.size()][vertexList.size()];
+
+        for (int i = 0; i < vertexList.size(); i++) {
+            for (int j = 0; j < vertexList.size(); j++) {
+                if (i == j) {
+                    distanceMatrix[i][j] = 0;
+                } else if (areConnected(vertexList.get(i), vertexList.get(j))) {
+                    distanceMatrix[i][j] = getEdge(vertexList.get(i), vertexList.get(j)).getWeight();
+                } else {
+                    distanceMatrix[i][j] = Integer.MAX_VALUE;
+                }
+            }
+        }
+
+        for (int k = 0; k < vertexList.size(); k++) {
+            for (int i = 0; i < vertexList.size(); i++) {
+                for (int j = 0; j < vertexList.size(); j++) {
+                    if (distanceMatrix[i][k] != Integer.MAX_VALUE && distanceMatrix[k][j] != Integer.MAX_VALUE) {
+                        distanceMatrix[i][j] = Math.min(distanceMatrix[i][j], distanceMatrix[i][k] + distanceMatrix[k][j]);
+                    }
+                }
+            }
+        }
+
+        return distanceMatrix;
     }
 
     @Override
-    public void Prim(Vertex<K, V> s) {
+    public IGraph<K, V> prim(Vertex<K, V> begin) {
+        return null;
     }
 
     @Override
-    public void Kruskal() {
+    public IGraph<K, V> kruskal() {
+
+        // TODO
+        return null;
+        
     }
 
     
