@@ -18,6 +18,8 @@ public class MainViewController implements Initializable {
     @FXML
     private Button playBTN;
 
+    private static String graphType = "ADJACENCY LIST";
+
     @FXML
     private void play(ActionEvent event) {
         lblOut.setText("tas jugando");
@@ -25,10 +27,14 @@ public class MainViewController implements Initializable {
         try {
             loader = MainApp.setRoot("game-view", "Blitz Bomb");
             GameViewController controller = loader.getController();
-            controller.init();
+            controller.init(graphType);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void setGraph(String graph) {
+        graphType = graph;
     }
 
     @FXML

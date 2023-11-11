@@ -38,11 +38,11 @@ public class MainApp extends Application {
 
     public static void showWindow(String fxml) throws IOException {
 
-        //Cerrar ventana auxiliar si esta abierta
+        // Cerrar ventana auxiliar si esta abierta
         if (isAuxStageOpen()) {
             auxStage.close();
         }
-        
+
         auxStage = new Stage();
         Scene scene = new Scene(loadFXML(fxml).load());
         auxStage.setScene(scene);
@@ -62,6 +62,7 @@ public class MainApp extends Application {
     }
 
     public static void setGraph(String graph) {
+        MainViewController.setGraph(graph);
         auxStage.close();
     }
 

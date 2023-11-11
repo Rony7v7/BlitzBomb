@@ -10,6 +10,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import structures.classes.Edge;
 import structures.classes.GraphAL;
+import structures.classes.GraphAM;
 // import structures.classes.GraphAM;
 import structures.classes.Vertex;
 import structures.enums.GraphType;
@@ -37,25 +38,28 @@ public class GameViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gc = this.canvas.getGraphicsContext2D();
-        this.graph = generateRandomGraph();
         gc.setFill(Color.web("#f7efd8")); // Set your desired background color
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        init();
     }
 
     // Use this method to send all the data that you need.
-    public void init() {
+    public void init(String graphType) {
         gc.setStroke(Color.RED);
 
         // Draw a rectangle around the Canvas to represent the borders
         gc.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        this.graph = generateRandomGraph(graphType);
+
         drawGraph(graph);
 
     }
 
-    private IGraph<String, BombWrapper> generateRandomGraph() {
-
-        IGraph<String, BombWrapper> graph = new GraphAL<>(GraphType.Simple);
+    private IGraph<String, BombWrapper> generateRandomGraph(String graphType) {
+        if (graphType.equals("ADJACENCY LIST")) {
+            this.graph = new GraphAL<>(GraphType.Simple);
+        } else {
+            this.graph = new GraphAM<>(GraphType.Simple);
+        }
 
         LevelGenerator levelGenerator = new LevelGenerator(graph);
         return levelGenerator.generateRandomLevel(NUM_VERTICES, MAX_EDGES, this.canvas.getHeight(),
