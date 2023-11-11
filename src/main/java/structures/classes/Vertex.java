@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import structures.enums.Color;
 import structures.interfaces.IVertex;
 
-public class Vertex<K,V> implements IVertex<K,V> {
+public class Vertex<K,V> implements IVertex<K,V>, Comparable<Vertex<K, V>> {
 
     private K key;
     private V value;
@@ -157,6 +157,10 @@ public class Vertex<K,V> implements IVertex<K,V> {
         return null;
     }
 
+    @Override
+    public int compareTo(Vertex<K, V> other) {
+        return Integer.compare(this.getDistance(), other.getDistance());
+    }   
 
 
 }

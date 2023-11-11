@@ -31,6 +31,8 @@ public interface IGraph<K, V> {
 
     public Edge<K, V> insertEdge(Edge<K, V> edge);
 
+    public Edge<K, V> insertEdgePrim(Edge<K, V> edge);
+
     public Vertex<K, V> removeVertex(Vertex<K, V> vertex);
 
     public Vertex<K, V> searchVertex(K key);
@@ -41,10 +43,10 @@ public interface IGraph<K, V> {
 
     public List<Edge<K, V>> Dijkstra(Vertex<K, V> s);
 
-    public void FloydWarshall();
+    public int[][] floydWarshall();
 
-    public void Prim(Vertex<K, V> s);
+    public IGraph<K, V> prim(Vertex<K, V> begin);
 
-    public void Kruskal();
+    public IGraph<K, V> kruskal();
 
 }
