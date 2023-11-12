@@ -3,6 +3,7 @@ package structures.classes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Collections;
 
 import structures.enums.Color;
 import structures.enums.GraphType;
@@ -351,7 +352,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
     }
 
     @Override
-    public List<Edge<K, V>> Dijkstra(Vertex<K, V> s) {
+    public List<Edge<K, V>> Dijkstra(Vertex<K, V> s, Vertex<K, V> t) {
         s.setDistance(0);
         s.setPredecessor(null);
 
@@ -367,24 +368,28 @@ public class GraphAM<K, V> implements IGraph<K, V> {
 
         while (!q.isEmpty()) {
             Vertex<K, V> u = q.poll();
+            if (u.equals(t)) {
+                break;
+            }
             for (Vertex<K, V> v : getAdjacents(u)) {
                 if (v.getDistance() > u.getDistance() + getEdge(u, v).getWeight()) {
                     v.setDistance(u.getDistance() + getEdge(u, v).getWeight());
                     v.setPredecessor(u);
                     q.remove(v);
+                    q.add(v);
                 }
             }
         }
 
         List<Edge<K, V>> edgeList = new ArrayList<>();
-        for (Vertex<K, V> vertex : vertexList) {
-            if (vertex.getPredecessor() != null) {
-                edgeList.add(getEdge(vertex.getPredecessor(), vertex));
-            }
+        Vertex<K, V> current = t;
+        while (current.getPredecessor() != null) {
+            edgeList.add(getEdge(current.getPredecessor(), current));
+            current = current.getPredecessor();
         }
+        Collections.reverse(edgeList);
 
         return edgeList;
-
     }
 
     @Override

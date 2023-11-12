@@ -41,7 +41,7 @@ public interface IGraph<K, V> {
 
     public void DFS();
 
-    public List<Edge<K, V>> Dijkstra(Vertex<K, V> s);
+    public List<Edge<K, V>> Dijkstra(Vertex<K, V> s, Vertex<K, V> e);
 
     public int[][] floydWarshall();
 

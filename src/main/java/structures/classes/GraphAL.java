@@ -330,14 +330,19 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         u.setTimeStampF(u.getTimeStampF() + 1);
     }
 
-    @Override
-    public List<Edge<K, V>> Dijkstra(Vertex<K, V> s) {
-        s.setDistance(0);
+    /**
+     * Implements Dijkstra's algorithm to find the shortest path between two
+     * vertices in a graph.
+     * Returns a list of edges to get from the first vertex to the second one in the
+     * shortest way.
+     */
+    public List<Edge<K, V>> Dijkstra(Vertex<K, V> start, Vertex<K, V> end) {
+        start.setDistance(0);
 
         PriorityQueue<Vertex<K, V>> q = new PriorityQueue<>();
 
         for (Vertex<K, V> vertex : vertexList) {
-            if (!vertex.equals(s)) {
+            if (!vertex.equals(start)) {
                 vertex.setDistance(Integer.MAX_VALUE);
             }
             vertex.setPredecessor(null);
@@ -358,43 +363,45 @@ public class GraphAL<K, V> implements IGraph<K, V> {
 
         List<Edge<K, V>> edgeList = new ArrayList<>();
 
-        for (Vertex<K, V> vertex : vertexList) {
-            if (!vertex.equals(s)) {
-                edgeList.add(new Edge<>(vertex.getPredecessor(), vertex, vertex.getDistance()));
-            }
+        Vertex<K, V> current = end;
+        while (current.getPredecessor() != null) {
+            Vertex<K, V> predecessor = current.getPredecessor();
+            edgeList.add(new Edge<>(predecessor, current, current.getDistance() - predecessor.getDistance()));
+            current = predecessor;
         }
 
-        return edgeList;
+        Collections.reverse(edgeList);
 
+        return edgeList;
     }
 
-
     /**
-     * Implements the Floyd-Warshall algorithm to find the shortest path between all pairs of vertices in a graph.
+     * Implements the Floyd-Warshall algorithm to find the shortest path between all
+     * pairs of vertices in a graph.
      */
     @Override
     public int[][] floydWarshall() {
         int numVertices = getVertexAmount();
-    
+
         // Initialize the distance matrix with infinity for unconnected vertex pairs
         int[][] distances = new int[numVertices][numVertices];
         for (int i = 0; i < numVertices; i++) {
             Arrays.fill(distances[i], Integer.MAX_VALUE);
-            distances[i][i] = 0;  // Distance from a vertex to itself is zero
+            distances[i][i] = 0; // Distance from a vertex to itself is zero
         }
-    
+
         // Fill the matrix with initial distances from the graph's edges
         for (Edge<K, V> edge : getEdgeList()) {
             int row = getVertexIndex(edge.getVertex1());
             int col = getVertexIndex(edge.getVertex2());
             distances[row][col] = edge.getWeight();
-    
+
             // If the graph is undirected, update the opposite direction as well
             if (getType() != GraphType.Directed) {
                 distances[col][row] = edge.getWeight();
             }
         }
-    
+
         for (int k = 0; k < numVertices; k++) {
             for (int i = 0; i < numVertices; i++) {
                 for (int j = 0; j < numVertices; j++) {
@@ -404,10 +411,9 @@ public class GraphAL<K, V> implements IGraph<K, V> {
                 }
             }
         }
-    
+
         return distances;
     }
-    
 
     private int getVertexIndex(Vertex<K, V> vertex) {
         return getVertexList().indexOf(vertex);
@@ -422,7 +428,6 @@ public class GraphAL<K, V> implements IGraph<K, V> {
      */
     @Override
     public IGraph<K, V> prim(Vertex<K, V> begin) {
-
 
         if (getVertexAmount() == 0) {
             return null;
@@ -442,13 +447,11 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         // Continue until all vertices are included in the Minimum Spanning Tree
         while (includedVertices.size() < getVertexAmount() && currentVertex != null) {
 
-            
             for (Edge<K, V> edge : currentVertex.getEdges()) {
                 if (!includedVertices.contains(edge.getVertex2())) {
                     minHeap.add(edge);
                 }
             }
-
 
             Edge<K, V> minEdge = minHeap.poll();
 
@@ -518,7 +521,8 @@ public class GraphAL<K, V> implements IGraph<K, V> {
                 }
             }
 
-            // If the vertices are in different sets, add the edge to the minimum spanning tree
+            // If the vertices are in different sets, add the edge to the minimum spanning
+            // tree
             if (set1 != null && set2 != null && set1 != set2) {
                 minimumSpanningTree.insertEdgePrim(edge);
 

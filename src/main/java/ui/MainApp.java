@@ -28,6 +28,12 @@ public class MainApp extends Application {
         stage.setTitle(title);
         stage.setScene(scene);
         stage.show();
+        stage.setOnCloseRequest(e -> {
+            if (isAuxStageOpen()) {
+                auxStage.close();
+            }
+            GameViewController.gameOver();
+        });
         return loader;
     }
 
