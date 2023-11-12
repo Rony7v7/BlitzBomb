@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import structures.classes.GraphAM;
 import structures.classes.Vertex;
+import structures.interfaces.IGraph;
 import structures.classes.Edge;
 
 public class GraphAMTest {
@@ -139,6 +140,40 @@ public class GraphAMTest {
         assertNotNull(graph.searchVertex(3));
         assertNotNull(graph.searchVertex(4));
         assertNull(graph.searchVertex(5));
+    }
+
+    @Test
+    public void test1Prim() {
+
+        IGraph<Integer, Integer> graph = new GraphAM<>();
+        
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
+        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
+        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+
+        
+
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 8));
+        graph.insertEdge(new Edge<>(vertex1, vertex5, 2));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 9));
+        graph.insertEdge(new Edge<>(vertex2, vertex3, 5));
+        graph.insertEdge(new Edge<>(vertex2, vertex5, 5));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 6));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 8));
+
+        IGraph<Integer, Integer> minimumSpanningTree = graph.prim(graph.getVertexList().get(0));
+
+        assertEquals(4, minimumSpanningTree.getVertexAmount());
+        assertEquals(3, minimumSpanningTree.getEdgesAmount());
+
+        assertEquals(true, minimumSpanningTree.areConnected(minimumSpanningTree.searchVertex(1),
+                minimumSpanningTree.searchVertex(5)));
+        assertEquals(true, minimumSpanningTree.areConnected(minimumSpanningTree.searchVertex(1),
+                minimumSpanningTree.searchVertex(2)));
+
     }
 
 }

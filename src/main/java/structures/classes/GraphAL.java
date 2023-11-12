@@ -385,7 +385,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             return null;
         }
 
-        GraphAL<K, V> minimumSpanningTree = new GraphAL<>();
+        IGraph<K, V> minimumSpanningTree = new GraphAL<>();
 
         // Set of vertices already included in the Minimum Spanning Tree
         Set<Vertex<K, V>> includedVertices = new HashSet<>();

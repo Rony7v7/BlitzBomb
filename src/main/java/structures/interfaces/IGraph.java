@@ -32,6 +32,8 @@ public interface IGraph<K, V> {
 
     public Vertex<K, V> searchVertex(K key);
 
+    public boolean areConnected(Vertex<K, V> vertex1, Vertex<K, V> vertex2);
+
     public void BFS(Vertex<K, V> s);
 
     public int DFS(IGraph<K, V> minimumSpanningTree);

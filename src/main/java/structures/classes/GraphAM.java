@@ -199,6 +199,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return adjacencyMatrix.get(vertexList.indexOf(vertex1)).get(vertexList.indexOf(vertex2));
     }
 
+    @Override
     public boolean areConnected(Vertex<K, V> vertex1, Vertex<K, V> vertex2) {
         if (vertex1 == null || vertex2 == null) {
             return false;
@@ -351,9 +352,63 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return distanceMatrix;
     }
 
+    /**
+     * Prim's algorithm implementation, this method returns a minimum spanning
+     * tree of the graph, with a given vertex of the original graph.
+     */
     @Override
     public IGraph<K, V> prim(Vertex<K, V> begin) {
-        return null;
+
+        if (getVertexAmount() == 0) {
+            return null;
+        }
+
+        // Initialize data structures for the algorithm
+        Map<Vertex<K, V>, Integer> distance = new HashMap<>();
+
+        Map<Vertex<K, V>, Edge<K, V>> previousEdge = new HashMap<>();
+
+        PriorityQueue<Vertex<K, V>> priorityQueue = new PriorityQueue<>(getVertexAmount(),
+                (v1, v2) -> Integer.compare(distance.get(v1), distance.get(v2)));
+
+        // Initialize distance to all vertices as infinity and the start vertex's
+        // distance to 0
+        for (Vertex<K, V> vertex : vertexList) {
+            distance.put(vertex, Integer.MAX_VALUE);
+            previousEdge.put(vertex, null);
+        }
+
+        distance.put(begin, 0);
+
+        // Add the start vertex to the priority queue
+        priorityQueue.add(begin);
+
+        while (!priorityQueue.isEmpty()) {
+            Vertex<K, V> currentVertex = priorityQueue.poll();
+
+            for (Edge<K, V> edge : getVertexEdges(currentVertex)) {
+                Vertex<K, V> neighbor = edge.getVertex2();
+                int newDistance = edge.getWeight();
+
+                if (newDistance < distance.get(neighbor)) {
+                    distance.put(neighbor, newDistance);
+                    previousEdge.put(neighbor, edge);
+                    priorityQueue.add(neighbor);
+                }
+            }
+        }
+
+        IGraph<K, V> minimumSpanningTree = new GraphAM<>();
+
+        for (Vertex<K, V> vertex : vertexList) {
+            minimumSpanningTree.insertVertex(vertex);
+        }
+
+        for (Edge<K, V> edge : previousEdge.values()) {
+            minimumSpanningTree.insertEdgePrim(edge);
+        }
+
+        return minimumSpanningTree;
     }
 
     @Override
