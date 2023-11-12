@@ -142,14 +142,9 @@ public class GameViewController implements Initializable {
         }
 
         if (selectedVertices[0] != null && selectedVertices[1] != null) {
-            System.out.println(
-                    "Vertex 1 clicked at " + selectedVertices[0].getValue().X + " " + selectedVertices[0].getValue().Y);
-            System.out.println(
-                    "Vertex 2 clicked at " + selectedVertices[1].getValue().X + " " + selectedVertices[1].getValue().Y);
 
             List<Edge<String, BombWrapper>> shortestPath = graph.Dijkstra(selectedVertices[0],
                     selectedVertices[1]);
-            System.out.println("Shortest path: " + shortestPath);
 
             for (Edge<String, BombWrapper> edge : shortestPath) {
                 paintEdgeRed(edge);
