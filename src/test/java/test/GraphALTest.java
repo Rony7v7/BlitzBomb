@@ -11,7 +11,6 @@ import org.junit.Test;
 import structures.classes.GraphAL;
 import structures.classes.Vertex;
 import structures.enums.Color;
-import structures.enums.GraphType;
 import structures.interfaces.IGraph;
 import structures.classes.Edge;
 
@@ -20,7 +19,7 @@ public class GraphALTest {
     public GraphAL<Integer, Integer> graph;
 
     public void setupSimple1() {
-        graph = new GraphAL<Integer, Integer>(GraphType.Simple);
+        graph = new GraphAL<Integer, Integer>();
     }
 
     public void setupSimple2() {
@@ -43,29 +42,6 @@ public class GraphALTest {
 
     }
 
-    public void setupDirected1() {
-        graph = new GraphAL<>(GraphType.Directed);
-    }
-
-    public void setupDirected2() {
-        setupDirected1();
-
-        Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
-        Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<Integer, Integer>(4, 1);
-        Vertex<Integer, Integer> vertex5 = new Vertex<Integer, Integer>(5, 1);
-
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
-    }
-
     public void setup3() {
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 100);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 200);
@@ -75,7 +51,7 @@ public class GraphALTest {
     }
 
     public void setUp4() {
-        graph = new GraphAL<>(GraphType.Simple);
+        graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -94,7 +70,7 @@ public class GraphALTest {
     }
 
     public void setUp5() {
-        graph = new GraphAL<>(GraphType.Directed);
+        graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -145,36 +121,6 @@ public class GraphALTest {
     }
 
     @Test
-    public void testInsertDirectedEdge() {
-        setupDirected2();
-
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
-        Vertex<Integer, Integer> vertex4 = graph.searchVertex(4);
-        Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
-
-        assertEquals(true, vertex1.isConnected(vertex2));
-        assertEquals(true, vertex1.isConnected(vertex5));
-        assertEquals(true, vertex1.isConnected(vertex4));
-        assertEquals(true, vertex4.isConnected(vertex5));
-        assertEquals(true, vertex4.isConnected(vertex3));
-        assertEquals(true, vertex2.isConnected(vertex5));
-        assertEquals(true, vertex2.isConnected(vertex3));
-        assertEquals(true, vertex3.isConnected(vertex5));
-
-        assertEquals(false, vertex2.isConnected(vertex1));
-        assertEquals(false, vertex5.isConnected(vertex1));
-        assertEquals(false, vertex4.isConnected(vertex1));
-        assertEquals(false, vertex5.isConnected(vertex4));
-        assertEquals(false, vertex3.isConnected(vertex4));
-        assertEquals(false, vertex5.isConnected(vertex2));
-        assertEquals(false, vertex3.isConnected(vertex2));
-        assertEquals(false, vertex5.isConnected(vertex3));
-
-    }
-
-    @Test
     public void testIsConnected() {
         setupSimple2();
 
@@ -187,7 +133,7 @@ public class GraphALTest {
 
     @Test
     public void testRemoveVertex() {
-        setupDirected1();
+        setupSimple1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
@@ -214,14 +160,14 @@ public class GraphALTest {
 
     @Test
     public void testIsStronglyConex1() {
-        setupDirected2();
+        setupSimple2();
 
-        assertEquals(false, graph.isStronglyConex());
+        assertEquals(true, graph.isStronglyConex());
     }
 
     @Test
     public void testIsStronglyConex2() {
-        setupDirected1();
+        setupSimple1();
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
         Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 1);
@@ -248,60 +194,6 @@ public class GraphALTest {
         assertNotNull(graph.searchVertex(3));
         assertNotNull(graph.searchVertex(4));
         assertNull(graph.searchVertex(5));
-    }
-
-    @Test
-    public void testInsertEdgeAndIsConnectedDirectedGraph() {
-        setupDirected1();
-
-        Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 100);
-        Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 200);
-        Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 300);
-
-        Edge<Integer, Integer> edge12 = new Edge<>(vertex1, vertex2, 10);
-        Edge<Integer, Integer> edge23 = new Edge<>(vertex2, vertex3, 20);
-
-        graph.insertEdge(edge12);
-        graph.insertEdge(edge23);
-
-        assertTrue(vertex1.isConnected(vertex2));
-        assertTrue(vertex2.isConnected(vertex3));
-        assertFalse(vertex3.isConnected(vertex1));
-    }
-
-    @Test
-    public void testInsertMultigraphEdge() {
-        graph = new GraphAL<>(GraphType.Multigraph);
-        setup3();
-
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
-
-        assertTrue(vertex1.isConnected(vertex2));
-        assertTrue(vertex2.isConnected(vertex1));
-    }
-
-    @Test
-    public void testInsertPseudographEdge() {
-        graph = new GraphAL<>(GraphType.Pseudograph);
-        setup3();
-
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
-
-        assertTrue(vertex1.isConnected(vertex2));
-        assertTrue(vertex2.isConnected(vertex1));
-    }
-
-    @Test
-    public void testInsertMultiDirectedEdge() {
-        graph = new GraphAL<>(GraphType.DirectedMultigraph);
-        setup3();
-
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
-        // assertEquals(true, connected);
-        assertFalse(vertex2.isConnected(vertex1));
     }
 
     @Test
@@ -470,7 +362,7 @@ public class GraphALTest {
 
     @Test
     public void test1BFS() {
-        GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
+        GraphAL<Integer, Integer> graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -505,7 +397,7 @@ public class GraphALTest {
 
     @Test
     public void test2BFS() {
-        GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
+        GraphAL<Integer, Integer> graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -537,7 +429,7 @@ public class GraphALTest {
 
     @Test
     public void test3BFS() {
-        GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
+        GraphAL<Integer, Integer> graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -574,7 +466,7 @@ public class GraphALTest {
     @Test
     public void test1DFS() {
 
-        GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
+        GraphAL<Integer, Integer> graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 2);
@@ -594,7 +486,7 @@ public class GraphALTest {
 
     @Test
     public void test2DFS() {
-        GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
+        GraphAL<Integer, Integer> graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -619,7 +511,7 @@ public class GraphALTest {
     @Test
     public void test3DFS() {
 
-        GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
+        GraphAL<Integer, Integer> graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);

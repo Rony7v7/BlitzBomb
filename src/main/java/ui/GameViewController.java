@@ -13,7 +13,6 @@ import structures.classes.GraphAL;
 import structures.classes.GraphAM;
 // import structures.classes.GraphAM;
 import structures.classes.Vertex;
-import structures.enums.GraphType;
 import structures.interfaces.IGraph;
 import model.BombWrapper;
 
@@ -62,9 +61,9 @@ public class GameViewController implements Initializable {
 
     private IGraph<String, BombWrapper> generateRandomGraph(String graphType) {
         if (graphType.equals("ADJACENCY LIST")) {
-            this.graph = new GraphAL<>(GraphType.Simple);
+            this.graph = new GraphAL<>();
         } else {
-            this.graph = new GraphAM<>(GraphType.Simple);
+            this.graph = new GraphAM<>();
         }
 
         LevelGenerator levelGenerator = new LevelGenerator(graph);

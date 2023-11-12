@@ -7,7 +7,6 @@ import java.util.PriorityQueue;
 import java.util.HashMap;
 
 import structures.enums.Color;
-import structures.enums.GraphType;
 import structures.interfaces.IGraph;
 
 public class GraphAM<K, V> implements IGraph<K, V> {
@@ -15,14 +14,12 @@ public class GraphAM<K, V> implements IGraph<K, V> {
     private ArrayList<Vertex<K, V>> vertexList;
     private ArrayList<Edge<K, V>> edgeList;
     private ArrayList<ArrayList<Edge<K, V>>> adjacencyMatrix;
-    public GraphType type;
 
-    public GraphAM(GraphType type) {
+    public GraphAM() {
         this.vertexList = new ArrayList<>();
         this.edgeList = new ArrayList<>();
         this.adjacencyMatrix = new ArrayList<>();
 
-        this.type = type;
     }
 
     public ArrayList<ArrayList<Edge<K, V>>> getAdjacencyMatrix() {
@@ -57,16 +54,6 @@ public class GraphAM<K, V> implements IGraph<K, V> {
     @Override
     public void setEdgeList(ArrayList<Edge<K, V>> edgeList) {
         this.edgeList = edgeList;
-    }
-
-    @Override
-    public GraphType getType() {
-        return type;
-    }
-
-    @Override
-    public void setType(GraphType type) {
-        this.type = type;
     }
 
     @Override
@@ -105,27 +92,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
             vertexList.add(edge.getVertex2());
         }
 
-        switch (this.type) {
-            case Simple -> {
-                return insertSimpleEdge(edge);
-            }
-            case Directed -> {
-                return insertDirectedEdge(edge);
-            }
-            case Multigraph -> {
-                return insertMultigraphEdge(edge);
-            }
-            case Pseudograph -> {
-                return insertPseudographEdge(edge);
-            }
-            case DirectedMultigraph -> {
-                return insertMultiDirectedEdge(edge);
-            }
-
-            default -> {
-                return null;
-            }
-        }
+        return insertSimpleEdge(edge);
 
     }
 
@@ -161,78 +128,6 @@ public class GraphAM<K, V> implements IGraph<K, V> {
 
         adjacencyMatrix.get(index1).set(index2, edge);
         adjacencyMatrix.get(index2).set(index1, new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight()));
-        edgeList.add(edge);
-
-        return edge;
-    }
-
-    private Edge<K, V> insertDirectedEdge(Edge<K, V> edge) {
-
-        if (areConnected(edge.getVertex1(), edge.getVertex2())) {
-            return null;
-        }
-
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1())).set(vertexList.indexOf(edge.getVertex2()), edge);
-
-        edgeList.add(edge);
-
-        return edge;
-    }
-
-    private Edge<K, V> insertMultigraphEdge(Edge<K, V> edge) {
-
-        if (edge.getVertex2().equals(edge.getVertex1())) {
-            return null;
-        }
-
-        Edge<K, V> prevEdgeAtoB = adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1()))
-                .get(vertexList.indexOf(edge.getVertex2()));
-        Edge<K, V> prevEdgeBtoA = adjacencyMatrix.get(vertexList.indexOf(edge.getVertex2()))
-                .get(vertexList.indexOf(edge.getVertex1()));
-        Edge<K, V> edgeBtoA = new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight());
-
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1())).set(vertexList.indexOf(edge.getVertex2()), edge);
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex2())).set(vertexList.indexOf(edge.getVertex1()), edgeBtoA);
-
-        if (prevEdgeAtoB != null) {
-            edge.setNextEdge(prevEdgeAtoB);
-            edgeBtoA.setNextEdge(prevEdgeBtoA);
-        }
-
-        edgeList.add(edge);
-
-        return edge;
-    }
-
-    private Edge<K, V> insertPseudographEdge(Edge<K, V> edge) {
-        Edge<K, V> prevEdgeAtoB = adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1()))
-                .get(vertexList.indexOf(edge.getVertex2()));
-        Edge<K, V> prevEdgeBtoA = adjacencyMatrix.get(vertexList.indexOf(edge.getVertex2()))
-                .get(vertexList.indexOf(edge.getVertex1()));
-        Edge<K, V> edgeBtoA = new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight());
-
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1())).set(vertexList.indexOf(edge.getVertex2()), edge);
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex2())).set(vertexList.indexOf(edge.getVertex1()), edgeBtoA);
-
-        if (prevEdgeAtoB != null) {
-            edge.setNextEdge(prevEdgeAtoB);
-            edgeBtoA.setNextEdge(prevEdgeBtoA);
-        }
-
-        edgeList.add(edge);
-        return edge;
-    }
-
-    private Edge<K, V> insertMultiDirectedEdge(Edge<K, V> edge) {
-        Edge<K, V> prevEdgeAtoB = adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1()))
-                .get(vertexList.indexOf(edge.getVertex2()));
-
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1())).set(vertexList.indexOf(edge.getVertex2()), edge);
-
-        if (prevEdgeAtoB != null) {
-            edge.setNextEdge(prevEdgeAtoB);
-        }
-
         edgeList.add(edge);
 
         return edge;

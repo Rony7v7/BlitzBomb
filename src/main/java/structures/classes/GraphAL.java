@@ -14,19 +14,15 @@ import java.util.Queue;
 import java.util.Set;
 
 import structures.enums.Color;
-import structures.enums.GraphType;
 import structures.interfaces.IGraph;
 
 public class GraphAL<K, V> implements IGraph<K, V> {
     private ArrayList<Vertex<K, V>> vertexList;
     private ArrayList<Edge<K, V>> edgeList;
 
-    public GraphType type;
-
-    public GraphAL(GraphType type) {
+    public GraphAL() {
         this.vertexList = new ArrayList<>();
         this.edgeList = new ArrayList<>();
-        this.type = type;
     }
 
     @Override
@@ -74,22 +70,6 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         this.edgeList = edgeList;
     }
 
-    /**
-     * @return the type
-     */
-    @Override
-    public GraphType getType() {
-        return type;
-    }
-
-    /**
-     * @param type the type to set
-     */
-    @Override
-    public void setType(GraphType type) {
-        this.type = type;
-    }
-
     @Override
     public Vertex<K, V> insertVertex(K key, V value) {
 
@@ -114,27 +94,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             vertexList.add(edge.getVertex2());
         }
 
-        switch (this.type) {
-            case Simple -> {
-                return insertSimpleEdge(edge);
-            }
-            case Directed -> {
-                return insertDirectedEdge(edge);
-            }
-            case Multigraph -> {
-                return insertMultigraphEdge(edge);
-            }
-            case Pseudograph -> {
-                return insertPseudographEdge(edge);
-            }
-            case DirectedMultigraph -> {
-                return insertMultiDirectedEdge(edge);
-            }
-
-            default -> {
-                return null;
-            }
-        }
+        return insertSimpleEdge(edge);
 
     }
 
@@ -178,42 +138,6 @@ public class GraphAL<K, V> implements IGraph<K, V> {
 
         edgeList.add(edge);
 
-        return edge;
-    }
-
-    private Edge<K, V> insertDirectedEdge(Edge<K, V> edge) {
-
-        if (edge.getVertex1().isConnected(edge.getVertex2())) {
-            return null;
-        }
-
-        edge.getVertex1().addEdge(edge);
-        edgeList.add(edge);
-
-        return edge;
-    }
-
-    private Edge<K, V> insertMultigraphEdge(Edge<K, V> edge) {
-
-        if (edge.getVertex2().equals(edge.getVertex1())) {
-            return null;
-        }
-
-        edge.getVertex2().addEdge(new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight()));
-        edgeList.add(edge);
-
-        return edge;
-    }
-
-    private Edge<K, V> insertPseudographEdge(Edge<K, V> edge) {
-        edge.getVertex1().addEdge(edge);
-        edge.getVertex2().addEdge(new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight()));
-        edgeList.add(edge);
-        return edge;
-    }
-
-    private Edge<K, V> insertMultiDirectedEdge(Edge<K, V> edge) {
-        edgeList.add(edge);
         return edge;
     }
 
@@ -427,10 +351,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             int col = getVertexIndex(edge.getVertex2());
             distances[row][col] = edge.getWeight();
 
-            // If the graph is undirected, update the opposite direction as well
-            if (getType() != GraphType.Directed) {
-                distances[col][row] = edge.getWeight();
-            }
+
         }
 
         for (int k = 0; k < numVertices; k++) {
@@ -464,7 +385,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             return null;
         }
 
-        GraphAL<K, V> minimumSpanningTree = new GraphAL<>(this.type);
+        GraphAL<K, V> minimumSpanningTree = new GraphAL<>();
 
         // Set of vertices already included in the Minimum Spanning Tree
         Set<Vertex<K, V>> includedVertices = new HashSet<>();
@@ -519,7 +440,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             return null;
         }
 
-        GraphAL<K, V> minimumSpanningTree = new GraphAL<>(this.type);
+        GraphAL<K, V> minimumSpanningTree = new GraphAL<>();
 
         // Create a list of edges sorted by weight
         List<Edge<K, V>> sortedEdges = new ArrayList<>(getEdgeList());

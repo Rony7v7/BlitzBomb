@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import structures.classes.GraphAL;
 import structures.classes.Vertex;
-import structures.enums.GraphType;
 import structures.classes.Edge;
 
 import static org.junit.Assert.*;
@@ -16,7 +15,7 @@ public class DijkstraTest {
     // Returns the shortest path between two vertices in a connected graph
     @Test
     public void test_shortest_path_connected_graph() {
-        GraphAL<String, Integer> graph = new GraphAL<>(GraphType.Simple);
+        GraphAL<String, Integer> graph = new GraphAL<>();
         Vertex<String, Integer> vertexA = graph.insertVertex("A", 0);
         Vertex<String, Integer> vertexB = graph.insertVertex("B", 1);
         Vertex<String, Integer> vertexC = graph.insertVertex("C", 2);
@@ -41,7 +40,7 @@ public class DijkstraTest {
     // Returns an empty list if the source and destination vertices are the same
     @Test
     public void test_empty_list_same_source_and_destination() {
-        GraphAL<String, Integer> graph = new GraphAL<>(GraphType.Simple);
+        GraphAL<String, Integer> graph = new GraphAL<>();
         Vertex<String, Integer> vertexA = graph.insertVertex("A", 0);
 
         List<Edge<String, Integer>> shortestPath = graph.Dijkstra(vertexA, vertexA);
@@ -53,7 +52,7 @@ public class DijkstraTest {
     // adjacent
     @Test
     public void test_single_edge_adjacent_vertices() {
-        GraphAL<String, Integer> graph = new GraphAL<>(GraphType.Simple);
+        GraphAL<String, Integer> graph = new GraphAL<>();
         Vertex<String, Integer> vertexA = graph.insertVertex("A", 0);
         Vertex<String, Integer> vertexB = graph.insertVertex("B", 1);
 
@@ -67,7 +66,7 @@ public class DijkstraTest {
     // Returns an empty list if the source or destination vertex is not in the graph
     @Test
     public void test_empty_list_vertex_not_in_graph() {
-        GraphAL<String, Integer> graph = new GraphAL<>(GraphType.Simple);
+        GraphAL<String, Integer> graph = new GraphAL<>();
         Vertex<String, Integer> vertexA = graph.insertVertex("A", 0);
         Vertex<String, Integer> vertexB = new Vertex<>("B", 1);
 
@@ -80,7 +79,7 @@ public class DijkstraTest {
     // vertices
     @Test
     public void test_empty_list_no_path_between_vertices() {
-        GraphAL<String, Integer> graph = new GraphAL<>(GraphType.Simple);
+        GraphAL<String, Integer> graph = new GraphAL<>();
         Vertex<String, Integer> vertexA = graph.insertVertex("A", 0);
         Vertex<String, Integer> vertexB = graph.insertVertex("B", 1);
         Vertex<String, Integer> vertexC = graph.insertVertex("C", 2);

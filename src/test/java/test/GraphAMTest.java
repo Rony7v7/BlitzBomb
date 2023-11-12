@@ -1,16 +1,13 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import structures.classes.GraphAM;
 import structures.classes.Vertex;
-import structures.enums.GraphType;
 import structures.classes.Edge;
 
 public class GraphAMTest {
@@ -18,7 +15,7 @@ public class GraphAMTest {
     public GraphAM<Integer, Integer> graph;
 
     public void setupSimple1() {
-        graph = new GraphAM<Integer, Integer>(GraphType.Simple);
+        graph = new GraphAM<Integer, Integer>();
     }
 
     public void setupSimple2() {
@@ -45,35 +42,6 @@ public class GraphAMTest {
         graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
         graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
 
-    }
-
-    public void setupDirected1() {
-        graph = new GraphAM<>(GraphType.Directed);
-    }
-
-    public void setupDirected2() {
-        setupDirected1();
-
-        Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
-        Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<Integer, Integer>(4, 1);
-        Vertex<Integer, Integer> vertex5 = new Vertex<Integer, Integer>(5, 1);
-
-        graph.insertVertex(vertex1);
-        graph.insertVertex(vertex2);
-        graph.insertVertex(vertex3);
-        graph.insertVertex(vertex4);
-        graph.insertVertex(vertex5);
-
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
     }
 
     public void setup3() {
@@ -119,7 +87,6 @@ public class GraphAMTest {
 
     }
 
-
     @Test
     public void testIsConnected() {
         setupSimple2();
@@ -128,14 +95,13 @@ public class GraphAMTest {
 
         assertNotNull(graph.searchVertex(2));
         assertNull(graph.searchVertex(1));
-        
+
         assertEquals(false, graph.areConnected(graph.searchVertex(2), graph.searchVertex(1)));
 
     }
 
     @Test
     public void testRemoveVertex() {
-        setupDirected1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
@@ -173,61 +139,6 @@ public class GraphAMTest {
         assertNotNull(graph.searchVertex(3));
         assertNotNull(graph.searchVertex(4));
         assertNull(graph.searchVertex(5));
-    }
-
-    @Test
-    public void testInsertEdgeAndIsConnectedDirectedGraph() {
-        setupDirected1();
-
-        Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 100);
-        Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 200);
-        Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 300);
-
-        Edge<Integer, Integer> edge12 = new Edge<>(vertex1, vertex2, 10);
-        Edge<Integer, Integer> edge23 = new Edge<>(vertex2, vertex3, 20);
-
-        graph.insertEdge(edge12);
-        graph.insertEdge(edge23);
-
-        assertTrue(vertex1.isConnected(vertex2));
-        assertTrue(vertex2.isConnected(vertex3));
-        assertFalse(vertex3.isConnected(vertex1));
-    }
-
-    @Test
-    public void testInsertMultigraphEdge() {
-        graph = new GraphAM<>(GraphType.Multigraph);
-        setup3();
-
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
-
-        assertTrue(vertex1.isConnected(vertex2));
-        assertTrue(vertex2.isConnected(vertex1));
-    }
-
-    @Test
-    public void testInsertPseudographEdge() {
-        graph = new GraphAM<>(GraphType.Pseudograph);
-        setup3();
-
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
-
-        assertTrue(vertex1.isConnected(vertex2));
-        assertTrue(vertex2.isConnected(vertex1));
-    }
-
-    @Test
-    public void testInsertMultiDirectedEdge() {
-        graph = new GraphAM<>(GraphType.DirectedMultigraph);
-        setup3();
-
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
-
-        assertTrue(vertex1.isConnected(vertex2));
-        assertFalse(vertex2.isConnected(vertex1));
     }
 
 }
