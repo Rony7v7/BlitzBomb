@@ -103,10 +103,10 @@ public class GraphAMTest {
         setupSimple2();
 
         Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
+        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
         Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
         Vertex<Integer, Integer> vertex4 = graph.searchVertex(4);
         Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
 
         assertEquals(true, vertex2.isConnected(vertex1));
         assertEquals(true, vertex5.isConnected(vertex1));
