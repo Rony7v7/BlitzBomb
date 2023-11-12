@@ -21,14 +21,17 @@ public class Avatar {
         this.canvas = canvas;
         frame = 0;
 
-        for (int i = 1; i <= 4; i++) {
-            this.idle.add(new Image("file:src/main/resources/assets/avatar/kelvin_stand(" + i + ").png"));
+        for (int i = 1; i <= 8; i++) {
+            Image image = new Image(getClass().getResource("/assets/avatar/kelvin_stand/kelvin_stand_"+i+".png").toExternalForm(),70,70,false,false);
+            idle.add(image);
         }
     }
 
     public void paint() {
-       canvas.getGraphicsContext2D().drawImage(idle.get(frame%idle.size()), x, y);
-       frame++;
+        // delete previous frame
+        canvas.getGraphicsContext2D().clearRect(x, y, idle.get(frame%idle.size()).getWidth(), idle.get(frame%idle.size()).getHeight());
+        canvas.getGraphicsContext2D().drawImage(idle.get(frame%idle.size()), x, y);
+        frame++;
     }
 
 

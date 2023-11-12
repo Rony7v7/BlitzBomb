@@ -44,37 +44,35 @@ public class GameViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gc = this.canvas.getGraphicsContext2D();
-        gc.setFill(Color.web("#f7efd8")); // Set your desired background color
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        init(MainViewController.getGraphType());
-        player = new Player("",0,canvas);
-        player.paint();
+        initDraw();
 
-        // New tread to draw player
-        // new Thread(() -> {
-        //     while (true) {
-        //         try {
-        //             player.paint();
-        //             Thread.sleep(100);
-        //         } catch (InterruptedException e) {
-        //             e.printStackTrace();
-        //         }
-        //     }
-        // }).start();
+        player = new Player("",0,canvas); // player que llega de la clase controladora 
+        new Thread(() -> {
+            while (true) {
+                try {
+                    player.paint();
+                    Thread.sleep(65);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
         isGameRunning = true;
     }
 
     // Use this method to send all the data that you need.
-    private void init(String graphType) {
+    private void initDraw() {
+        gc.setFill(Color.web("#f7efd8")); // Set your desired background color
+        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.setStroke(Color.RED);
 
         // Draw a rectangle around the Canvas to represent the borders
         gc.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        this.graph = generateRandomGraph(graphType);
+
+        this.graph = generateRandomGraph(MainViewController.getGraphType());
 
         drawGraph(graph);
-
     }
 
     private IGraph<String, BombWrapper> generateRandomGraph(String graphType) {
@@ -91,6 +89,10 @@ public class GameViewController implements Initializable {
     }
 
     private void drawGraph(IGraph<String, BombWrapper> graph) {
+
+        // clear the canvas
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
         if (graph instanceof GraphAL) {
             drawALGraph(graph);
         } else {

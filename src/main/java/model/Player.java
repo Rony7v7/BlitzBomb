@@ -11,7 +11,7 @@ public class Player {
     public Player(String nickname, int score, Canvas canvas) {
         this.nickname = nickname;
         this.score = 0;
-        this.avatar = new Avatar(0, 0, canvas);
+        this.avatar = new Avatar(0, 600, canvas);
     }
 
     public void paint() {
