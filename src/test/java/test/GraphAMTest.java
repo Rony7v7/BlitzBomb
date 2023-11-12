@@ -175,6 +175,9 @@ public class GraphAMTest {
         Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
         Vertex<Integer, Integer> mstVertex5 = mst.searchVertex(5);
 
+        assertEquals(true, mst.areConnected(mstVertex1, mstVertex2));
+        assertEquals(true, mst.areConnected(mstVertex1, mstVertex5));
+
     }
 
 }

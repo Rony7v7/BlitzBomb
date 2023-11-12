@@ -497,4 +497,9 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return vertex;
     }
 
+    @Override
+    public boolean areConnected(Vertex<K, V> vertex1, Vertex<K, V> vertex2) {
+        return vertex1.isConnected(vertex2);
+    }
+
 }
