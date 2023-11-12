@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import structures.enums.Color;
 import structures.interfaces.IVertex;
 
-public class Vertex<K,V> implements IVertex<K,V>, Comparable<Vertex<K, V>> {
+public class Vertex<K, V> implements IVertex<K, V>, Comparable<Vertex<K, V>> {
 
     private K key;
     private V value;
-    private ArrayList<Edge<K,V>> edges;
-    
+    private ArrayList<Edge<K, V>> edges;
+
     // BFS and DFS
     private Color color;
     private int distance;
-    private Vertex<K,V> predecessor;
+    private Vertex<K, V> predecessor;
 
     private int timeStampD;
     private int timeStampF;
@@ -22,7 +22,7 @@ public class Vertex<K,V> implements IVertex<K,V>, Comparable<Vertex<K, V>> {
     public Vertex(K key, V value) {
         this.key = key;
         this.value = value;
-        this.edges = new ArrayList<Edge<K,V>>();
+        this.edges = new ArrayList<Edge<K, V>>();
 
         this.color = Color.WHITE;
         this.distance = 0;
@@ -31,7 +31,7 @@ public class Vertex<K,V> implements IVertex<K,V>, Comparable<Vertex<K, V>> {
         this.timeStampF = 0;
     }
 
-    public void addEdge(Edge<K,V> edge) {
+    public void addEdge(Edge<K, V> edge) {
         this.edges.add(edge);
     }
 
@@ -56,7 +56,7 @@ public class Vertex<K,V> implements IVertex<K,V>, Comparable<Vertex<K, V>> {
     }
 
     @Override
-    public Vertex<K,V> getPredecessor() {
+    public Vertex<K, V> getPredecessor() {
         return predecessor;
     }
 
@@ -91,7 +91,7 @@ public class Vertex<K,V> implements IVertex<K,V>, Comparable<Vertex<K, V>> {
     }
 
     @Override
-    public void setPredecessor(Vertex<K,V> predecessor) {
+    public void setPredecessor(Vertex<K, V> predecessor) {
         this.predecessor = predecessor;
     }
 
@@ -107,49 +107,45 @@ public class Vertex<K,V> implements IVertex<K,V>, Comparable<Vertex<K, V>> {
 
     @Override
     public void disconnect() {
-        ArrayList<Edge<K,V>> toRemove = new ArrayList<>(edges);
 
-        for (Edge<K,V> edge : toRemove) {
-            disconnectFrom(edge.getVertex2());
+        for (int i = edges.size() - 1; i >= 0; i--) {
+            disconnectFrom(edges.get(i).getVertex2());
         }
 
     }
 
     @Override
-    public void disconnectFrom(Vertex<K,V> vertex) {
-        if (isConnected(vertex)) {
-            this.edges.remove(getEdgeFrom(vertex));
-            System.out.println();
-        }
+    public void disconnectFrom(Vertex<K, V> vertex) {
 
-        if (vertex.isConnected(this)) {
-            vertex.getEdges().remove(getEdgeFrom(this));
-        }
+        this.edges.remove(getEdgeFrom(vertex));
+
+        vertex.getEdges().remove(vertex.getEdgeFrom(this));
+
     }
 
     @Override
-    public void removeEdge(Vertex<K,V> vertex) {
-        for (Edge<K,V> edge : edges) {
+    public void removeEdge(Vertex<K, V> vertex) {
+        for (Edge<K, V> edge : edges) {
             if (edge.getVertex2().equals(vertex)) {
                 this.edges.remove(edge);
                 break;
             }
         }
     }
-    
+
     @Override
-    public ArrayList<Edge<K,V>> getEdges() {
+    public ArrayList<Edge<K, V>> getEdges() {
         return edges;
     }
 
     @Override
-    public boolean isConnected(Vertex<K,V> vertex) {
-        return getEdgeFrom(vertex) != null ? true:false;
+    public boolean isConnected(Vertex<K, V> vertex) {
+        return getEdgeFrom(vertex) != null ? true : false;
     }
 
     @Override
-    public Edge<K,V> getEdgeFrom(Vertex<K,V> vertex) {
-        for (Edge<K,V> edge : edges) {
+    public Edge<K, V> getEdgeFrom(Vertex<K, V> vertex) {
+        for (Edge<K, V> edge : edges) {
             if (edge.getVertex2().equals(vertex)) {
                 return edge;
             }
@@ -160,7 +156,6 @@ public class Vertex<K,V> implements IVertex<K,V>, Comparable<Vertex<K, V>> {
     @Override
     public int compareTo(Vertex<K, V> other) {
         return Integer.compare(this.getDistance(), other.getDistance());
-    }   
-
+    }
 
 }
