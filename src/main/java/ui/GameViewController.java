@@ -16,6 +16,7 @@ import structures.classes.Vertex;
 import structures.enums.GraphType;
 import structures.interfaces.IGraph;
 import model.BombWrapper;
+import model.Player;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class GameViewController implements Initializable {
     @FXML
     private AnchorPane pane;
     private static final int NUM_VERTICES = 51;
+    private Player player;
 
     private IGraph<String, BombWrapper> graph;
 
@@ -40,10 +42,25 @@ public class GameViewController implements Initializable {
         gc = this.canvas.getGraphicsContext2D();
         gc.setFill(Color.web("#f7efd8")); // Set your desired background color
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        init(MainViewController.getGraphType());
+        player = new Player(50,50, this.canvas);
+
+        // New tread to draw player
+        new Thread(() -> {
+            while (true) {
+                try {
+                    player.paint();
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
     }
 
     // Use this method to send all the data that you need.
-    public void init(String graphType) {
+    private void init(String graphType) {
         gc.setStroke(Color.RED);
 
         // Draw a rectangle around the Canvas to represent the borders

@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import structures.enums.GraphType;
 
 public class MainViewController implements Initializable {
 
@@ -22,12 +23,8 @@ public class MainViewController implements Initializable {
 
     @FXML
     private void play(ActionEvent event) {
-        lblOut.setText("tas jugando");
-        FXMLLoader loader;
         try {
-            loader = MainApp.setRoot("game-view", "Blitz Bomb");
-            GameViewController controller = loader.getController();
-            controller.init(graphType);
+            MainApp.setRoot("game-view", "Blitz Bomb");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,6 +32,10 @@ public class MainViewController implements Initializable {
 
     public static void setGraph(String graph) {
         graphType = graph;
+    }
+
+    public static String getGraphType() {
+        return graphType;
     }
 
     @FXML
