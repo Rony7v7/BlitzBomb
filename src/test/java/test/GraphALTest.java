@@ -300,8 +300,7 @@ public class GraphALTest {
 
         Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
         Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
-        boolean connected = vertex1.isConnected(vertex2);
-        //assertEquals(true, connected);
+        // assertEquals(true, connected);
         assertFalse(vertex2.isConnected(vertex1));
     }
 
@@ -421,7 +420,6 @@ public class GraphALTest {
         setUp4();
         IGraph<Integer, Integer> mst = graph.kruskal();
 
-
         assertEquals(5, mst.getVertexAmount());
 
         Vertex<Integer, Integer> mstVertex1 = mst.searchVertex(1);
@@ -470,7 +468,6 @@ public class GraphALTest {
         assertNotNull(mstVertex5);
     }
 
-
     @Test
     public void test1BFS() {
         GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
@@ -492,7 +489,7 @@ public class GraphALTest {
 
         graph.BFS(vertex1);
 
-        assertEquals(Color.BLACK, vertex1.getColor()); 
+        assertEquals(Color.BLACK, vertex1.getColor());
         assertEquals(Color.BLACK, vertex2.getColor());
         assertEquals(Color.BLACK, vertex3.getColor());
         assertEquals(Color.BLACK, vertex4.getColor());
@@ -527,7 +524,7 @@ public class GraphALTest {
 
         graph.BFS(vertex3);
 
-        assertEquals(Color.BLACK, vertex1.getColor()); 
+        assertEquals(Color.BLACK, vertex1.getColor());
         assertEquals(Color.BLACK, vertex2.getColor());
 
         assertEquals(2, (int) vertex1.getDistance());
@@ -559,7 +556,7 @@ public class GraphALTest {
 
         graph.BFS(vertex5);
 
-        assertEquals(Color.BLACK, vertex1.getColor()); 
+        assertEquals(Color.BLACK, vertex1.getColor());
         assertEquals(Color.BLACK, vertex2.getColor());
         assertEquals(Color.BLACK, vertex3.getColor());
         assertEquals(Color.BLACK, vertex4.getColor());
@@ -592,7 +589,7 @@ public class GraphALTest {
         int totalWeight = graph.DFS(mst);
 
         assertEquals(2, totalWeight);
-        
+
     }
 
     @Test
@@ -621,7 +618,7 @@ public class GraphALTest {
 
     @Test
     public void test3DFS() {
-        
+
         GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
