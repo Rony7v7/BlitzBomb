@@ -104,6 +104,8 @@ public class GraphAMTest {
     @Test
     public void testRemoveVertex() {
 
+        setupSimple1();
+
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
         Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 1);

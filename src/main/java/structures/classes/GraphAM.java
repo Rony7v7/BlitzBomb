@@ -85,11 +85,11 @@ public class GraphAM<K, V> implements IGraph<K, V> {
     public Edge<K, V> insertEdge(Edge<K, V> edge) {
 
         if (!vertexList.contains(edge.getVertex1())) {
-            vertexList.add(edge.getVertex1());
+            insertVertex(edge.getVertex1());
         }
 
         if (!vertexList.contains(edge.getVertex2())) {
-            vertexList.add(edge.getVertex2());
+            insertVertex(edge.getVertex2());
         }
 
         return insertSimpleEdge(edge);
