@@ -43,19 +43,20 @@ public class GameViewController implements Initializable {
         gc.setFill(Color.web("#f7efd8")); // Set your desired background color
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         init(MainViewController.getGraphType());
-        player = new Player(50,50, this.canvas);
+        player = new Player("",0,canvas);
+        player.paint();
 
         // New tread to draw player
-        new Thread(() -> {
-            while (true) {
-                try {
-                    player.paint();
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        // new Thread(() -> {
+        //     while (true) {
+        //         try {
+        //             player.paint();
+        //             Thread.sleep(100);
+        //         } catch (InterruptedException e) {
+        //             e.printStackTrace();
+        //         }
+        //     }
+        // }).start();
 
     }
 
