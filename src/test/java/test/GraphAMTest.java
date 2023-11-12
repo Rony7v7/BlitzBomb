@@ -108,46 +108,17 @@ public class GraphAMTest {
         Vertex<Integer, Integer> vertex4 = graph.searchVertex(4);
         Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
 
-        assertEquals(true, vertex2.isConnected(vertex1));
-        assertEquals(true, vertex5.isConnected(vertex1));
-        assertEquals(true, vertex4.isConnected(vertex1));
-        assertEquals(true, vertex5.isConnected(vertex4));
-        assertEquals(true, vertex3.isConnected(vertex4));
-        assertEquals(true, vertex5.isConnected(vertex2));
-        assertEquals(true, vertex3.isConnected(vertex2));
-        assertEquals(true, vertex5.isConnected(vertex3));
+        assertEquals(true, graph.areConnected(vertex1, vertex2));
+        assertEquals(true, graph.areConnected(vertex1, vertex5));
+        assertEquals(true, graph.areConnected(vertex1, vertex4));
+        assertEquals(true, graph.areConnected(vertex4, vertex5));
+        assertEquals(true, graph.areConnected(vertex4, vertex3));
+        assertEquals(true, graph.areConnected(vertex2, vertex5));
+        assertEquals(true, graph.areConnected(vertex2, vertex3));
+        assertEquals(true, graph.areConnected(vertex3, vertex5));
 
     }
 
-    @Test
-    public void testInsertDirectedEdge() {
-        setupDirected2();
-
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
-        Vertex<Integer, Integer> vertex4 = graph.searchVertex(4);
-        Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
-
-        assertEquals(true, vertex1.isConnected(vertex2));
-        assertEquals(true, vertex1.isConnected(vertex5));
-        assertEquals(true, vertex1.isConnected(vertex4));
-        assertEquals(true, vertex4.isConnected(vertex5));
-        assertEquals(true, vertex4.isConnected(vertex3));
-        assertEquals(true, vertex2.isConnected(vertex5));
-        assertEquals(true, vertex2.isConnected(vertex3));
-        assertEquals(true, vertex3.isConnected(vertex5));
-
-        assertEquals(false, vertex2.isConnected(vertex1));
-        assertEquals(false, vertex5.isConnected(vertex1));
-        assertEquals(false, vertex4.isConnected(vertex1));
-        assertEquals(false, vertex5.isConnected(vertex4));
-        assertEquals(false, vertex3.isConnected(vertex4));
-        assertEquals(false, vertex5.isConnected(vertex2));
-        assertEquals(false, vertex3.isConnected(vertex2));
-        assertEquals(false, vertex5.isConnected(vertex3));
-
-    }
 
     @Test
     public void testIsConnected() {
@@ -156,7 +127,9 @@ public class GraphAMTest {
         graph.removeVertex(graph.searchVertex(1));
 
         assertNotNull(graph.searchVertex(2));
-        assertEquals(false, graph.searchVertex(2).isConnected(graph.searchVertex(1)));
+        assertNull(graph.searchVertex(1));
+        
+        assertEquals(false, graph.areConnected(graph.searchVertex(2), graph.searchVertex(1)));
 
     }
 

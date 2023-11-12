@@ -128,7 +128,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
     }
 
     @Override
-    public Edge<K,V> insertEdgePrim(Edge<K,V> edge) {
+    public Edge<K, V> insertEdgePrim(Edge<K, V> edge) {
         if (!vertexList.contains(edge.getVertex1())) {
             vertexList.add(edge.getVertex1());
         }
@@ -137,7 +137,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
             vertexList.add(edge.getVertex2());
         }
 
-        return insertSimpleEdge(edge);   
+        return insertSimpleEdge(edge);
     }
 
     private Edge<K, V> insertSimpleEdge(Edge<K, V> edge) {
@@ -302,7 +302,10 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return adjacencyMatrix.get(vertexList.indexOf(vertex1)).get(vertexList.indexOf(vertex2));
     }
 
-    private boolean areConnected(Vertex<K, V> vertex1, Vertex<K, V> vertex2) {
+    public boolean areConnected(Vertex<K, V> vertex1, Vertex<K, V> vertex2) {
+        if (vertex1 == null || vertex2 == null) {
+            return false;
+        }
         return adjacencyMatrix.get(vertexList.indexOf(vertex1)).get(vertexList.indexOf(vertex2)) != null;
     }
 
@@ -406,7 +409,8 @@ public class GraphAM<K, V> implements IGraph<K, V> {
             for (int i = 0; i < vertexList.size(); i++) {
                 for (int j = 0; j < vertexList.size(); j++) {
                     if (distanceMatrix[i][k] != Integer.MAX_VALUE && distanceMatrix[k][j] != Integer.MAX_VALUE) {
-                        distanceMatrix[i][j] = Math.min(distanceMatrix[i][j], distanceMatrix[i][k] + distanceMatrix[k][j]);
+                        distanceMatrix[i][j] = Math.min(distanceMatrix[i][j],
+                                distanceMatrix[i][k] + distanceMatrix[k][j]);
                     }
                 }
             }
@@ -425,7 +429,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
 
         // TODO
         return null;
-        
+
     }
 
     @Override
