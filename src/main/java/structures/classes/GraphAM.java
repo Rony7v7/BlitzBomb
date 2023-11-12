@@ -1,10 +1,13 @@
 package structures.classes;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import structures.enums.Color;
 import structures.interfaces.IGraph;
@@ -98,6 +101,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
 
     @Override
     public Edge<K, V> insertEdgePrim(Edge<K, V> edge) {
+
         if (!vertexList.contains(edge.getVertex1())) {
             vertexList.add(edge.getVertex1());
         }
@@ -106,7 +110,33 @@ public class GraphAM<K, V> implements IGraph<K, V> {
             vertexList.add(edge.getVertex2());
         }
 
-        return insertSimpleEdge(edge);
+        Vertex<K, V> vertex1 = edge.getVertex1();
+        Vertex<K, V> vertex2 = edge.getVertex2();
+
+        vertex1.getEdges().add(edge);
+        vertex2.getEdges().add(new Edge<>(vertex2, vertex1, edge.getWeight()));
+
+        edgeList.add(edge);
+
+        if (edge.getVertex2().equals(edge.getVertex1())) {
+            return null;
+        }
+
+        if (areConnected(edge.getVertex2(), edge.getVertex1())) {
+            return null;
+        }  
+
+        int index1 = vertexList.indexOf(edge.getVertex1());
+        int index2 = vertexList.indexOf(edge.getVertex2());
+
+        if (index1 == -1 || index2 == -1) {
+            return null;
+        }
+
+        adjacencyMatrix.get(index1).set(index2, edge);
+        adjacencyMatrix.get(index2).set(index1, new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight()));
+
+        return edge;
     }
 
     private Edge<K, V> insertSimpleEdge(Edge<K, V> edge) {
@@ -117,7 +147,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
 
         if (areConnected(edge.getVertex2(), edge.getVertex1())) {
             return null;
-        }
+        }  
 
         int index1 = vertexList.indexOf(edge.getVertex1());
         int index2 = vertexList.indexOf(edge.getVertex2());
@@ -199,7 +229,6 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return adjacencyMatrix.get(vertexList.indexOf(vertex1)).get(vertexList.indexOf(vertex2));
     }
 
-    @Override
     public boolean areConnected(Vertex<K, V> vertex1, Vertex<K, V> vertex2) {
         if (vertex1 == null || vertex2 == null) {
             return false;
@@ -363,52 +392,48 @@ public class GraphAM<K, V> implements IGraph<K, V> {
             return null;
         }
 
-        // Initialize data structures for the algorithm
-        Map<Vertex<K, V>, Integer> distance = new HashMap<>();
+        IGraph<K, V> minimumSpanningTree = new GraphAM<>();
 
-        Map<Vertex<K, V>, Edge<K, V>> previousEdge = new HashMap<>();
+        // Set of vertices already included in the Minimum Spanning Tree
+        Set<Vertex<K, V>> includedVertices = new HashSet<>();
 
-        PriorityQueue<Vertex<K, V>> priorityQueue = new PriorityQueue<>(getVertexAmount(),
-                (v1, v2) -> Integer.compare(distance.get(v1), distance.get(v2)));
+        // Priority queue to select the edge with the minimum weight in each iteration
+        PriorityQueue<Edge<K, V>> minHeap = new PriorityQueue<>(Comparator.comparingInt(Edge::getWeight));
 
-        // Initialize distance to all vertices as infinity and the start vertex's
-        // distance to 0
-        for (Vertex<K, V> vertex : vertexList) {
-            distance.put(vertex, Integer.MAX_VALUE);
-            previousEdge.put(vertex, null);
-        }
+        Vertex<K, V> currentVertex = begin;
+        includedVertices.add(currentVertex);
 
-        distance.put(begin, 0);
-
-        // Add the start vertex to the priority queue
-        priorityQueue.add(begin);
-
-        while (!priorityQueue.isEmpty()) {
-            Vertex<K, V> currentVertex = priorityQueue.poll();
+        // Continue until all vertices are included in the Minimum Spanning Tree
+        while (includedVertices.size() < getVertexAmount() && currentVertex != null) {
 
             for (Edge<K, V> edge : getVertexEdges(currentVertex)) {
-                Vertex<K, V> neighbor = edge.getVertex2();
-                int newDistance = edge.getWeight();
-
-                if (newDistance < distance.get(neighbor)) {
-                    distance.put(neighbor, newDistance);
-                    previousEdge.put(neighbor, edge);
-                    priorityQueue.add(neighbor);
+                if (!includedVertices.contains(edge.getVertex2())) {
+                    minHeap.add(edge);
                 }
+            }
+
+            Edge<K, V> minEdge = minHeap.poll();
+
+            if (minEdge != null) {
+                // Get the next vertex connected by the selected edge
+                Vertex<K, V> nextVertex = minEdge.getVertex2();
+
+                // Add the edge to the Minimum Spanning Tree
+                minimumSpanningTree.insertEdge(minEdge);
+
+                // Add the next vertex to the set of included vertices
+                includedVertices.add(nextVertex);
+
+                // Move to the next vertex
+                currentVertex = nextVertex;
+            } else {
+
+                currentVertex = null;
             }
         }
 
-        IGraph<K, V> minimumSpanningTree = new GraphAM<>();
-
-        for (Vertex<K, V> vertex : vertexList) {
-            minimumSpanningTree.insertVertex(vertex);
-        }
-
-        for (Edge<K, V> edge : previousEdge.values()) {
-            minimumSpanningTree.insertEdgePrim(edge);
-        }
-
         return minimumSpanningTree;
+
     }
 
     @Override

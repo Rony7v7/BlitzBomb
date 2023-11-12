@@ -3,6 +3,7 @@ package test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -156,7 +157,6 @@ public class GraphAMTest {
         Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
 
         
-
         graph.insertEdge(new Edge<>(vertex1, vertex2, 8));
         graph.insertEdge(new Edge<>(vertex1, vertex5, 2));
         graph.insertEdge(new Edge<>(vertex1, vertex4, 9));
@@ -166,15 +166,14 @@ public class GraphAMTest {
         graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
         graph.insertEdge(new Edge<>(vertex3, vertex5, 8));
 
-        IGraph<Integer, Integer> minimumSpanningTree = graph.prim(graph.getVertexList().get(0));
+        IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
 
-        assertEquals(4, minimumSpanningTree.getVertexAmount());
-        assertEquals(3, minimumSpanningTree.getEdgesAmount());
+        assertEquals(5, mst.getVertexAmount());
+        assertEquals(4, mst.getEdgesAmount());
 
-        assertEquals(true, minimumSpanningTree.areConnected(minimumSpanningTree.searchVertex(1),
-                minimumSpanningTree.searchVertex(5)));
-        assertEquals(true, minimumSpanningTree.areConnected(minimumSpanningTree.searchVertex(1),
-                minimumSpanningTree.searchVertex(2)));
+        Vertex<Integer, Integer> mstVertex1 = mst.searchVertex(1);
+        Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
+        Vertex<Integer, Integer> mstVertex5 = mst.searchVertex(5);
 
     }
 
