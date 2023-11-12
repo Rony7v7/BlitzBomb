@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import structures.classes.GraphAL;
 import structures.classes.Vertex;
+import structures.enums.Color;
 import structures.enums.GraphType;
 import structures.interfaces.IGraph;
 import structures.classes.Edge;
@@ -470,6 +471,137 @@ public class GraphALTest {
         assertNotNull(mstVertex2);
         assertNotNull(mstVertex4);
         assertNotNull(mstVertex5);
+    }
+
+
+    @Test
+    public void test1BFS() {
+        GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
+
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
+        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
+        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
+        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+
+        graph.BFS(vertex1);
+
+        assertEquals(Color.BLACK, vertex1.getColor()); 
+        assertEquals(Color.BLACK, vertex2.getColor());
+        assertEquals(Color.BLACK, vertex3.getColor());
+        assertEquals(Color.BLACK, vertex4.getColor());
+        assertEquals(Color.BLACK, vertex5.getColor());
+
+        assertEquals(0, (int) vertex1.getDistance());
+        assertEquals(1, (int) vertex2.getDistance());
+
+        assertNull(vertex1.getPredecessor());
+        assertEquals(vertex1, vertex2.getPredecessor());
+        assertEquals(vertex2, vertex3.getPredecessor());
+    }
+
+    @Test
+    public void test2BFS() {
+        GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
+
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
+        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
+        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
+        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+
+        graph.BFS(vertex3);
+
+        assertEquals(Color.BLACK, vertex1.getColor()); 
+        assertEquals(Color.BLACK, vertex2.getColor());
+
+        assertEquals(2, (int) vertex1.getDistance());
+        assertEquals(1, (int) vertex2.getDistance());
+
+        assertNull(vertex3.getPredecessor());
+        assertEquals(vertex3, vertex4.getPredecessor());
+        assertEquals(vertex3, vertex5.getPredecessor());
+    }
+
+    @Test
+    public void test3BFS() {
+        GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
+
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
+        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
+        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
+        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+
+        graph.BFS(vertex5);
+
+        assertEquals(Color.BLACK, vertex1.getColor()); 
+        assertEquals(Color.BLACK, vertex2.getColor());
+        assertEquals(Color.BLACK, vertex3.getColor());
+        assertEquals(Color.BLACK, vertex4.getColor());
+        assertEquals(Color.BLACK, vertex5.getColor());
+
+        assertEquals(1, (int) vertex4.getDistance());
+        assertEquals(0, (int) vertex5.getDistance());
+
+        assertNull(vertex5.getPredecessor());
+        assertEquals(vertex5, vertex1.getPredecessor());
+        assertEquals(vertex5, vertex2.getPredecessor());
+
+    }
+
+    @Test
+    public void test1DFS() {
+        GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
+
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
+        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
+        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 8));
+        graph.insertEdge(new Edge<>(vertex1, vertex5, 2));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 9));
+        graph.insertEdge(new Edge<>(vertex2, vertex3, 5));
+        graph.insertEdge(new Edge<>(vertex2, vertex5, 5));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 6));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 8));
+
+        IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
+
+        int totalWeight = graph.DFS(mst);
+
+        assertEquals(19, totalWeight);
+        
     }
 
 }

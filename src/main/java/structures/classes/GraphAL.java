@@ -235,7 +235,6 @@ public class GraphAL<K, V> implements IGraph<K, V> {
                 return vertex;
             }
         }
-
         return null;
     }
 
@@ -301,33 +300,48 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return true;
     }
 
+    /*
+     * This method returns the total weight of the minimum spanning tree
+     */
     @Override
-    public void DFS() {
-        for (Vertex<K, V> vertex : vertexList) {
+    public int DFS(IGraph<K, V> minimumSpanningTree) {
+
+        int totalWeight = 0;
+
+        // Initialize the vertices
+        for (Vertex<K, V> vertex : minimumSpanningTree.getVertexList()) {
             vertex.setColor(Color.WHITE);
             vertex.setPredecessor(null);
         }
 
-        for (Vertex<K, V> vertex : vertexList) {
+        // Visit all vertices
+        for (Vertex<K, V> vertex : minimumSpanningTree.getVertexList()) {
             if (vertex.getColor() == Color.WHITE) {
-                DFSVisit(vertex);
+                totalWeight += DFSVisit(vertex);
             }
         }
 
+        return totalWeight;
     }
 
-    private void DFSVisit(Vertex<K, V> u) {
-        u.setColor(Color.GRAY);
-        u.setTimeStampD(u.getTimeStampD() + 1);
-        for (Edge<K, V> edge : u.getEdges()) {
-            Vertex<K, V> v = edge.getVertex2();
-            if (v.getColor() == Color.WHITE) {
-                v.setPredecessor(u);
-                DFSVisit(v);
+    private int DFSVisit(Vertex<K, V> vertex) {
+        int totalWeight = 0;
+
+        vertex.setColor(Color.GRAY);
+
+        for (Edge<K, V> edge : vertex.getEdges()) {
+            Vertex<K, V> nextVertex = edge.getVertex2();
+
+            if (nextVertex.getColor() == Color.WHITE) {
+                nextVertex.setPredecessor(vertex);
+                totalWeight += edge.getWeight();
+                totalWeight += DFSVisit(nextVertex);
             }
         }
-        u.setColor(Color.BLACK);
-        u.setTimeStampF(u.getTimeStampF() + 1);
+
+        vertex.setColor(Color.BLACK);
+
+        return totalWeight;
     }
 
     @Override

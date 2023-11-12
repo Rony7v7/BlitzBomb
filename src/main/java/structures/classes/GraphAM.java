@@ -322,12 +322,16 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         adjacencyMatrix.get(vertexList.indexOf(vertex1)).set(vertexList.indexOf(vertex2), null);
     }
 
+    // A este metodo le entra el arbol de expansion minima, debe recorrerlo y
+    // sumar los pesos de las aristas y retornar el valor
     @Override
-    public void DFS() {
+    public int DFS(IGraph<K, V> minimumSpanningTree) {
         for (Vertex<K, V> vertex : vertexList) {
             vertex.setColor(Color.WHITE);
             vertex.setPredecessor(null);
         }
+
+        int totalWeight = 0;
 
         for (Vertex<K, V> vertex : vertexList) {
             if (vertex.getColor() == Color.WHITE) {
@@ -335,18 +339,22 @@ public class GraphAM<K, V> implements IGraph<K, V> {
             }
         }
 
+        for (Edge<K, V> edge : minimumSpanningTree.getEdgeList()) {
+            totalWeight += edge.getWeight();
+        }
+
+        return totalWeight;
+
     }
 
     private void DFSVisit(Vertex<K, V> u) {
         u.setColor(Color.GRAY);
-        u.setTimeStampD(u.getTimeStampD() + 1);
         for (Vertex<K, V> v : getAdjacents(u)) {
             if (v.getColor() == Color.WHITE) {
                 v.setPredecessor(u);
                 DFSVisit(v);
             }
         }
-        u.setTimeStampF(u.getTimeStampF() + 1);
         u.setColor(Color.BLACK);
     }
 
