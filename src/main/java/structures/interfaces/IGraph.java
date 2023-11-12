@@ -5,7 +5,6 @@ import java.util.List;
 
 import structures.classes.Edge;
 import structures.classes.Vertex;
-import structures.enums.GraphType;
 
 public interface IGraph<K, V> {
 
@@ -21,10 +20,6 @@ public interface IGraph<K, V> {
 
     public void setEdgeList(ArrayList<Edge<K, V>> edgeList);
 
-    public GraphType getType();
-
-    public void setType(GraphType type);
-
     public Vertex<K, V> insertVertex(K key, V value);
 
     public Vertex<K, V> insertVertex(Vertex<K, V> vertex);
@@ -39,9 +34,9 @@ public interface IGraph<K, V> {
 
     public void BFS(Vertex<K, V> s);
 
-    public void DFS();
+    public int DFS(IGraph<K, V> minimumSpanningTree);
 
-    public List<Edge<K, V>> Dijkstra(Vertex<K, V> s);
+    public List<Edge<K, V>> Dijkstra(Vertex<K, V> s, Vertex<K, V> e);
 
     public int[][] floydWarshall();
 

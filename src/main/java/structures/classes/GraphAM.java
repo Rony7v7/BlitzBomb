@@ -2,10 +2,11 @@ package structures.classes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.HashMap;
 
 import structures.enums.Color;
-import structures.enums.GraphType;
 import structures.interfaces.IGraph;
 
 public class GraphAM<K, V> implements IGraph<K, V> {
@@ -13,14 +14,12 @@ public class GraphAM<K, V> implements IGraph<K, V> {
     private ArrayList<Vertex<K, V>> vertexList;
     private ArrayList<Edge<K, V>> edgeList;
     private ArrayList<ArrayList<Edge<K, V>>> adjacencyMatrix;
-    public GraphType type;
 
-    public GraphAM(GraphType type) {
+    public GraphAM() {
         this.vertexList = new ArrayList<>();
         this.edgeList = new ArrayList<>();
         this.adjacencyMatrix = new ArrayList<>();
 
-        this.type = type;
     }
 
     public ArrayList<ArrayList<Edge<K, V>>> getAdjacencyMatrix() {
@@ -55,16 +54,6 @@ public class GraphAM<K, V> implements IGraph<K, V> {
     @Override
     public void setEdgeList(ArrayList<Edge<K, V>> edgeList) {
         this.edgeList = edgeList;
-    }
-
-    @Override
-    public GraphType getType() {
-        return type;
-    }
-
-    @Override
-    public void setType(GraphType type) {
-        this.type = type;
     }
 
     @Override
@@ -103,27 +92,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
             vertexList.add(edge.getVertex2());
         }
 
-        switch (this.type) {
-            case Simple -> {
-                return insertSimpleEdge(edge);
-            }
-            case Directed -> {
-                return insertDirectedEdge(edge);
-            }
-            case Multigraph -> {
-                return insertMultigraphEdge(edge);
-            }
-            case Pseudograph -> {
-                return insertPseudographEdge(edge);
-            }
-            case DirectedMultigraph -> {
-                return insertMultiDirectedEdge(edge);
-            }
-
-            default -> {
-                return null;
-            }
-        }
+        return insertSimpleEdge(edge);
 
     }
 
@@ -159,78 +128,6 @@ public class GraphAM<K, V> implements IGraph<K, V> {
 
         adjacencyMatrix.get(index1).set(index2, edge);
         adjacencyMatrix.get(index2).set(index1, new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight()));
-        edgeList.add(edge);
-
-        return edge;
-    }
-
-    private Edge<K, V> insertDirectedEdge(Edge<K, V> edge) {
-
-        if (areConnected(edge.getVertex1(), edge.getVertex2())) {
-            return null;
-        }
-
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1())).set(vertexList.indexOf(edge.getVertex2()), edge);
-
-        edgeList.add(edge);
-
-        return edge;
-    }
-
-    private Edge<K, V> insertMultigraphEdge(Edge<K, V> edge) {
-
-        if (edge.getVertex2().equals(edge.getVertex1())) {
-            return null;
-        }
-
-        Edge<K, V> prevEdgeAtoB = adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1()))
-                .get(vertexList.indexOf(edge.getVertex2()));
-        Edge<K, V> prevEdgeBtoA = adjacencyMatrix.get(vertexList.indexOf(edge.getVertex2()))
-                .get(vertexList.indexOf(edge.getVertex1()));
-        Edge<K, V> edgeBtoA = new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight());
-
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1())).set(vertexList.indexOf(edge.getVertex2()), edge);
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex2())).set(vertexList.indexOf(edge.getVertex1()), edgeBtoA);
-
-        if (prevEdgeAtoB != null) {
-            edge.setNextEdge(prevEdgeAtoB);
-            edgeBtoA.setNextEdge(prevEdgeBtoA);
-        }
-
-        edgeList.add(edge);
-
-        return edge;
-    }
-
-    private Edge<K, V> insertPseudographEdge(Edge<K, V> edge) {
-        Edge<K, V> prevEdgeAtoB = adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1()))
-                .get(vertexList.indexOf(edge.getVertex2()));
-        Edge<K, V> prevEdgeBtoA = adjacencyMatrix.get(vertexList.indexOf(edge.getVertex2()))
-                .get(vertexList.indexOf(edge.getVertex1()));
-        Edge<K, V> edgeBtoA = new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight());
-
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1())).set(vertexList.indexOf(edge.getVertex2()), edge);
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex2())).set(vertexList.indexOf(edge.getVertex1()), edgeBtoA);
-
-        if (prevEdgeAtoB != null) {
-            edge.setNextEdge(prevEdgeAtoB);
-            edgeBtoA.setNextEdge(prevEdgeBtoA);
-        }
-
-        edgeList.add(edge);
-        return edge;
-    }
-
-    private Edge<K, V> insertMultiDirectedEdge(Edge<K, V> edge) {
-        Edge<K, V> prevEdgeAtoB = adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1()))
-                .get(vertexList.indexOf(edge.getVertex2()));
-
-        adjacencyMatrix.get(vertexList.indexOf(edge.getVertex1())).set(vertexList.indexOf(edge.getVertex2()), edge);
-
-        if (prevEdgeAtoB != null) {
-            edge.setNextEdge(prevEdgeAtoB);
-        }
-
         edgeList.add(edge);
 
         return edge;
@@ -322,12 +219,16 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         adjacencyMatrix.get(vertexList.indexOf(vertex1)).set(vertexList.indexOf(vertex2), null);
     }
 
+    // A este metodo le entra el arbol de expansion minima, debe recorrerlo y
+    // sumar los pesos de las aristas y retornar el valor
     @Override
-    public void DFS() {
+    public int DFS(IGraph<K, V> minimumSpanningTree) {
         for (Vertex<K, V> vertex : vertexList) {
             vertex.setColor(Color.WHITE);
             vertex.setPredecessor(null);
         }
+
+        int totalWeight = 0;
 
         for (Vertex<K, V> vertex : vertexList) {
             if (vertex.getColor() == Color.WHITE) {
@@ -335,56 +236,87 @@ public class GraphAM<K, V> implements IGraph<K, V> {
             }
         }
 
+        for (Edge<K, V> edge : minimumSpanningTree.getEdgeList()) {
+            totalWeight += edge.getWeight();
+        }
+
+        return totalWeight;
+
     }
 
     private void DFSVisit(Vertex<K, V> u) {
         u.setColor(Color.GRAY);
-        u.setTimeStampD(u.getTimeStampD() + 1);
         for (Vertex<K, V> v : getAdjacents(u)) {
             if (v.getColor() == Color.WHITE) {
                 v.setPredecessor(u);
                 DFSVisit(v);
             }
         }
-        u.setTimeStampF(u.getTimeStampF() + 1);
         u.setColor(Color.BLACK);
     }
 
     @Override
-    public List<Edge<K, V>> Dijkstra(Vertex<K, V> s) {
-        s.setDistance(0);
-        s.setPredecessor(null);
+    public List<Edge<K, V>> Dijkstra(Vertex<K, V> startVertex, Vertex<K, V> endVertex) {
+        // Initialize data structures for the algorithm
+        Map<Vertex<K, V>, Integer> distance = new HashMap<>();
+        Map<Vertex<K, V>, Edge<K, V>> previousEdge = new HashMap<>();
+        PriorityQueue<Vertex<K, V>> priorityQueue = new PriorityQueue<>(getVertexAmount(),
+                (v1, v2) -> Integer.compare(distance.get(v1), distance.get(v2)));
 
-        PriorityQueue<Vertex<K, V>> q = new PriorityQueue<>();
-
+        // Initialize distance to all vertices as infinity and the start vertex's
+        // distance to 0
         for (Vertex<K, V> vertex : vertexList) {
-            if (!vertex.equals(s)) {
-                vertex.setDistance(Integer.MAX_VALUE);
-            }
-            vertex.setPredecessor(null);
-            q.add(vertex);
+            distance.put(vertex, Integer.MAX_VALUE);
+            previousEdge.put(vertex, null);
         }
+        distance.put(startVertex, 0);
 
-        while (!q.isEmpty()) {
-            Vertex<K, V> u = q.poll();
-            for (Vertex<K, V> v : getAdjacents(u)) {
-                if (v.getDistance() > u.getDistance() + getEdge(u, v).getWeight()) {
-                    v.setDistance(u.getDistance() + getEdge(u, v).getWeight());
-                    v.setPredecessor(u);
-                    q.remove(v);
+        // Add the start vertex to the priority queue
+        priorityQueue.add(startVertex);
+
+        while (!priorityQueue.isEmpty()) {
+            Vertex<K, V> currentVertex = priorityQueue.poll();
+
+            if (currentVertex == endVertex) {
+                return buildPath(previousEdge, endVertex);
+            }
+
+            for (Edge<K, V> edge : getVertexEdges(currentVertex)) {
+                Vertex<K, V> neighbor = edge.getVertex2();
+                int newDistance = distance.get(currentVertex) + edge.getWeight();
+
+                if (newDistance < distance.get(neighbor)) {
+                    distance.put(neighbor, newDistance);
+                    previousEdge.put(neighbor, edge);
+                    priorityQueue.add(neighbor);
                 }
             }
         }
 
-        List<Edge<K, V>> edgeList = new ArrayList<>();
-        for (Vertex<K, V> vertex : vertexList) {
-            if (vertex.getPredecessor() != null) {
-                edgeList.add(getEdge(vertex.getPredecessor(), vertex));
+        return null; // No path found
+    }
+
+    private List<Edge<K, V>> getVertexEdges(Vertex<K, V> vertex) {
+        List<Edge<K, V>> edges = new ArrayList<>();
+        for (Edge<K, V> edge : adjacencyMatrix.get(vertexList.indexOf(vertex))) {
+            if (edge != null) {
+                edges.add(edge);
             }
         }
+        return edges;
+    }
 
-        return edgeList;
+    private List<Edge<K, V>> buildPath(Map<Vertex<K, V>, Edge<K, V>> previousEdge, Vertex<K, V> endVertex) {
+        List<Edge<K, V>> path = new ArrayList<>();
+        Vertex<K, V> currentVertex = endVertex;
 
+        while (previousEdge.get(currentVertex) != null) {
+            Edge<K, V> edge = previousEdge.get(currentVertex);
+            path.add(0, edge); // Add the edge at the beginning of the path
+            currentVertex = edge.getVertex1();
+        }
+
+        return path;
     }
 
     @Override

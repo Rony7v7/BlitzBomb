@@ -4,27 +4,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
 import structures.enums.Color;
-import structures.enums.GraphType;
 import structures.interfaces.IGraph;
 
 public class GraphAL<K, V> implements IGraph<K, V> {
     private ArrayList<Vertex<K, V>> vertexList;
     private ArrayList<Edge<K, V>> edgeList;
 
-    public GraphType type;
-
-    public GraphAL(GraphType type) {
+    public GraphAL() {
         this.vertexList = new ArrayList<>();
         this.edgeList = new ArrayList<>();
-        this.type = type;
     }
 
     @Override
@@ -72,22 +70,6 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         this.edgeList = edgeList;
     }
 
-    /**
-     * @return the type
-     */
-    @Override
-    public GraphType getType() {
-        return type;
-    }
-
-    /**
-     * @param type the type to set
-     */
-    @Override
-    public void setType(GraphType type) {
-        this.type = type;
-    }
-
     @Override
     public Vertex<K, V> insertVertex(K key, V value) {
 
@@ -112,27 +94,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             vertexList.add(edge.getVertex2());
         }
 
-        switch (this.type) {
-            case Simple -> {
-                return insertSimpleEdge(edge);
-            }
-            case Directed -> {
-                return insertDirectedEdge(edge);
-            }
-            case Multigraph -> {
-                return insertMultigraphEdge(edge);
-            }
-            case Pseudograph -> {
-                return insertPseudographEdge(edge);
-            }
-            case DirectedMultigraph -> {
-                return insertMultiDirectedEdge(edge);
-            }
-
-            default -> {
-                return null;
-            }
-        }
+        return insertSimpleEdge(edge);
 
     }
 
@@ -179,42 +141,6 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return edge;
     }
 
-    private Edge<K, V> insertDirectedEdge(Edge<K, V> edge) {
-
-        if (edge.getVertex1().isConnected(edge.getVertex2())) {
-            return null;
-        }
-
-        edge.getVertex1().addEdge(edge);
-        edgeList.add(edge);
-
-        return edge;
-    }
-
-    private Edge<K, V> insertMultigraphEdge(Edge<K, V> edge) {
-
-        if (edge.getVertex2().equals(edge.getVertex1())) {
-            return null;
-        }
-
-        edge.getVertex2().addEdge(new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight()));
-        edgeList.add(edge);
-
-        return edge;
-    }
-
-    private Edge<K, V> insertPseudographEdge(Edge<K, V> edge) {
-        edge.getVertex1().addEdge(edge);
-        edge.getVertex2().addEdge(new Edge<>(edge.getVertex2(), edge.getVertex1(), edge.getWeight()));
-        edgeList.add(edge);
-        return edge;
-    }
-
-    private Edge<K, V> insertMultiDirectedEdge(Edge<K, V> edge) {
-        edgeList.add(edge);
-        return edge;
-    }
-
     @Override
     public Vertex<K, V> removeVertex(Vertex<K, V> vertex) {
         if (vertex == null) {
@@ -235,7 +161,6 @@ public class GraphAL<K, V> implements IGraph<K, V> {
                 return vertex;
             }
         }
-
         return null;
     }
 
@@ -301,100 +226,134 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return true;
     }
 
+    /*
+     * This method returns the total weight of the minimum spanning tree
+     * performed with the DFS algorithm.
+     */
     @Override
-    public void DFS() {
-        for (Vertex<K, V> vertex : vertexList) {
+    public int DFS(IGraph<K, V> minimumSpanningTree) {
+
+        int totalWeight = 0;
+
+        // Initialize the vertices
+        for (Vertex<K, V> vertex : minimumSpanningTree.getVertexList()) {
             vertex.setColor(Color.WHITE);
             vertex.setPredecessor(null);
         }
 
-        for (Vertex<K, V> vertex : vertexList) {
+        // Visit all vertices
+        for (Vertex<K, V> vertex : minimumSpanningTree.getVertexList()) {
             if (vertex.getColor() == Color.WHITE) {
-                DFSVisit(vertex);
+                totalWeight += DFSVisit(vertex);
             }
         }
 
+        return totalWeight;
     }
 
-    private void DFSVisit(Vertex<K, V> u) {
-        u.setColor(Color.GRAY);
-        u.setTimeStampD(u.getTimeStampD() + 1);
-        for (Edge<K, V> edge : u.getEdges()) {
-            Vertex<K, V> v = edge.getVertex2();
-            if (v.getColor() == Color.WHITE) {
-                v.setPredecessor(u);
-                DFSVisit(v);
+    private int DFSVisit(Vertex<K, V> vertex) {
+        int totalWeight = 0;
+
+        vertex.setColor(Color.GRAY);
+
+        for (Edge<K, V> edge : vertex.getEdges()) {
+            Vertex<K, V> nextVertex = edge.getVertex2();
+
+            if (nextVertex.getColor() == Color.WHITE) {
+                nextVertex.setPredecessor(vertex);
+                totalWeight += edge.getWeight();
+                totalWeight += DFSVisit(nextVertex);
             }
         }
-        u.setColor(Color.BLACK);
-        u.setTimeStampF(u.getTimeStampF() + 1);
+
+        vertex.setColor(Color.BLACK);
+
+        return totalWeight;
     }
 
-    @Override
-    public List<Edge<K, V>> Dijkstra(Vertex<K, V> s) {
-        s.setDistance(0);
+    /**
+     * Implements Dijkstra's algorithm to find the shortest path between two
+     * vertices in a graph.
+     * Returns a list of edges to get from the first vertex to the second one in the
+     * shortest way.
+     */
+    public List<Edge<K, V>> Dijkstra(Vertex<K, V> source, Vertex<K, V> destination) {
+        // Initialize distances and previous vertices
+        Map<Vertex<K, V>, Integer> distances = new HashMap<>();
+        Map<Vertex<K, V>, Vertex<K, V>> previousVertices = new HashMap<>();
 
-        PriorityQueue<Vertex<K, V>> q = new PriorityQueue<>();
-
-        for (Vertex<K, V> vertex : vertexList) {
-            if (!vertex.equals(s)) {
-                vertex.setDistance(Integer.MAX_VALUE);
-            }
-            vertex.setPredecessor(null);
-            q.add(vertex);
+        for (Vertex<K, V> vertex : getVertexList()) {
+            distances.put(vertex, Integer.MAX_VALUE);
+            previousVertices.put(vertex, null);
         }
 
-        while (!q.isEmpty()) {
-            Vertex<K, V> u = q.poll();
-            for (Edge<K, V> edge : u.getEdges()) {
-                Vertex<K, V> v = edge.getVertex2();
-                if (v.getDistance() > u.getDistance() + edge.getWeight()) {
-                    v.setDistance(u.getDistance() + edge.getWeight());
-                    v.setPredecessor(u);
-                    q.remove(v);
+        distances.put(source, 0);
+
+        // Create a priority queue to hold vertices
+        PriorityQueue<Vertex<K, V>> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(distances::get));
+        priorityQueue.add(source);
+
+        while (!priorityQueue.isEmpty()) {
+            Vertex<K, V> current = priorityQueue.poll();
+
+            if (current.equals(destination)) {
+                break; // Found the shortest path
+            }
+
+            for (Edge<K, V> edge : current.getEdges()) {
+                Vertex<K, V> neighbor = edge.getVertex2();
+                int newDistance = distances.get(current) + edge.getWeight();
+
+                if (newDistance < distances.get(neighbor)) {
+                    distances.put(neighbor, newDistance);
+                    previousVertices.put(neighbor, current);
+                    priorityQueue.add(neighbor);
                 }
             }
         }
 
-        List<Edge<K, V>> edgeList = new ArrayList<>();
+        // Reconstruct the shortest path from destination to source
+        List<Edge<K, V>> shortestPath = new ArrayList<>();
+        Vertex<K, V> current = destination;
 
-        for (Vertex<K, V> vertex : vertexList) {
-            if (!vertex.equals(s)) {
-                edgeList.add(new Edge<>(vertex.getPredecessor(), vertex, vertex.getDistance()));
+        while (current != null) {
+            Vertex<K, V> previous = previousVertices.get(current);
+            if (previous != null) {
+                Edge<K, V> edge = previous.getEdgeFrom(current);
+                shortestPath.add(edge);
             }
+            current = previous;
         }
 
-        return edgeList;
+        Collections.reverse(shortestPath);
 
+        return shortestPath;
     }
 
-
     /**
-     * Implements the Floyd-Warshall algorithm to find the shortest path between all pairs of vertices in a graph.
+     * Implements the Floyd-Warshall algorithm to find the shortest path between all
+     * pairs of vertices in a graph.
      */
     @Override
     public int[][] floydWarshall() {
         int numVertices = getVertexAmount();
-    
+
         // Initialize the distance matrix with infinity for unconnected vertex pairs
         int[][] distances = new int[numVertices][numVertices];
         for (int i = 0; i < numVertices; i++) {
             Arrays.fill(distances[i], Integer.MAX_VALUE);
-            distances[i][i] = 0;  // Distance from a vertex to itself is zero
+            distances[i][i] = 0; // Distance from a vertex to itself is zero
         }
-    
+
         // Fill the matrix with initial distances from the graph's edges
         for (Edge<K, V> edge : getEdgeList()) {
             int row = getVertexIndex(edge.getVertex1());
             int col = getVertexIndex(edge.getVertex2());
             distances[row][col] = edge.getWeight();
-    
-            // If the graph is undirected, update the opposite direction as well
-            if (getType() != GraphType.Directed) {
-                distances[col][row] = edge.getWeight();
-            }
+
+
         }
-    
+
         for (int k = 0; k < numVertices; k++) {
             for (int i = 0; i < numVertices; i++) {
                 for (int j = 0; j < numVertices; j++) {
@@ -404,10 +363,9 @@ public class GraphAL<K, V> implements IGraph<K, V> {
                 }
             }
         }
-    
+
         return distances;
     }
-    
 
     private int getVertexIndex(Vertex<K, V> vertex) {
         return getVertexList().indexOf(vertex);
@@ -423,12 +381,11 @@ public class GraphAL<K, V> implements IGraph<K, V> {
     @Override
     public IGraph<K, V> prim(Vertex<K, V> begin) {
 
-
         if (getVertexAmount() == 0) {
             return null;
         }
 
-        GraphAL<K, V> minimumSpanningTree = new GraphAL<>(this.type);
+        GraphAL<K, V> minimumSpanningTree = new GraphAL<>();
 
         // Set of vertices already included in the Minimum Spanning Tree
         Set<Vertex<K, V>> includedVertices = new HashSet<>();
@@ -442,13 +399,11 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         // Continue until all vertices are included in the Minimum Spanning Tree
         while (includedVertices.size() < getVertexAmount() && currentVertex != null) {
 
-            
             for (Edge<K, V> edge : currentVertex.getEdges()) {
                 if (!includedVertices.contains(edge.getVertex2())) {
                     minHeap.add(edge);
                 }
             }
-
 
             Edge<K, V> minEdge = minHeap.poll();
 
@@ -485,7 +440,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             return null;
         }
 
-        GraphAL<K, V> minimumSpanningTree = new GraphAL<>(this.type);
+        GraphAL<K, V> minimumSpanningTree = new GraphAL<>();
 
         // Create a list of edges sorted by weight
         List<Edge<K, V>> sortedEdges = new ArrayList<>(getEdgeList());
@@ -518,7 +473,8 @@ public class GraphAL<K, V> implements IGraph<K, V> {
                 }
             }
 
-            // If the vertices are in different sets, add the edge to the minimum spanning tree
+            // If the vertices are in different sets, add the edge to the minimum spanning
+            // tree
             if (set1 != null && set2 != null && set1 != set2) {
                 minimumSpanningTree.insertEdgePrim(edge);
 

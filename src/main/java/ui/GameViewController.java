@@ -13,13 +13,13 @@ import structures.classes.GraphAL;
 import structures.classes.GraphAM;
 // import structures.classes.GraphAM;
 import structures.classes.Vertex;
-import structures.enums.GraphType;
 import structures.interfaces.IGraph;
 import model.BombWrapper;
 import model.Player;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import Controller.LevelGenerator;
@@ -31,11 +31,15 @@ public class GameViewController implements Initializable {
     @FXML
     private AnchorPane pane;
     private static final int NUM_VERTICES = 51;
+
+    private static boolean isGameRunning = false;
     private Player player;
 
     private IGraph<String, BombWrapper> graph;
 
     private static GraphicsContext gc;
+
+    private boolean isPowerUpActive = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -58,6 +62,7 @@ public class GameViewController implements Initializable {
         //     }
         // }).start();
 
+        isGameRunning = true;
     }
 
     // Use this method to send all the data that you need.
@@ -74,9 +79,9 @@ public class GameViewController implements Initializable {
 
     private IGraph<String, BombWrapper> generateRandomGraph(String graphType) {
         if (graphType.equals("ADJACENCY LIST")) {
-            this.graph = new GraphAL<>(GraphType.Simple);
+            this.graph = new GraphAL<>();
         } else {
-            this.graph = new GraphAM<>(GraphType.Simple);
+            this.graph = new GraphAM<>();
         }
 
         LevelGenerator levelGenerator = new LevelGenerator(graph);
@@ -91,6 +96,95 @@ public class GameViewController implements Initializable {
         } else {
             drawAMGraph(graph);
         }
+    }
+
+    public static void gameOver() {
+        isGameRunning = false;
+    }
+
+    @FXML
+    @SuppressWarnings("unchecked")
+    public void powerUp() {
+        Vertex<String, BombWrapper>[] selectedVertices = new Vertex[2]; // Create a new array for selected vertices
+
+        if (!isPowerUpActive) {
+            isPowerUpActive = true;
+
+            new Thread(() -> {
+                dijkstraPowerUp(selectedVertices);
+                isPowerUpActive = false;
+            }).start();
+        }
+    }
+
+    private void dijkstraPowerUp(Vertex<String, BombWrapper>[] selectedVertices) {
+        while (isPowerUpActive) {
+            canvas.setOnMouseClicked(event -> {
+                double mouseX = event.getX();
+                double mouseY = event.getY();
+                Vertex<String, BombWrapper> clickedVertex = detectVertexClicked(mouseX, mouseY);
+
+                if (clickedVertex != null) {
+                    if (selectedVertices[0] == null) {
+                        selectedVertices[0] = clickedVertex;
+                    } else if (selectedVertices[1] == null) {
+                        selectedVertices[1] = clickedVertex;
+                        isPowerUpActive = false; // Stop the power-up
+                    }
+                }
+            });
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (selectedVertices[0] != null && selectedVertices[1] != null) {
+            System.out.println(
+                    "Vertex 1 clicked at " + selectedVertices[0].getValue().X + " " + selectedVertices[0].getValue().Y);
+            System.out.println(
+                    "Vertex 2 clicked at " + selectedVertices[1].getValue().X + " " + selectedVertices[1].getValue().Y);
+
+            List<Edge<String, BombWrapper>> shortestPath = graph.Dijkstra(selectedVertices[0],
+                    selectedVertices[1]);
+            System.out.println("Shortest path: " + shortestPath);
+
+            for (Edge<String, BombWrapper> edge : shortestPath) {
+                paintEdgeRed(edge);
+            }
+
+            selectedVertices[0] = null;
+            selectedVertices[1] = null;
+        }
+    }
+
+    public void paintEdgeRed(Edge<String, BombWrapper> edge) {
+        double targetX = edge.getVertex2().getValue().X;
+        double targetY = edge.getVertex2().getValue().Y;
+
+        // Calculate the coordinates to start and end the line at the vertex borders
+        double startX = edge.getVertex1().getValue().X;
+        double startY = edge.getVertex1().getValue().Y;
+        double endX = targetX;
+        double endY = targetY;
+
+        // Draw edge from (startX, startY) to (endX, endY) on the Canvas
+        gc.setStroke(Color.RED);
+        gc.strokeLine(startX, startY, endX, endY);
+    }
+
+    private Vertex<String, BombWrapper> detectVertexClicked(double positionX, double positionY) {
+        for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
+            double x = vertex.getValue().X;
+            double y = vertex.getValue().Y;
+            double radius = vertex.getValue().radius;
+            if (Math.sqrt(Math.pow(positionX - x, 2) + Math.pow(positionY - y, 2)) <= radius) {
+                return vertex;
+            }
+        }
+        return null;
     }
 
     private void drawAMGraph(IGraph<String, BombWrapper> graph2) {
