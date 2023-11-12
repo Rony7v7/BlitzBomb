@@ -57,6 +57,7 @@ public class GraphAMTest {
         graph.insertEdge(new Edge<>(vertex1, vertex2, 20));
     }
 
+
     @Test
     public void testInsertVertex() {
         setupSimple1();
@@ -170,14 +171,79 @@ public class GraphAMTest {
 
         assertEquals(5, mst.getVertexAmount());
         assertEquals(4, mst.getEdgesAmount());
+    }
+
+    @Test
+    public void test2Prim() {
+
+        IGraph<Integer, Integer> graph = new GraphAM<>();
+        
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
+        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
+        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+
+        
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 8));
+        graph.insertEdge(new Edge<>(vertex1, vertex5, 2));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 9));
+        graph.insertEdge(new Edge<>(vertex2, vertex3, 5));
+        graph.insertEdge(new Edge<>(vertex2, vertex5, 5));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 6));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 8));
+
+        IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
+
+        assertEquals(5, mst.getVertexAmount());
+        assertEquals(4, mst.getEdgesAmount());
 
         Vertex<Integer, Integer> mstVertex1 = mst.searchVertex(1);
         Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
         Vertex<Integer, Integer> mstVertex5 = mst.searchVertex(5);
 
-        assertEquals(true, mst.areConnected(mstVertex1, mstVertex2));
         assertEquals(true, mst.areConnected(mstVertex1, mstVertex5));
+        assertEquals(true, mst.areConnected(mstVertex5, mstVertex2));
 
     }
+
+    @Test
+    public void test3Prim() {
+
+        IGraph<Integer, Integer> graph = new GraphAM<>();
+        
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
+        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
+        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+
+        
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 8));
+        graph.insertEdge(new Edge<>(vertex1, vertex5, 2));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 9));
+        graph.insertEdge(new Edge<>(vertex2, vertex3, 5));
+        graph.insertEdge(new Edge<>(vertex2, vertex5, 5));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 6));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 8));
+
+        IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
+
+        assertEquals(5, mst.getVertexAmount());
+        assertEquals(4, mst.getEdgesAmount());
+
+        Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
+        Vertex<Integer, Integer> mstVertex3 = mst.searchVertex(3);
+        Vertex<Integer, Integer> mstVertex4 = mst.searchVertex(4);
+
+        assertEquals(true, mst.areConnected(mstVertex2, mstVertex3));
+        assertEquals(true, mst.areConnected(mstVertex3, mstVertex4));
+    }
+
+
+    
+
 
 }
