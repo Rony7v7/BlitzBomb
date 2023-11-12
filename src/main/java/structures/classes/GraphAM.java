@@ -2,8 +2,9 @@ package structures.classes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Collections;
+import java.util.HashMap;
 
 import structures.enums.Color;
 import structures.enums.GraphType;
@@ -352,44 +353,67 @@ public class GraphAM<K, V> implements IGraph<K, V> {
     }
 
     @Override
-    public List<Edge<K, V>> Dijkstra(Vertex<K, V> s, Vertex<K, V> t) {
-        s.setDistance(0);
-        s.setPredecessor(null);
+    public List<Edge<K, V>> Dijkstra(Vertex<K, V> startVertex, Vertex<K, V> endVertex) {
+        // Initialize data structures for the algorithm
+        Map<Vertex<K, V>, Integer> distance = new HashMap<>();
+        Map<Vertex<K, V>, Edge<K, V>> previousEdge = new HashMap<>();
+        PriorityQueue<Vertex<K, V>> priorityQueue = new PriorityQueue<>(getVertexAmount(),
+                (v1, v2) -> Integer.compare(distance.get(v1), distance.get(v2)));
 
-        PriorityQueue<Vertex<K, V>> q = new PriorityQueue<>();
-
+        // Initialize distance to all vertices as infinity and the start vertex's
+        // distance to 0
         for (Vertex<K, V> vertex : vertexList) {
-            if (!vertex.equals(s)) {
-                vertex.setDistance(Integer.MAX_VALUE);
-            }
-            vertex.setPredecessor(null);
-            q.add(vertex);
+            distance.put(vertex, Integer.MAX_VALUE);
+            previousEdge.put(vertex, null);
         }
+        distance.put(startVertex, 0);
 
-        while (!q.isEmpty()) {
-            Vertex<K, V> u = q.poll();
-            if (u.equals(t)) {
-                break;
+        // Add the start vertex to the priority queue
+        priorityQueue.add(startVertex);
+
+        while (!priorityQueue.isEmpty()) {
+            Vertex<K, V> currentVertex = priorityQueue.poll();
+
+            if (currentVertex == endVertex) {
+                return buildPath(previousEdge, endVertex);
             }
-            for (Vertex<K, V> v : getAdjacents(u)) {
-                if (v.getDistance() > u.getDistance() + getEdge(u, v).getWeight()) {
-                    v.setDistance(u.getDistance() + getEdge(u, v).getWeight());
-                    v.setPredecessor(u);
-                    q.remove(v);
-                    q.add(v);
+
+            for (Edge<K, V> edge : getVertexEdges(currentVertex)) {
+                Vertex<K, V> neighbor = edge.getVertex2();
+                int newDistance = distance.get(currentVertex) + edge.getWeight();
+
+                if (newDistance < distance.get(neighbor)) {
+                    distance.put(neighbor, newDistance);
+                    previousEdge.put(neighbor, edge);
+                    priorityQueue.add(neighbor);
                 }
             }
         }
 
-        List<Edge<K, V>> edgeList = new ArrayList<>();
-        Vertex<K, V> current = t;
-        while (current.getPredecessor() != null) {
-            edgeList.add(getEdge(current.getPredecessor(), current));
-            current = current.getPredecessor();
-        }
-        Collections.reverse(edgeList);
+        return null; // No path found
+    }
 
-        return edgeList;
+    private List<Edge<K, V>> getVertexEdges(Vertex<K, V> vertex) {
+        List<Edge<K, V>> edges = new ArrayList<>();
+        for (Edge<K, V> edge : adjacencyMatrix.get(vertexList.indexOf(vertex))) {
+            if (edge != null) {
+                edges.add(edge);
+            }
+        }
+        return edges;
+    }
+
+    private List<Edge<K, V>> buildPath(Map<Vertex<K, V>, Edge<K, V>> previousEdge, Vertex<K, V> endVertex) {
+        List<Edge<K, V>> path = new ArrayList<>();
+        Vertex<K, V> currentVertex = endVertex;
+
+        while (previousEdge.get(currentVertex) != null) {
+            Edge<K, V> edge = previousEdge.get(currentVertex);
+            path.add(0, edge); // Add the edge at the beginning of the path
+            currentVertex = edge.getVertex1();
+        }
+
+        return path;
     }
 
     @Override

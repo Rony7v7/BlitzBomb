@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -336,43 +338,57 @@ public class GraphAL<K, V> implements IGraph<K, V> {
      * Returns a list of edges to get from the first vertex to the second one in the
      * shortest way.
      */
-    public List<Edge<K, V>> Dijkstra(Vertex<K, V> start, Vertex<K, V> end) {
-        start.setDistance(0);
+    public List<Edge<K, V>> Dijkstra(Vertex<K, V> source, Vertex<K, V> destination) {
+        // Initialize distances and previous vertices
+        Map<Vertex<K, V>, Integer> distances = new HashMap<>();
+        Map<Vertex<K, V>, Vertex<K, V>> previousVertices = new HashMap<>();
 
-        PriorityQueue<Vertex<K, V>> q = new PriorityQueue<>();
-
-        for (Vertex<K, V> vertex : vertexList) {
-            if (!vertex.equals(start)) {
-                vertex.setDistance(Integer.MAX_VALUE);
-            }
-            vertex.setPredecessor(null);
-            q.add(vertex);
+        for (Vertex<K, V> vertex : getVertexList()) {
+            distances.put(vertex, Integer.MAX_VALUE);
+            previousVertices.put(vertex, null);
         }
 
-        while (!q.isEmpty()) {
-            Vertex<K, V> u = q.poll();
-            for (Edge<K, V> edge : u.getEdges()) {
-                Vertex<K, V> v = edge.getVertex2();
-                if (v.getDistance() > u.getDistance() + edge.getWeight()) {
-                    v.setDistance(u.getDistance() + edge.getWeight());
-                    v.setPredecessor(u);
-                    q.remove(v);
+        distances.put(source, 0);
+
+        // Create a priority queue to hold vertices
+        PriorityQueue<Vertex<K, V>> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(distances::get));
+        priorityQueue.add(source);
+
+        while (!priorityQueue.isEmpty()) {
+            Vertex<K, V> current = priorityQueue.poll();
+
+            if (current.equals(destination)) {
+                break; // Found the shortest path
+            }
+
+            for (Edge<K, V> edge : current.getEdges()) {
+                Vertex<K, V> neighbor = edge.getVertex2();
+                int newDistance = distances.get(current) + edge.getWeight();
+
+                if (newDistance < distances.get(neighbor)) {
+                    distances.put(neighbor, newDistance);
+                    previousVertices.put(neighbor, current);
+                    priorityQueue.add(neighbor);
                 }
             }
         }
 
-        List<Edge<K, V>> edgeList = new ArrayList<>();
+        // Reconstruct the shortest path from destination to source
+        List<Edge<K, V>> shortestPath = new ArrayList<>();
+        Vertex<K, V> current = destination;
 
-        Vertex<K, V> current = end;
-        while (current.getPredecessor() != null) {
-            Vertex<K, V> predecessor = current.getPredecessor();
-            edgeList.add(new Edge<>(predecessor, current, current.getDistance() - predecessor.getDistance()));
-            current = predecessor;
+        while (current != null) {
+            Vertex<K, V> previous = previousVertices.get(current);
+            if (previous != null) {
+                Edge<K, V> edge = previous.getEdgeFrom(current);
+                shortestPath.add(edge);
+            }
+            current = previous;
         }
 
-        Collections.reverse(edgeList);
+        Collections.reverse(shortestPath);
 
-        return edgeList;
+        return shortestPath;
     }
 
     /**
