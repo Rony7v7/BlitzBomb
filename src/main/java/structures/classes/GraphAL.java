@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 
 import structures.enums.Color;
 import structures.enums.GraphType;
@@ -302,6 +303,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
 
     /*
      * This method returns the total weight of the minimum spanning tree
+     * performed with the DFS algorithm.
      */
     @Override
     public int DFS(IGraph<K, V> minimumSpanningTree) {
@@ -343,6 +345,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
 
         return totalWeight;
     }
+
 
     @Override
     public List<Edge<K, V>> Dijkstra(Vertex<K, V> s) {

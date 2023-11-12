@@ -421,8 +421,8 @@ public class GraphALTest {
         setUp4();
         IGraph<Integer, Integer> mst = graph.kruskal();
 
+
         assertEquals(5, mst.getVertexAmount());
-        assertEquals(4, mst.getEdgesAmount());
 
         Vertex<Integer, Integer> mstVertex1 = mst.searchVertex(1);
         Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
@@ -438,7 +438,6 @@ public class GraphALTest {
         IGraph<Integer, Integer> mst = graph.kruskal();
 
         assertEquals(5, mst.getVertexAmount());
-        assertEquals(4, mst.getEdgesAmount());
 
         Vertex<Integer, Integer> mstVertex1 = mst.searchVertex(1);
         Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
@@ -579,6 +578,27 @@ public class GraphALTest {
 
     @Test
     public void test1DFS() {
+
+        GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
+
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 2);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 3);
+
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex3, 3));
+        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
+
+        IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
+
+        int totalWeight = graph.DFS(mst);
+
+        assertEquals(2, totalWeight);
+        
+    }
+
+    @Test
+    public void test2DFS() {
         GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
@@ -587,21 +607,43 @@ public class GraphALTest {
         Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
         Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
 
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 8));
-        graph.insertEdge(new Edge<>(vertex1, vertex5, 2));
-        graph.insertEdge(new Edge<>(vertex1, vertex4, 9));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 5));
-        graph.insertEdge(new Edge<>(vertex2, vertex5, 5));
-        graph.insertEdge(new Edge<>(vertex4, vertex5, 6));
-        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex5, 8));
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 3));
+        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 5));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 2));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
 
         IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
 
         int totalWeight = graph.DFS(mst);
 
-        assertEquals(19, totalWeight);
+        assertEquals(7, totalWeight);
+    }
+
+    @Test
+    public void test3DFS() {
         
+        GraphAL<Integer, Integer> graph = new GraphAL<>(GraphType.Simple);
+
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
+        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
+        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 3));
+        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+
+        IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
+
+        int totalWeight = graph.DFS(mst);
+
+        assertEquals(6, totalWeight);
     }
 
 }

@@ -40,7 +40,7 @@ public interface IGraph<K, V> {
     public void BFS(Vertex<K, V> s);
 
     public int DFS(IGraph<K, V> minimumSpanningTree);
-
+    
     public List<Edge<K, V>> Dijkstra(Vertex<K, V> s);
 
     public int[][] floydWarshall();
