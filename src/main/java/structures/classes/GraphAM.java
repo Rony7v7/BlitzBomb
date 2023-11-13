@@ -1,10 +1,14 @@
 package structures.classes;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import structures.enums.Color;
 import structures.interfaces.IGraph;
@@ -98,6 +102,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
 
     @Override
     public Edge<K, V> insertEdgePrim(Edge<K, V> edge) {
+
         if (!vertexList.contains(edge.getVertex1())) {
             vertexList.add(edge.getVertex1());
         }
@@ -105,6 +110,14 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         if (!vertexList.contains(edge.getVertex2())) {
             vertexList.add(edge.getVertex2());
         }
+
+        Vertex<K, V> vertex1 = edge.getVertex1();
+        Vertex<K, V> vertex2 = edge.getVertex2();
+
+        vertex1.getEdges().add(edge);
+        vertex2.getEdges().add(new Edge<>(vertex2, vertex1, edge.getWeight()));
+
+        edgeList.add(edge);
 
         return insertSimpleEdge(edge);
     }
@@ -117,7 +130,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
 
         if (areConnected(edge.getVertex2(), edge.getVertex1())) {
             return null;
-        }
+        }  
 
         int index1 = vertexList.indexOf(edge.getVertex1());
         int index2 = vertexList.indexOf(edge.getVertex2());
@@ -199,6 +212,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return adjacencyMatrix.get(vertexList.indexOf(vertex1)).get(vertexList.indexOf(vertex2));
     }
 
+    @Override
     public boolean areConnected(Vertex<K, V> vertex1, Vertex<K, V> vertex2) {
         if (vertex1 == null || vertex2 == null) {
             return false;
@@ -219,40 +233,47 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         adjacencyMatrix.get(vertexList.indexOf(vertex1)).set(vertexList.indexOf(vertex2), null);
     }
 
-    // A este metodo le entra el arbol de expansion minima, debe recorrerlo y
-    // sumar los pesos de las aristas y retornar el valor
+    
     @Override
     public int DFS(IGraph<K, V> minimumSpanningTree) {
-        for (Vertex<K, V> vertex : vertexList) {
+
+        int totalWeight = 0;
+
+        // Initialize the vertices
+        for (Vertex<K, V> vertex : minimumSpanningTree.getVertexList()) {
             vertex.setColor(Color.WHITE);
             vertex.setPredecessor(null);
         }
 
-        int totalWeight = 0;
-
-        for (Vertex<K, V> vertex : vertexList) {
+        // Visit all vertices
+        for (Vertex<K, V> vertex : minimumSpanningTree.getVertexList()) {
             if (vertex.getColor() == Color.WHITE) {
-                DFSVisit(vertex);
+                totalWeight += DFSVisit(vertex);
             }
-        }
-
-        for (Edge<K, V> edge : minimumSpanningTree.getEdgeList()) {
-            totalWeight += edge.getWeight();
         }
 
         return totalWeight;
 
     }
 
-    private void DFSVisit(Vertex<K, V> u) {
-        u.setColor(Color.GRAY);
-        for (Vertex<K, V> v : getAdjacents(u)) {
-            if (v.getColor() == Color.WHITE) {
-                v.setPredecessor(u);
-                DFSVisit(v);
+    private int DFSVisit(Vertex<K, V> vertex) {
+        int totalWeight = 0;
+
+        vertex.setColor(Color.GRAY);
+
+        for (Edge<K, V> edge : getVertexEdges(vertex)) {
+            Vertex<K, V> nextVertex = edge.getVertex2();
+
+            if (nextVertex.getColor() == Color.WHITE) {
+                nextVertex.setPredecessor(vertex);
+                totalWeight += edge.getWeight();
+                totalWeight += DFSVisit(nextVertex);
             }
         }
-        u.setColor(Color.BLACK);
+
+        vertex.setColor(Color.BLACK);
+
+        return totalWeight;
     }
 
     @Override
@@ -322,7 +343,6 @@ public class GraphAM<K, V> implements IGraph<K, V> {
     @Override
     public int[][] floydWarshall() {
 
-        // TODO
         int[][] distanceMatrix = new int[vertexList.size()][vertexList.size()];
 
         for (int i = 0; i < vertexList.size(); i++) {
@@ -351,17 +371,118 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return distanceMatrix;
     }
 
+    /**
+     * Prim's algorithm implementation, this method returns a minimum spanning
+     * tree of the graph, with a given vertex of the original graph.
+     */
     @Override
     public IGraph<K, V> prim(Vertex<K, V> begin) {
-        return null;
+
+        if (getVertexAmount() == 0) {
+            return null;
+        }
+
+        IGraph<K, V> minimumSpanningTree = new GraphAM<>();
+
+        // Set of vertices already included in the Minimum Spanning Tree
+        Set<Vertex<K, V>> includedVertices = new HashSet<>();
+
+        // Priority queue to select the edge with the minimum weight in each iteration
+        PriorityQueue<Edge<K, V>> minHeap = new PriorityQueue<>(Comparator.comparingInt(Edge::getWeight));
+
+        Vertex<K, V> currentVertex = begin;
+        includedVertices.add(currentVertex);
+
+        // Continue until all vertices are included in the Minimum Spanning Tree
+        while (includedVertices.size() < getVertexAmount() && currentVertex != null) {
+
+            for (Edge<K, V> edge : getVertexEdges(currentVertex)) {
+                if (!includedVertices.contains(edge.getVertex2())) {
+                    minHeap.add(edge);
+                }
+            }
+
+            Edge<K, V> minEdge = minHeap.poll();
+
+            if (minEdge != null) {
+                // Get the next vertex connected by the selected edge
+                Vertex<K, V> nextVertex = minEdge.getVertex2();
+
+                // Add the edge to the Minimum Spanning Tree
+                minimumSpanningTree.insertEdge(minEdge);
+
+                // Add the next vertex to the set of included vertices
+                includedVertices.add(nextVertex);
+
+                // Move to the next vertex
+                currentVertex = nextVertex;
+            } else {
+
+                currentVertex = null;
+            }
+        }
+
+        return minimumSpanningTree;
+
     }
 
+    /**
+     * Kruskal's algorithm to find a minimum spanning tree in a graph.
+     *
+     * @return A new graph representing the minimum spanning tree.
+     */
     @Override
     public IGraph<K, V> kruskal() {
 
-        // TODO
-        return null;
+        if (getVertexAmount() == 0) {
+            return null;
+        }
 
+        GraphAL<K, V> mst = new GraphAL<>();
+
+        // Create a list of edges sorted by weight
+        List<Edge<K, V>> sortedEdges = new ArrayList<>(getEdgeList());
+        Collections.sort(sortedEdges, Comparator.comparingInt(Edge::getWeight));
+
+        // Initialize disjoint sets for each vertex
+        Set<Set<Vertex<K, V>>> disjointSets = new HashSet<>();
+
+        for (Vertex<K, V> vertex : getVertexList()) {
+            // Create a singleton set for each vertex
+            Set<Vertex<K, V>> singletonSet = new HashSet<>();
+            singletonSet.add(vertex);
+            disjointSets.add(singletonSet);
+        }
+
+        for (Edge<K, V> edge : sortedEdges) {
+            Vertex<K, V> vertex1 = edge.getVertex1();
+            Vertex<K, V> vertex2 = edge.getVertex2();
+
+            // Find the sets to which the vertices belong
+            Set<Vertex<K, V>> set1 = null;
+            Set<Vertex<K, V>> set2 = null;
+
+            for (Set<Vertex<K, V>> disjointSet : disjointSets) {
+                if (disjointSet.contains(vertex1)) {
+                    set1 = disjointSet;
+                }
+                if (disjointSet.contains(vertex2)) {
+                    set2 = disjointSet;
+                }
+            }
+
+            // If the vertices are in different sets, add the edge to the minimum spanning
+            // tree
+            if (set1 != null && set2 != null && set1 != set2) {
+                mst.insertEdgePrim(edge);
+
+                // Merge the disjoint sets
+                set1.addAll(set2);
+                disjointSets.remove(set2);
+            }
+        }
+
+        return mst;
     }
 
     @Override

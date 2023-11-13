@@ -26,6 +26,8 @@ public interface IGraph<K, V> {
 
     public Edge<K, V> insertEdge(Edge<K, V> edge);
 
+    public boolean areConnected(Vertex<K, V> vertex1, Vertex<K, V> vertex2);
+
     public Edge<K, V> insertEdgePrim(Edge<K, V> edge);
 
     public Vertex<K, V> removeVertex(Vertex<K, V> vertex);

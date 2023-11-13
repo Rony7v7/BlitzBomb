@@ -87,6 +87,71 @@ public class GraphALTest {
         graph.insertEdge(new Edge<>(vertex3, vertex5, 8));
     }
 
+    public void setUp6() {
+        graph = new GraphAL<>();
+
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
+        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
+        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
+        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+    }
+
+    public void setUp7() {
+        graph = new GraphAL<>();
+
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 2);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 3);
+
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex3, 3));
+        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
+    }
+
+    public void setUp8() {
+        graph = new GraphAL<>();
+
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
+        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
+        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 3));
+        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 5));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 2));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+    }
+
+    public void setUp9() {
+        graph = new GraphAL<>();
+
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
+        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
+        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 3));
+        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+    }
+
     @Test
     public void testInsertVertex() {
         setupSimple1();
@@ -361,22 +426,14 @@ public class GraphALTest {
 
     @Test
     public void test1BFS() {
-        GraphAL<Integer, Integer> graph = new GraphAL<>();
 
-        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
-        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
-        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+        setUp6();
 
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
+        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
+        Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
+        Vertex<Integer, Integer> vertex4 = graph.searchVertex(4);
+        Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
 
         graph.BFS(vertex1);
 
@@ -396,22 +453,13 @@ public class GraphALTest {
 
     @Test
     public void test2BFS() {
-        GraphAL<Integer, Integer> graph = new GraphAL<>();
+        setUp6();
 
-        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
-        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
-        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
-
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
+        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
+        Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
+        Vertex<Integer, Integer> vertex4 = graph.searchVertex(4);
+        Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
 
         graph.BFS(vertex3);
 
@@ -428,22 +476,14 @@ public class GraphALTest {
 
     @Test
     public void test3BFS() {
-        GraphAL<Integer, Integer> graph = new GraphAL<>();
 
-        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
-        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
-        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+        setUp6();
 
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
+        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
+        Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
+        Vertex<Integer, Integer> vertex4 = graph.searchVertex(4);
+        Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
 
         graph.BFS(vertex5);
 
@@ -465,15 +505,7 @@ public class GraphALTest {
     @Test
     public void test1DFS() {
 
-        GraphAL<Integer, Integer> graph = new GraphAL<>();
-
-        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
-        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 2);
-        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 3);
-
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex3, 3));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
+        setUp7();
 
         IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
 
@@ -485,20 +517,8 @@ public class GraphALTest {
 
     @Test
     public void test2DFS() {
-        GraphAL<Integer, Integer> graph = new GraphAL<>();
-
-        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
-        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
-        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
-
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 3));
-        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex4, 5));
-        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex3, 2));
-        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+        
+        setUp8();
 
         IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
 
@@ -510,20 +530,7 @@ public class GraphALTest {
     @Test
     public void test3DFS() {
 
-        GraphAL<Integer, Integer> graph = new GraphAL<>();
-
-        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
-        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
-        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
-
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 3));
-        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+        setUp9();
 
         IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
 
