@@ -512,7 +512,7 @@ public class GraphAMTest {
         int totalWeight = graph.DFS(mst);
 
         assertEquals(7, totalWeight);
-    }
+    } 
 
     @Test
     public void test3DFS() {
