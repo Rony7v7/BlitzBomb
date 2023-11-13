@@ -440,7 +440,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             return null;
         }
 
-        GraphAL<K, V> minimumSpanningTree = new GraphAL<>();
+        GraphAL<K, V> mst = new GraphAL<>();
 
         // Create a list of edges sorted by weight
         List<Edge<K, V>> sortedEdges = new ArrayList<>(getEdgeList());
@@ -476,7 +476,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             // If the vertices are in different sets, add the edge to the minimum spanning
             // tree
             if (set1 != null && set2 != null && set1 != set2) {
-                minimumSpanningTree.insertEdgePrim(edge);
+                mst.insertEdgePrim(edge);
 
                 // Merge the disjoint sets
                 set1.addAll(set2);
@@ -484,7 +484,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             }
         }
 
-        return minimumSpanningTree;
+        return mst;
     }
 
     @Override

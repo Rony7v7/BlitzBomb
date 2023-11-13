@@ -361,7 +361,7 @@ public class GraphALTest {
 
     @Test
     public void test1BFS() {
-        GraphAL<Integer, Integer> graph = new GraphAL<>();
+        IGraph<Integer, Integer> graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -396,7 +396,7 @@ public class GraphALTest {
 
     @Test
     public void test2BFS() {
-        GraphAL<Integer, Integer> graph = new GraphAL<>();
+        IGraph<Integer, Integer> graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -428,7 +428,7 @@ public class GraphALTest {
 
     @Test
     public void test3BFS() {
-        GraphAL<Integer, Integer> graph = new GraphAL<>();
+        IGraph<Integer, Integer> graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -465,7 +465,7 @@ public class GraphALTest {
     @Test
     public void test1DFS() {
 
-        GraphAL<Integer, Integer> graph = new GraphAL<>();
+        IGraph<Integer, Integer> graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 2);
@@ -485,7 +485,7 @@ public class GraphALTest {
 
     @Test
     public void test2DFS() {
-        GraphAL<Integer, Integer> graph = new GraphAL<>();
+        IGraph<Integer, Integer> graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -510,7 +510,7 @@ public class GraphALTest {
     @Test
     public void test3DFS() {
 
-        GraphAL<Integer, Integer> graph = new GraphAL<>();
+        IGraph<Integer, Integer> graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
