@@ -5,9 +5,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 public class MainViewController implements Initializable {
 
@@ -17,12 +19,20 @@ public class MainViewController implements Initializable {
     @FXML
     private Button playBTN;
 
+    @FXML
+    private TextField nameInput;
+
     private static String graphType = "ADJACENCY LIST";
 
     @FXML
     private void play(ActionEvent event) {
         try {
-            MainApp.setRoot("game-view", "Blitz Bomb");
+            if (nameInput.getText().strip().equals("")) {
+                MainApp.showAlert("Missing NickName", "Please enter a nickname");
+                return;
+            }
+            GameViewController controller = MainApp.setRoot("game-view", "Blitz Bomb").getController();
+            controller.setPlayerName(nameInput.getText());
         } catch (IOException e) {
             e.printStackTrace();
         }

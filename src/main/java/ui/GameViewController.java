@@ -45,9 +45,10 @@ public class GameViewController implements Initializable {
         gc = this.canvas.getGraphicsContext2D();
         initDraw();
 
-        player = new Player("",0,canvas); // player que llega de la clase controladora 
+        player = new Player("", 0, canvas); // player que llega de la clase controladora
+        isGameRunning = true;
         new Thread(() -> {
-            while (true) {
+            while (isGameRunning) {
                 try {
                     player.paint();
                     Thread.sleep(65);
@@ -57,7 +58,6 @@ public class GameViewController implements Initializable {
             }
         }).start();
 
-        isGameRunning = true;
     }
 
     // Use this method to send all the data that you need.
@@ -260,6 +260,10 @@ public class GameViewController implements Initializable {
                 gc.strokeLine(startX, startY, endX, endY);
             }
         }
+    }
+
+    public void setPlayerName(String text) {
+        this.player.setNickname(text);
     }
 
 }

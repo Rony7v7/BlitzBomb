@@ -3,6 +3,7 @@ package ui;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import model.enums.Difficulty;
 
@@ -70,6 +71,13 @@ public class MainApp extends Application {
     public static void setGraph(String graph) {
         MainViewController.setGraph(graph);
         auxStage.close();
+    }
+
+    public static void showAlert(String titel,String content){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titel);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
 }
