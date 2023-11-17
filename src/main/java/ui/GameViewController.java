@@ -358,7 +358,9 @@ public class GameViewController implements Initializable {
         Text text = new Text(edge.getWeight() + "");
         text.setFill(Color.RED);
         text.setFont(new Font(32));
-        gc.fillText(text.getText(), targetX, targetY);
+        gc.setFill(text.getFill());
+        gc.setFont(text.getFont());
+        gc.fillText(text.getText(), targetX - 10, targetY - 5);
     }
 
     private List<Edge<String, BombWrapper>> getEdges(Vertex<String, BombWrapper> vertex) {
