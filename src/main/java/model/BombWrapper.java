@@ -17,8 +17,12 @@ public class BombWrapper {
         this.X = x;
         this.Y = y;
         this.bomb = bomb;
+        if (this.bomb == null) {
+            this.type = TypeOfNode.NORMAL;
+        } else {
+            this.type = TypeOfNode.BOMB;
+        }
         this.radius = radius;
-        this.type = TypeOfNode.NORMAL;
         this.idle = new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm());
     }
 
@@ -51,6 +55,7 @@ public class BombWrapper {
 
     public void setBomb(Bomb bomb) {
         if (bomb != null) {
+            this.type = TypeOfNode.BOMB;
             this.idle = new Image(getClass().getResource("/assets/Graph/bomb.png").toExternalForm());
         }
         this.bomb = bomb;

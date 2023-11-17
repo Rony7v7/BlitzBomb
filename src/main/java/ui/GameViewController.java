@@ -18,7 +18,6 @@ import structures.classes.GraphAL;
 import structures.classes.GraphAM;
 import structures.classes.Vertex;
 import structures.interfaces.IGraph;
-import model.Bomb;
 import model.BombWrapper;
 import model.Player;
 
@@ -53,9 +52,7 @@ public class GameViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         gc = this.canvas.getGraphicsContext2D();
         this.graph = generateRandomGraph(MainViewController.getGraphType());
-
         initActions();
-
         player = new Player("", 0, canvas); // player que llega de la clase controladora
         isGameRunning = true;
         new Thread(() -> {
@@ -118,16 +115,31 @@ public class GameViewController implements Initializable {
     }
 
     private void resetVertexAfterMoved(Vertex<String, BombWrapper> vertex) {
-        if (vertex.getValue().getType().equals(model.enums.TypeOfNode.SPAWN)) {
-            vertex.getValue()
-                    .setIdle(new Image(getClass().getResource("/assets/Graph/spawn_node.png").toExternalForm()));
-        } else if (vertex.getValue().getType().equals(model.enums.TypeOfNode.END)) {
-            vertex.getValue().setIdle(new Image(getClass().getResource("/assets/Graph/end_node.png").toExternalForm()));
-        } else if (vertex.getValue().getBomb() != null) {
-            vertex.getValue().setIdle(new Image(getClass().getResource("/assets/Graph/bomb.png").toExternalForm()));
-        } else {
-            vertex.getValue()
-                    .setIdle(new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm()));
+        switch (vertex.getValue().getType()) {
+            case SPAWN -> {
+                vertex.getValue()
+                        .setIdle(new Image(getClass().getResource("/assets/Graph/spawn_node.png").toExternalForm()));
+            }
+            case END -> {
+                vertex.getValue()
+                        .setIdle(new Image(getClass().getResource("/assets/Graph/end_node.png").toExternalForm()));
+            }
+            case BOMB -> {
+                if (vertex.getValue().getBomb().isDetonated()) {
+                    vertex.getValue().setIdle(
+                            new Image(getClass().getResource("/assets/Graph/activated_vertex.png").toExternalForm()));
+                } else {
+                    vertex.getValue()
+                            .setIdle(new Image(getClass().getResource("/assets/Graph/bomb.png").toExternalForm()));
+                }
+            }
+            case NORMAL -> {
+                vertex.getValue()
+                        .setIdle(new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm()));
+            }
+
+            default -> {
+            }
         }
     }
 
@@ -373,10 +385,19 @@ public class GameViewController implements Initializable {
             double y = vertex.getValue().Y;
             double radius = vertex.getValue().radius;
             if (Math.sqrt(Math.pow(positionX - x, 2) + Math.pow(positionY - y, 2)) <= radius * 2) {
+                activateBomb(vertex);
                 return vertex;
             }
         }
         return null;
+    }
+
+    private void activateBomb(Vertex<String, BombWrapper> vertex) {
+        if (vertex.getValue().getType().equals(model.enums.TypeOfNode.BOMB)) {
+            vertex.getValue().getBomb().setDetonated(true);
+            vertex.getValue().setIdle(
+                    new Image(getClass().getResource("/assets/Graph/activated_vertex.png").toExternalForm()));
+        }
     }
 
 }

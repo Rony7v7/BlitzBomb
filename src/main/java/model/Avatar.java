@@ -70,7 +70,7 @@ public class Avatar {
         double currentY = this.y;
 
         switch (event.getCode()) {
-            case UP -> {
+            case W -> {
                 edges.stream()
                         .filter(edge -> edge.getVertex2().getValue().Y < currentY)
                         .findFirst()
@@ -79,7 +79,7 @@ public class Avatar {
                             setX(edge.getVertex2().getValue().X);
                         });
             }
-            case DOWN -> {
+            case S -> {
                 edges.stream()
                         .filter(edge -> edge.getVertex2().getValue().Y > currentY)
                         .findFirst()
@@ -88,7 +88,7 @@ public class Avatar {
                             setX(edge.getVertex2().getValue().X);
                         });
             }
-            case LEFT -> {
+            case A -> {
                 edges.stream()
                         .filter(edge -> edge.getVertex2().getValue().X < currentX
                                 && edge.getVertex2().getValue().Y == currentY)
@@ -98,7 +98,7 @@ public class Avatar {
                             setX(edge.getVertex2().getValue().X);
                         });
             }
-            case RIGHT -> {
+            case D -> {
 
                 edges.stream()
                         .filter(edge -> edge.getVertex2().getValue().X > currentX
