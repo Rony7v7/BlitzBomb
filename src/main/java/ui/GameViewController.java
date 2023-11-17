@@ -3,10 +3,12 @@ package ui;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -16,6 +18,7 @@ import structures.classes.GraphAL;
 import structures.classes.GraphAM;
 import structures.classes.Vertex;
 import structures.interfaces.IGraph;
+import model.Bomb;
 import model.BombWrapper;
 import model.Player;
 
@@ -87,17 +90,45 @@ public class GameViewController implements Initializable {
 
         powerUp.setOnKeyPressed(e -> {
 
+            Vertex<String, BombWrapper> vertex = detectAvatarColisionWithVertex(player.getAvatar().getX(),
+                    player.getAvatar().getY());
+            ArrayList<Vertex<String, BombWrapper>> connectedVertices = new ArrayList<>();
+            if (vertex != null) {
+                for (Edge<String, BombWrapper> edge : getEdges(vertex)) {
+                    connectedVertices.add(edge.getVertex2());
+                }
+            }
+            connectedVertices.stream().forEach(v -> {
+                resetVertexAfterMoved(v);
+            });
+
             player.setOnKeyPressed(e,
                     getEdges(detectAvatarColisionWithVertex(player.getAvatar().getX(),
                             player.getAvatar().getY())));
         });
 
-        canvas.setOnKeyPressed(e -> {
+        canvas.setOnKeyPressed(e ->
+
+        {
             player.setOnKeyPressed(e,
                     getEdges(detectAvatarColisionWithVertex(player.getAvatar().getXForDrawing(),
                             player.getAvatar().getYForDrawing())));
         });
 
+    }
+
+    private void resetVertexAfterMoved(Vertex<String, BombWrapper> vertex) {
+        if (vertex.getValue().getType().equals(model.enums.TypeOfNode.SPAWN)) {
+            vertex.getValue()
+                    .setIdle(new Image(getClass().getResource("/assets/Graph/spawn_node.png").toExternalForm()));
+        } else if (vertex.getValue().getType().equals(model.enums.TypeOfNode.END)) {
+            vertex.getValue().setIdle(new Image(getClass().getResource("/assets/Graph/end_node.png").toExternalForm()));
+        } else if (vertex.getValue().getBomb() != null) {
+            vertex.getValue().setIdle(new Image(getClass().getResource("/assets/Graph/bomb.png").toExternalForm()));
+        } else {
+            vertex.getValue()
+                    .setIdle(new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm()));
+        }
     }
 
     private IGraph<String, BombWrapper> generateRandomGraph(String graphType) {
@@ -312,13 +343,28 @@ public class GameViewController implements Initializable {
     }
 
     private void highlightVertex(Vertex<String, BombWrapper> vertex) {
-        double x = vertex.getValue().X;
-        double y = vertex.getValue().Y;
+        if (vertex.getValue().getType().equals(model.enums.TypeOfNode.SPAWN)
+                || vertex.getValue().getType().equals(model.enums.TypeOfNode.END)) {
+            return;
+        }
         double radius = vertex.getValue().radius;
-        Image highlitedImage = new Image(
-                getClass().getResource("/assets/Graph/highlighted_vertex.png").toExternalForm(), 150, 150, false,
-                false);
-        gc.drawImage(highlitedImage, x - radius, y - radius, radius * 2 + 5, radius * 2 + 5);
+        double scaleFactor = 2.0;
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
+        ImageView highlightedVertex = new ImageView(
+                getClass().getResource("/assets/Graph/highlighted_vertex.png").toExternalForm());
+
+        // Ajusta la altura de acuerdo al radio del vértice y al factor de escala
+        highlightedVertex.setFitHeight(radius * 2 * scaleFactor);
+
+        // Calcula la nueva anchura manteniendo la proporción original de la imagen
+        double newWidth = highlightedVertex.getImage().getWidth()
+                * (highlightedVertex.getFitHeight() / highlightedVertex.getImage().getHeight());
+        highlightedVertex.setFitWidth(newWidth);
+
+        Image highlitedImage = highlightedVertex.snapshot(params, null);
+
+        vertex.getValue().setIdle(highlitedImage);
     }
 
     private Vertex<String, BombWrapper> detectAvatarColisionWithVertex(double positionX, double positionY) {

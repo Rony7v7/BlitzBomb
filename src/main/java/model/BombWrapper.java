@@ -6,6 +6,7 @@ import model.enums.TypeOfNode;
 public class BombWrapper {
     private Bomb bomb;
     private Image idle;
+
     public double X;
     public double Y;
     private TypeOfNode type;
@@ -18,20 +19,10 @@ public class BombWrapper {
         this.bomb = bomb;
         this.radius = radius;
         this.type = TypeOfNode.NORMAL;
+        this.idle = new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm());
     }
 
     public Image getIdle() {
-        if (this.bomb == null) {
-            if (type.equals(TypeOfNode.SPAWN)) {
-                this.idle = new Image(getClass().getResource("/assets/Graph/spawn_node.png").toExternalForm());
-            } else if (type.equals(TypeOfNode.END)) {
-                this.idle = new Image(getClass().getResource("/assets/Graph/end_node.png").toExternalForm());
-            } else {
-                this.idle = new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm());
-            }
-        } else {
-            this.idle = new Image(getClass().getResource("/assets/Graph/bomb.png").toExternalForm());
-        }
         return idle;
     }
 
@@ -39,7 +30,18 @@ public class BombWrapper {
         return type;
     }
 
+    public void setIdle(Image idle) {
+        this.idle = idle;
+    }
+
     public void setType(TypeOfNode type) {
+        if (type.equals(TypeOfNode.SPAWN)) {
+            this.idle = new Image(getClass().getResource("/assets/Graph/spawn_node.png").toExternalForm());
+        } else if (type.equals(TypeOfNode.END)) {
+            this.idle = new Image(getClass().getResource("/assets/Graph/end_node.png").toExternalForm());
+        } else {
+            this.idle = new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm());
+        }
         this.type = type;
     }
 
@@ -48,6 +50,9 @@ public class BombWrapper {
     }
 
     public void setBomb(Bomb bomb) {
+        if (bomb != null) {
+            this.idle = new Image(getClass().getResource("/assets/Graph/bomb.png").toExternalForm());
+        }
         this.bomb = bomb;
     }
 }
