@@ -395,8 +395,6 @@ public class GameViewController implements Initializable {
     private void activateBomb(Vertex<String, BombWrapper> vertex) {
         if (vertex.getValue().getType().equals(model.enums.TypeOfNode.BOMB)) {
             vertex.getValue().getBomb().setDetonated(true);
-            vertex.getValue().setIdle(
-                    new Image(getClass().getResource("/assets/Graph/activated_vertex.png").toExternalForm()));
         }
     }
 
