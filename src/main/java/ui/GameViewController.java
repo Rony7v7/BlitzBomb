@@ -3,12 +3,10 @@ package ui;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -45,6 +43,9 @@ public class GameViewController implements Initializable {
 
     private boolean isPowerUpActive = false;
 
+    private int amountOfBombs = 0;
+    private int amountOfBombsDetonated = 0;
+
     @FXML
     private Button powerUp;
 
@@ -62,6 +63,7 @@ public class GameViewController implements Initializable {
                     player.paint();
                     highglightConnectedVertex();
                 });
+                checkForAllBombsDetonated();
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
@@ -115,6 +117,7 @@ public class GameViewController implements Initializable {
     }
 
     private void resetVertexAfterMoved(Vertex<String, BombWrapper> vertex) {
+        vertex.getValue().setSelected(false);
         switch (vertex.getValue().getType()) {
             case SPAWN -> {
                 vertex.getValue()
@@ -151,8 +154,10 @@ public class GameViewController implements Initializable {
         }
 
         LevelGenerator levelGenerator = new LevelGenerator(graph);
-        return levelGenerator.generateRandomLevel(NUM_VERTICES, this.canvas.getHeight(),
+        IGraph<String, BombWrapper> graph = levelGenerator.generateRandomLevel(NUM_VERTICES, this.canvas.getHeight(),
                 this.canvas.getWidth() + 50);
+        this.amountOfBombs = levelGenerator.amountOfBombs();
+        return graph;
 
     }
 
@@ -261,10 +266,10 @@ public class GameViewController implements Initializable {
             double y = auxGraph.getVertexList().get(i).getValue().Y;
             double radius = auxGraph.getVertexList().get(i).getValue().radius;
             // Draw vertex at (x, y) on the Canvas
-            gc.drawImage(auxGraph.getVertexList().get(i).getValue().getIdle(), x - radius, y - radius, radius * 2 + 5,
-                    radius * 2 + 5);
 
-            int numEdges = 0;
+            gc.drawImage(auxGraph.getVertexList().get(i).getValue().getIdle(), x - radius, y - radius,
+                    radius * 2 + 5, radius * 2 + 5);
+
             for (int j = 0; j < matrix.get(i).size(); j++) {
 
                 if (matrix.get(i).get(j) != null) {
@@ -280,17 +285,9 @@ public class GameViewController implements Initializable {
                     // Draw edge from (startX, startY) to (endX, endY) on the Canvas
                     gc.setStroke(Color.web("#273142"));
                     gc.strokeLine(startX, startY, endX, endY);
-                    numEdges++;
                 }
             }
 
-            Text grade = new Text(numEdges + "");
-            grade.setX(auxGraph.getVertexList().get(i).getValue().X);
-            grade.setY(auxGraph.getVertexList().get(i).getValue().Y + 30);
-            grade.setFont(Font.font(20));
-            gc.setFill(Color.BLACK);
-            gc.fillText(grade.getText(), auxGraph.getVertexList().get(i).getValue().X,
-                    auxGraph.getVertexList().get(i).getValue().Y);
         }
 
     }
@@ -301,15 +298,14 @@ public class GameViewController implements Initializable {
             double y = vertex.getValue().Y;
             double radius = vertex.getValue().radius;
             // Draw vertex at (x, y) on the Canvas
+            // Si esta seleccionado hazlo mas grandre sino simplemente graficalo del tamaño
+            // del radio
             gc.drawImage(vertex.getValue().getIdle(), x - radius, y - radius, radius * 2 + 5, radius * 2 + 5);
 
             Text grade = new Text(vertex.getEdges().size() + "");
             grade.setX(vertex.getValue().X);
             grade.setY(vertex.getValue().Y + 30);
             grade.setFont(Font.font(20));
-
-            // Image image = new
-            // Image(getClass().getResource("/assets/Graph/edge.png").toExternalForm());
 
             for (Edge<String, BombWrapper> edge : vertex.getEdges()) {
                 double targetX = edge.getVertex2().getValue().X;
@@ -359,24 +355,21 @@ public class GameViewController implements Initializable {
                 || vertex.getValue().getType().equals(model.enums.TypeOfNode.END)) {
             return;
         }
+
+        double x = vertex.getValue().X;
+        double y = vertex.getValue().Y;
         double radius = vertex.getValue().radius;
+
         double scaleFactor = 2.0;
-        SnapshotParameters params = new SnapshotParameters();
-        params.setFill(Color.TRANSPARENT);
-        ImageView highlightedVertex = new ImageView(
-                getClass().getResource("/assets/Graph/highlighted_vertex.png").toExternalForm());
+        double height = (radius * 2 * scaleFactor);
+        double newWidth = vertex.getValue().getIdle().getWidth()
+                * (height / vertex.getValue().getIdle().getHeight());
+        double newX = x - newWidth / 2;
+        double newY = y - height / 2;
 
-        // Ajusta la altura de acuerdo al radio del vértice y al factor de escala
-        highlightedVertex.setFitHeight(radius * 2 * scaleFactor);
+        gc.drawImage(new Image(getClass().getResource("/assets/Graph/highlighted_vertex.png").toExternalForm()), newX, newY, newWidth, height);
+        vertex.getValue().setSelected(true);
 
-        // Calcula la nueva anchura manteniendo la proporción original de la imagen
-        double newWidth = highlightedVertex.getImage().getWidth()
-                * (highlightedVertex.getFitHeight() / highlightedVertex.getImage().getHeight());
-        highlightedVertex.setFitWidth(newWidth);
-
-        Image highlitedImage = highlightedVertex.snapshot(params, null);
-
-        vertex.getValue().setIdle(highlitedImage);
     }
 
     private Vertex<String, BombWrapper> detectAvatarColisionWithVertex(double positionX, double positionY) {
@@ -392,9 +385,15 @@ public class GameViewController implements Initializable {
         return null;
     }
 
+    private boolean checkForAllBombsDetonated() {
+        return amountOfBombsDetonated == amountOfBombs;
+    }
+
     private void activateBomb(Vertex<String, BombWrapper> vertex) {
-        if (vertex.getValue().getType().equals(model.enums.TypeOfNode.BOMB)) {
+        if (vertex.getValue().getType().equals(model.enums.TypeOfNode.BOMB)
+                && !vertex.getValue().getBomb().isDetonated()) {
             vertex.getValue().getBomb().setDetonated(true);
+            amountOfBombsDetonated++;
         }
     }
 

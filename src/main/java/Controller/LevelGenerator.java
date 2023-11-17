@@ -18,6 +18,7 @@ public class LevelGenerator {
     private final List<List<Vertex<String, BombWrapper>>> rows;
     private static final double VERTEX_RADIUS = 20.0;
     private static final double BOMBS_PERCENTAGE = 0.5;
+    private int amountOfBombs;
 
     public LevelGenerator(IGraph<String, BombWrapper> graph) {
         this.graph = graph;
@@ -81,6 +82,10 @@ public class LevelGenerator {
         return graph;
     }
 
+    public int amountOfBombs() {
+        return this.amountOfBombs;
+    }
+
     private void createSpawnAndEnd() {
         graph.getVertexList().get(0).getValue().setType(TypeOfNode.SPAWN);
         graph.getVertexList().get(graph.getVertexList().size() - 1).getValue().setType(TypeOfNode.END);
@@ -100,6 +105,7 @@ public class LevelGenerator {
                 }
                 if (row.get(randomIndex).getValue().getBomb() == null) {
                     row.get(randomIndex).getValue().setBomb(new Bomb());
+                    this.amountOfBombs++;
                     hasBomb = true;
                 }
                 attempts++;

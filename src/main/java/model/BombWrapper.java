@@ -11,12 +11,20 @@ public class BombWrapper {
     public double Y;
     private TypeOfNode type;
 
+    /**
+     * Estoy usando este atributo para saber si el nodo esta seleccionado o no y
+     * entonces hacerlo mas grande ()
+     * Con seleccionado me refiero a que el kelvin puede llegar a ese nodo
+     */
+    private boolean isSelected;
+
     public double radius;
 
     public BombWrapper(double x, double y, Bomb bomb, double radius) {
         this.X = x;
         this.Y = y;
         this.bomb = bomb;
+        this.isSelected = false;
         if (this.bomb == null) {
             this.type = TypeOfNode.NORMAL;
         } else {
@@ -24,6 +32,14 @@ public class BombWrapper {
         }
         this.radius = radius;
         this.idle = new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm());
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean isSelected) {
+        this.isSelected = isSelected;
     }
 
     public Image getIdle() {
