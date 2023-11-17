@@ -1,9 +1,12 @@
 package ui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -40,18 +43,27 @@ public class GameViewController implements Initializable {
 
     private boolean isPowerUpActive = false;
 
+    @FXML
+    private Button powerUp;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gc = this.canvas.getGraphicsContext2D();
-        initDraw();
+        this.graph = generateRandomGraph(MainViewController.getGraphType());
+
+        initActions();
 
         player = new Player("", 0, canvas); // player que llega de la clase controladora
         isGameRunning = true;
         new Thread(() -> {
             while (isGameRunning) {
-                try {
+                Platform.runLater(() -> {
+                    initDraw();
                     player.paint();
-                    Thread.sleep(65);
+                    highglightConnectedVertex();
+                });
+                try {
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -68,10 +80,24 @@ public class GameViewController implements Initializable {
 
         // Draw a rectangle around the Canvas to represent the borders
         gc.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        this.graph = generateRandomGraph(MainViewController.getGraphType());
-
         drawGraph(graph);
+    }
+
+    private void initActions() {
+
+        powerUp.setOnKeyPressed(e -> {
+
+            player.setOnKeyPressed(e,
+                    getEdges(detectAvatarColisionWithVertex(player.getAvatar().getX(),
+                            player.getAvatar().getY())));
+        });
+
+        canvas.setOnKeyPressed(e -> {
+            player.setOnKeyPressed(e,
+                    getEdges(detectAvatarColisionWithVertex(player.getAvatar().getXForDrawing(),
+                            player.getAvatar().getYForDrawing())));
+        });
+
     }
 
     private IGraph<String, BombWrapper> generateRandomGraph(String graphType) {
@@ -186,7 +212,6 @@ public class GameViewController implements Initializable {
     private void drawAMGraph(IGraph<String, BombWrapper> graph2) {
         GraphAM<String, BombWrapper> auxGraph = (GraphAM<String, BombWrapper>) graph2;
         ArrayList<ArrayList<Edge<String, BombWrapper>>> matrix = auxGraph.getAdjacencyMatrix();
-        System.out.println(matrix.size());
         // Draw vertex
         for (int i = 0; i < matrix.size(); i++) {
             double x = auxGraph.getVertexList().get(i).getValue().X;
@@ -239,8 +264,6 @@ public class GameViewController implements Initializable {
             grade.setX(vertex.getValue().X);
             grade.setY(vertex.getValue().Y + 30);
             grade.setFont(Font.font(20));
-            gc.setFill(Color.BLACK);
-            gc.fillText(grade.getText(), vertex.getValue().X, vertex.getValue().Y);
 
             // Image image = new
             // Image(getClass().getResource("/assets/Graph/edge.png").toExternalForm());
@@ -264,6 +287,50 @@ public class GameViewController implements Initializable {
 
     public void setPlayerName(String text) {
         this.player.setNickname(text);
+    }
+
+    private void highglightConnectedVertex() {
+        Vertex<String, BombWrapper> vertex = detectAvatarColisionWithVertex(player.getAvatar().getX(),
+                player.getAvatar().getY());
+        ArrayList<Vertex<String, BombWrapper>> connectedVertices = new ArrayList<>();
+        if (vertex != null) {
+            for (Edge<String, BombWrapper> edge : getEdges(vertex)) {
+                connectedVertices.add(edge.getVertex2());
+                paintEdgeRed(edge);
+            }
+            for (Vertex<String, BombWrapper> vertex1 : connectedVertices) {
+                highlightVertex(vertex1);
+            }
+        }
+    }
+
+    private List<Edge<String, BombWrapper>> getEdges(Vertex<String, BombWrapper> vertex) {
+        if (graph instanceof GraphAL) {
+            return vertex.getEdges();
+        }
+        return ((GraphAM<String, BombWrapper>) graph).getVertexEdges(vertex);
+    }
+
+    private void highlightVertex(Vertex<String, BombWrapper> vertex) {
+        double x = vertex.getValue().X;
+        double y = vertex.getValue().Y;
+        double radius = vertex.getValue().radius;
+        Image highlitedImage = new Image(
+                getClass().getResource("/assets/Graph/highlighted_vertex.png").toExternalForm(), 150, 150, false,
+                false);
+        gc.drawImage(highlitedImage, x - radius, y - radius, radius * 2 + 5, radius * 2 + 5);
+    }
+
+    private Vertex<String, BombWrapper> detectAvatarColisionWithVertex(double positionX, double positionY) {
+        for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
+            double x = vertex.getValue().X;
+            double y = vertex.getValue().Y;
+            double radius = vertex.getValue().radius;
+            if (Math.sqrt(Math.pow(positionX - x, 2) + Math.pow(positionY - y, 2)) <= radius * 2) {
+                return vertex;
+            }
+        }
+        return null;
     }
 
 }

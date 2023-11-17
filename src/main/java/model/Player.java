@@ -1,6 +1,10 @@
 package model;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyEvent;
+import structures.classes.Edge;
+
+import java.util.List;
 
 public class Player {
 
@@ -11,7 +15,7 @@ public class Player {
     public Player(String nickname, int score, Canvas canvas) {
         this.nickname = nickname;
         this.score = 0;
-        this.avatar = new Avatar(0, 600, canvas);
+        this.avatar = new Avatar(20, 635, canvas);
     }
 
     public void paint() {
@@ -58,6 +62,10 @@ public class Player {
      */
     public void setAvatar(Avatar avatar) {
         this.avatar = avatar;
+    }
+
+    public void setOnKeyPressed(KeyEvent event, List<Edge<String, BombWrapper>> edges) {
+        avatar.setOnKeyPressed(event, edges);
     }
 
 }

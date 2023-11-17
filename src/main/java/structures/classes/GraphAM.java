@@ -130,7 +130,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
 
         if (areConnected(edge.getVertex2(), edge.getVertex1())) {
             return null;
-        }  
+        }
 
         int index1 = vertexList.indexOf(edge.getVertex1());
         int index2 = vertexList.indexOf(edge.getVertex2());
@@ -233,7 +233,6 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         adjacencyMatrix.get(vertexList.indexOf(vertex1)).set(vertexList.indexOf(vertex2), null);
     }
 
-    
     @Override
     public int DFS(IGraph<K, V> minimumSpanningTree) {
 
@@ -317,7 +316,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return null; // No path found
     }
 
-    private List<Edge<K, V>> getVertexEdges(Vertex<K, V> vertex) {
+    public List<Edge<K, V>> getVertexEdges(Vertex<K, V> vertex) {
         List<Edge<K, V>> edges = new ArrayList<>();
         for (Edge<K, V> edge : adjacencyMatrix.get(vertexList.indexOf(vertex))) {
             if (edge != null) {
