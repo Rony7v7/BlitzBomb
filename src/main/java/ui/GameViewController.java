@@ -336,11 +336,29 @@ public class GameViewController implements Initializable {
             for (Edge<String, BombWrapper> edge : getEdges(vertex)) {
                 connectedVertices.add(edge.getVertex2());
                 paintEdgeRed(edge);
+                drawEdgeWeight(edge);
             }
             for (Vertex<String, BombWrapper> vertex1 : connectedVertices) {
                 highlightVertex(vertex1);
             }
         }
+    }
+
+    /**
+     * Este es el metodo encargado de poner el peso de la arista en el canvas
+     * Calcula el peso del vertice y luego se lo pinta en las cordiandas del vertice
+     * 
+     * @param edge la arista a la que se le va a poner el peso
+     */
+    private void drawEdgeWeight(Edge<String, BombWrapper> edge) {
+        double targetX = edge.getVertex2().getValue().X;
+        double targetY = edge.getVertex2().getValue().Y;
+
+        // Como se va a ver el texto
+        Text text = new Text(edge.getWeight() + "");
+        text.setFill(Color.RED);
+        text.setFont(new Font(32));
+        gc.fillText(text.getText(), targetX, targetY);
     }
 
     private List<Edge<String, BombWrapper>> getEdges(Vertex<String, BombWrapper> vertex) {
@@ -360,14 +378,15 @@ public class GameViewController implements Initializable {
         double y = vertex.getValue().Y;
         double radius = vertex.getValue().radius;
 
-        double scaleFactor = 2.0;
+        double scaleFactor = 1;
         double height = (radius * 2 * scaleFactor);
         double newWidth = vertex.getValue().getIdle().getWidth()
                 * (height / vertex.getValue().getIdle().getHeight());
         double newX = x - newWidth / 2;
         double newY = y - height / 2;
 
-        gc.drawImage(new Image(getClass().getResource("/assets/Graph/highlighted_vertex.png").toExternalForm()), newX, newY, newWidth, height);
+        gc.drawImage(new Image(getClass().getResource("/assets/Graph/highlighted_vertex.png").toExternalForm()), newX,
+                newY, newWidth, height);
         vertex.getValue().setSelected(true);
 
     }
