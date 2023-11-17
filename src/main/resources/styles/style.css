@@ -1,0 +1,42 @@
+.main-title {
+    -fx-font-size: 70px;
+    -fx-text-fill: #FFFFFF;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
+}
+
+.menu-button {
+    -fx-font-size: 25px;
+    -fx-color: #FFFFFF;
+    /* -fx-text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); */
+}
+
+.menu-button:hover {
+    -fx-color: #FFFFFF;
+    -fx-text-fill: #000000;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
+}
+
+.menu-button:pressed {
+    -fx-color: #FFFFFF;
+    -fx-text-fill: #000000;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
+}
+
+.menu-button:focused {
+    -fx-color: #FFFFFF;
+    -fx-text-fill: #000000;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
+}
+
+.menu-button:disabled {
+    -fx-color: #FFFFFF;
+    -fx-text-fill: #000000;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
+}
+
+.menu-button:default {
+    -fx-color: #FFFFFF;
+    -fx-text-fill: #000000;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
+}
+

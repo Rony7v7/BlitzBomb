@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.enums.Difficulty;
 
@@ -26,6 +27,7 @@ public class MainApp extends Application {
     public static FXMLLoader setRoot(String fxml, String title) throws IOException {
         FXMLLoader loader = loadFXML(fxml);
         Scene scene = new Scene(loader.load());
+        loadCss(scene);
         stage.setTitle(title);
         stage.setScene(scene);
         stage.show();
@@ -41,6 +43,11 @@ public class MainApp extends Application {
     private static FXMLLoader loadFXML(String fxml) throws IOException {
         return new FXMLLoader(MainApp.class.getResource("/fxml/" + fxml + ".fxml"));
 
+    }
+
+    private static void loadCss(Scene scene) {
+        scene.getStylesheets().add(MainApp.class.getResource("/styles/style.css").toExternalForm());
+        Font.loadFont(MainApp.class.getResource("/fonts/kenvector_future.ttf").toExternalForm(), 10);
     }
 
     public static void showWindow(String fxml) throws IOException {

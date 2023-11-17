@@ -3,26 +3,33 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.MainViewController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000" style="-fx-background-color: BLACK;" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.MainViewController">
     <children>
-        <Label fx:id="lblOut" layoutX="90.0" layoutY="118.0" minHeight="16" minWidth="69" prefHeight="52.0" prefWidth="215.0" />
-        <Button fx:id="playBTN" layoutX="45.0" layoutY="325.0" onAction="#play" prefHeight="37.0" prefWidth="192.0" text="Play" />
-      <Button layoutX="45.0" layoutY="376.0" onAction="#setDifficulty" prefHeight="37.0" prefWidth="192.0" text="Set Difficulty" />
-      <Button layoutX="45.0" layoutY="430.0" onAction="#setGraph" prefHeight="37.0" prefWidth="192.0" text="Set Graph" />
-      <Text layoutX="44.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BlitzBomb" wrappingWidth="385.13671875">
-         <font>
-            <Font name="Cooper Black" size="70.0" />
-         </font>
-      </Text>
+      <ImageView fitHeight="578.0" fitWidth="562.0" layoutX="434.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/BackgroundMenu.gif" />
+         </image></ImageView>
+      <ImageView fitHeight="303.0" fitWidth="530.0" layoutX="23.0" layoutY="-28.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/mainTitle.png" />
+         </image>
+      </ImageView>
       <VBox layoutX="44.0" layoutY="247.0" prefHeight="62.0" prefWidth="245.0">
          <children>
-            <Label style="-fx-padding: 5;" text="Enter Nickname" />
+            <Label style="-fx-padding: 5;" text="Enter Nickname" textFill="WHITE" />
             <TextField fx:id="nameInput" prefHeight="25.0" prefWidth="192.0" promptText="nickname" style="-fx-padding: 5;" />
+         </children>
+      </VBox>
+      <VBox layoutX="44.0" layoutY="327.0" prefHeight="153.0" prefWidth="245.0" style="-fx-spacing: 10;">
+         <children>
+              <Button fx:id="playBTN" onAction="#play" prefHeight="37.0" prefWidth="192.0" styleClass="menu-button" stylesheets="@../styles/style.css" text="Play" />
+            <Button onAction="#setDifficulty" prefHeight="37.0" prefWidth="192.0" styleClass="menu-button" stylesheets="@../styles/style.css" text="Set Difficulty" />
+            <Button onAction="#setGraph" prefHeight="37.0" prefWidth="192.0" styleClass="menu-button" stylesheets="@../styles/style.css" text="Set Graph" />
          </children>
       </VBox>
     </children>
