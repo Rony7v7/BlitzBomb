@@ -34,6 +34,11 @@ public class BombWrapper {
         this.idle = new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm());
     }
 
+    public void detonateBomb() {
+        this.bomb.setDetonated(true);
+        this.idle = new Image(getClass().getResource("/assets/Graph/activated_vertex.png").toExternalForm());
+    }
+
     public boolean isSelected() {
         return isSelected;
     }
