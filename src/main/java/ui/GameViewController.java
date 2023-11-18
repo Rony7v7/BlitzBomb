@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import Controller.LevelGenerator;
+import Controller.Timer;
 
 public class GameViewController implements Initializable {
 
@@ -32,6 +34,11 @@ public class GameViewController implements Initializable {
     private Canvas canvas;
     @FXML
     private AnchorPane pane;
+
+    @FXML
+    private Label timerLabel;
+
+
     private static final int NUM_VERTICES = 51;
 
     private static boolean isGameRunning = false;
@@ -45,17 +52,28 @@ public class GameViewController implements Initializable {
 
     private int amountOfBombs = 0;
     private int amountOfBombsDetonated = 0;
+    private int secondsRemaining;
+    private Timer timer;
 
     @FXML
     private Button powerUp;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gc = this.canvas.getGraphicsContext2D();
+        timerLabel = new Label(timerFormat(secondsRemaining));
+        timerLabel.setFont(new Font(32));
+        timerLabel.setTextFill(Color.RED);
+        pane.setTopAnchor(timerLabel, 10.0);
+        pane.setRightAnchor(timerLabel, 10.0);
+        pane.getChildren().add(timerLabel);
+        timerLabel.setLayoutX(10);
+        timerLabel.setLayoutY(10);
+    
         this.graph = generateRandomGraph(MainViewController.getGraphType());
         initActions();
         player = new Player("", 0, canvas); // player que llega de la clase controladora
         isGameRunning = true;
+        
         new Thread(() -> {
             while (isGameRunning) {
                 Platform.runLater(() -> {
@@ -71,8 +89,32 @@ public class GameViewController implements Initializable {
                 }
             }
         }).start();
-
+    
+        timer = new Timer(2);
+        timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
     }
+    
+    private void updateTimerLabel(int secondsRemaining) {
+        this.secondsRemaining = secondsRemaining; // Actualizar la variable de clase
+        timerLabel.setText(timerFormat(secondsRemaining));
+    }
+    
+    private String timerFormat(int seconds) {
+        int minutes = seconds / 60;
+        int remainingSeconds = seconds % 60;
+        return String.format("%02d:%02d", minutes, remainingSeconds);
+    }
+
+    
+
+    private void handleTimerFinish() {
+        try {
+            MainApp.showWindow("gameOver-view");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // Use this method to send all the data that you need.
     private void initDraw() {
@@ -175,6 +217,11 @@ public class GameViewController implements Initializable {
 
     public static void gameOver() {
         isGameRunning = false;
+    }
+
+    public void timerGameOver() {
+        gameOver();
+        timer.stopTimer();
     }
 
     @FXML

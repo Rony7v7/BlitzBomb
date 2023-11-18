@@ -40,7 +40,6 @@ public class MainApp extends Application {
 
     private static FXMLLoader loadFXML(String fxml) throws IOException {
         return new FXMLLoader(MainApp.class.getResource("/fxml/" + fxml + ".fxml"));
-
     }
 
     public static void showWindow(String fxml) throws IOException {
