@@ -71,6 +71,7 @@ public class MainApp extends Application {
     }
 
     public static void setDifficulty(Difficulty difficulty) {
+        MainViewController.setDifficulty(difficulty);
         auxStage.close();
     }
 
@@ -79,7 +80,7 @@ public class MainApp extends Application {
         auxStage.close();
     }
 
-    public static void showAlert(String titel,String content){
+    public static void showAlert(String titel, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titel);
         alert.setContentText(content);

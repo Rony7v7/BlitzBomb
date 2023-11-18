@@ -153,7 +153,7 @@ public class LevelGenerator {
                 int randomIndex = random.nextInt(row2.size());
                 int randomWeight = random.nextInt(10) + 1;
                 if (row2.get(randomIndex).getEdges().size() < 1) {
-                    Edge<String, BombWrapper> edge = new Edge<>(vertex, row2.get(randomIndex), randomWeight);
+                    Edge<String, BombWrapper> edge = new Edge<>(vertex, row2.get(randomIndex), 1);
                     graph.insertEdge(edge);
                     isLinked = true;
                 }
@@ -169,7 +169,7 @@ public class LevelGenerator {
                 int randomIndex = random.nextInt(row2.size());
                 int randomWeight = random.nextInt(10) + 1;
                 if (calculateAmountOfConnections(row2.get(randomIndex)) < 1) {
-                    Edge<String, BombWrapper> edge = new Edge<>(vertex, row2.get(randomIndex), randomWeight);
+                    Edge<String, BombWrapper> edge = new Edge<>(vertex, row2.get(randomIndex), 1);
                     graph.insertEdge(edge);
                     isLinked = true;
                 }

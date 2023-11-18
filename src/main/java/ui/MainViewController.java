@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import model.enums.Difficulty;
 
 public class MainViewController implements Initializable {
 
@@ -22,6 +23,7 @@ public class MainViewController implements Initializable {
     private TextField nameInput;
 
     private static String graphType = "ADJACENCY LIST";
+    private static Difficulty difficulty = Difficulty.MEDIUM;
 
     @FXML
     private void play(ActionEvent event) {
@@ -32,9 +34,18 @@ public class MainViewController implements Initializable {
             }
             GameViewController controller = MainApp.setRoot("game-view", "Blitz Bomb").getController();
             controller.setPlayerName(nameInput.getText());
+            controller.setDifficulty(difficulty);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public static void setDifficulty(Difficulty difficulty) {
+        MainViewController.difficulty = difficulty;
     }
 
     public static void setGraph(String graph) {

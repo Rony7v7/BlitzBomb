@@ -20,6 +20,7 @@ import structures.classes.Vertex;
 import structures.interfaces.IGraph;
 import model.BombWrapper;
 import model.Player;
+import model.enums.Difficulty;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -37,11 +38,15 @@ public class GameViewController implements Initializable {
     private AnchorPane pane;
     @FXML
     private Button powerUp;
+    @FXML
+    private Label timerLabel;
 
+    private static GraphicsContext gc;
+    private Difficulty difficulty;
     private Player player;
     private IGraph<String, BombWrapper> graph;
     private PowerUpController powerUpController;
-    private static GraphicsContext gc;
+    private Timer timer;
 
     private static final int NUM_VERTICES = 51;
     private static boolean isGameRunning = false;
@@ -49,9 +54,6 @@ public class GameViewController implements Initializable {
     private int amountOfBombsDetonated = 0;
     private boolean wasPowerUpUsed = false;
     private int secondsRemaining;
-    private Timer timer;
-    @FXML
-    private Label timerLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -118,6 +120,22 @@ public class GameViewController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        int seconds = this.secondsRemaining;
+        switch (difficulty) {
+            case EASY -> {
+                seconds += 15;
+            }
+            case MEDIUM -> {
+                seconds += 10;
+            }
+            case HARD -> {
+                seconds += 5;
+            }
+        }
+        this.difficulty = difficulty;
     }
 
     // Use this method to send all the data that you need.
