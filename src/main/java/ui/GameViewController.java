@@ -33,25 +33,30 @@ public class GameViewController implements Initializable {
 
     @FXML
     private Canvas canvas;
+
     @FXML
     private AnchorPane pane;
+
     @FXML
     private Button powerUp;
 
+    @FXML
+    private Label timerLabel;
+
+    private static GraphicsContext gc;
+    
     private Player player;
     private IGraph<String, BombWrapper> graph;
     private PowerUpController powerUpController;
-    private static GraphicsContext gc;
-
+    private boolean wasPowerUpUsed = false;
+    
     private static final int NUM_VERTICES = 51;
-    private static boolean isGameRunning = false;
     private int amountOfBombs = 0;
     private int amountOfBombsDetonated = 0;
-    private boolean wasPowerUpUsed = false;
-    private int secondsRemaining;
+    
     private Timer timer;
-    @FXML
-    private Label timerLabel;
+    private int secondsRemaining;
+    private static boolean isGameRunning = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -92,7 +97,7 @@ public class GameViewController implements Initializable {
     }
 
     // -------------- TIMER ------------------
-    
+
     private void initTimer() {
         timerLabel = new Label(timerFormat(secondsRemaining));
 
