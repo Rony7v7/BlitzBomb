@@ -87,4 +87,22 @@ public class MainApp extends Application {
         alert.showAndWait();
     }
 
+    public static void showWarning(String titel,String content){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(titel);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    public static void gameOver() {
+        try {
+            setRoot("main-view", "Blitz Bomb");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        showWarning("Game Over", "You lost the game :p");
+
+    }
 }

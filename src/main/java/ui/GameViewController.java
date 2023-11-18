@@ -12,7 +12,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import structures.classes.Edge;
 import structures.classes.GraphAL;
 import structures.classes.GraphAM;
@@ -34,58 +33,48 @@ public class GameViewController implements Initializable {
 
     @FXML
     private Canvas canvas;
+
     @FXML
     private AnchorPane pane;
+
     @FXML
     private Button powerUp;
+
     @FXML
     private Label timerLabel;
 
     private static GraphicsContext gc;
-    private Difficulty difficulty;
+    
     private Player player;
     private IGraph<String, BombWrapper> graph;
     private PowerUpController powerUpController;
-    private Timer timer;
-
+    private boolean wasPowerUpUsed = false;
+    private Difficulty difficulty;
     private static final int NUM_VERTICES = 51;
-    private static boolean isGameRunning = false;
     private int amountOfBombs = 0;
     private int amountOfBombsDetonated = 0;
-    private boolean wasPowerUpUsed = false;
+    
+    private Timer timer;
     private int secondsRemaining;
+    private static boolean isGameRunning = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        gc = this.canvas.getGraphicsContext2D();
-        timerLabel = new Label(timerFormat(secondsRemaining));
-        timerLabel.setFont(new Font(32));
-        timerLabel.setTextFill(Color.RED);
-        pane.setTopAnchor(timerLabel, 10.0);
-        pane.setRightAnchor(timerLabel, 10.0);
-        pane.getChildren().add(timerLabel);
-        timerLabel.setLayoutX(10);
-        timerLabel.setLayoutY(10);
-
         this.graph = generateRandomGraph(MainViewController.getGraphType());
-        initActions();
-        player = new Player("", 0, canvas); // player que llega de la clase controladora
+        this.player = new Player("", 0, canvas); // player que llega de la clase controladora
+        gc = this.canvas.getGraphicsContext2D();
         isGameRunning = true;
         powerUpController = new PowerUpController(canvas);
-        // Calculate the minimum spanning tree of the graph, i.e. the shortest path
-        IGraph<String, BombWrapper> MST = graph.prim(graph.getVertexList().get(0));
 
-        // Calculate the time it takes to traverse the shortest path
-        int seconds = graph.DFS(MST);
-        timer = new Timer(seconds);
-        timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
-        updateTimerLabel(seconds);
+        initTimer();
+        initActions();
+
         new Thread(() -> {
             while (isGameRunning) {
                 Platform.runLater(() -> {
                     initDraw();
                     player.paint();
-                    highglightConnectedVertex();
+                    highLightConnectedVertex();
                     if (wasPowerUpUsed) {
                         powerUp();
                     }
@@ -101,6 +90,38 @@ public class GameViewController implements Initializable {
 
     }
 
+    @FXML
+    public void powerUp() {
+        powerUpController.powerUp(this.graph);
+        wasPowerUpUsed = true;
+    }
+
+    // -------------- TIMER ------------------
+
+    private void initTimer() {
+        timerLabel = new Label(timerFormat(secondsRemaining)); //Se hace desde fxml
+
+        timerLabel.setFont(new Font(32));//Se hace desde fxml
+        timerLabel.setTextFill(Color.RED);//Se hace desde fxml
+
+        pane.setTopAnchor(timerLabel, 10.0);//Se hace desde fxml
+        pane.setRightAnchor(timerLabel, 10.0);//Se hace desde fxml
+
+        pane.getChildren().add(timerLabel);//Se hace desde fxml
+        timerLabel.setLayoutX(10);//Se hace desde fxml
+        timerLabel.setLayoutY(10);//Se hace desde fxml
+
+        // Calculate the minimum spanning tree of the graph, i.e. the shortest path
+        IGraph<String, BombWrapper> MST = graph.prim(graph.getVertexList().get(0));
+
+        // Calculate the time it takes to traverse the shortest path
+        int seconds = graph.DFS(MST);
+        timer = new Timer(seconds);
+        timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
+
+        updateTimerLabel(seconds);
+    }
+
     private void updateTimerLabel(int secondsRemaining) {
         this.secondsRemaining = secondsRemaining;
         timerLabel.setText(timerFormat(secondsRemaining));
@@ -114,9 +135,7 @@ public class GameViewController implements Initializable {
 
     private void handleTimerFinish() {
         try {
-            // TODO: Game Over screen and show it
-            Stage stage = (Stage) pane.getScene().getWindow();
-            stage.close();
+            MainApp.gameOver();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -138,6 +157,8 @@ public class GameViewController implements Initializable {
         this.difficulty = difficulty;
     }
 
+     // -------------- VIEW ------------------
+
     private void initDraw() {
         gc.setFill(Color.web("#f7efd8")); // Set your desired background color
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -146,82 +167,6 @@ public class GameViewController implements Initializable {
         // Draw a rectangle around the Canvas to represent the borders
         gc.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
         drawGraph(graph);
-    }
-
-    private void initActions() {
-
-        powerUp.setOnKeyPressed(e -> {
-
-            Vertex<String, BombWrapper> vertex = detectAvatarColisionWithVertex(player.getAvatar().getX(),
-                    player.getAvatar().getY());
-            ArrayList<Vertex<String, BombWrapper>> connectedVertices = new ArrayList<>();
-            if (vertex != null) {
-                for (Edge<String, BombWrapper> edge : getEdges(vertex)) {
-                    connectedVertices.add(edge.getVertex2());
-                }
-            }
-            connectedVertices.stream().forEach(v -> {
-                resetVertexAfterMoved(v);
-            });
-
-            player.setOnKeyPressed(e,
-                    getEdges(detectAvatarColisionWithVertex(player.getAvatar().getX(),
-                            player.getAvatar().getY())));
-        });
-
-        canvas.setOnKeyPressed(e ->
-
-        {
-            player.setOnKeyPressed(e,
-                    getEdges(detectAvatarColisionWithVertex(player.getAvatar().getXForDrawing(),
-                            player.getAvatar().getYForDrawing())));
-        });
-
-    }
-
-    private void resetVertexAfterMoved(Vertex<String, BombWrapper> vertex) {
-        vertex.getValue().setSelected(false);
-        switch (vertex.getValue().getType()) {
-            case SPAWN -> {
-                vertex.getValue()
-                        .setIdle(new Image(getClass().getResource("/assets/Graph/spawn_node.png").toExternalForm()));
-            }
-            case END -> {
-                vertex.getValue()
-                        .setIdle(new Image(getClass().getResource("/assets/Graph/end_node.png").toExternalForm()));
-            }
-            case BOMB -> {
-                if (vertex.getValue().getBomb().isDetonated()) {
-                    vertex.getValue().setIdle(
-                            new Image(getClass().getResource("/assets/Graph/activated_vertex.png").toExternalForm()));
-                } else {
-                    vertex.getValue()
-                            .setIdle(new Image(getClass().getResource("/assets/Graph/bomb.png").toExternalForm()));
-                }
-            }
-            case NORMAL -> {
-                vertex.getValue()
-                        .setIdle(new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm()));
-            }
-
-            default -> {
-            }
-        }
-    }
-
-    private IGraph<String, BombWrapper> generateRandomGraph(String graphType) {
-        if (graphType.equals("ADJACENCY LIST")) {
-            this.graph = new GraphAL<>();
-        } else {
-            this.graph = new GraphAM<>();
-        }
-
-        LevelGenerator levelGenerator = new LevelGenerator(graph);
-        IGraph<String, BombWrapper> graph = levelGenerator.generateRandomLevel(NUM_VERTICES, this.canvas.getHeight(),
-                this.canvas.getWidth() + 50);
-        this.amountOfBombs = levelGenerator.amountOfBombs();
-        return graph;
-
     }
 
     private void drawGraph(IGraph<String, BombWrapper> graph) {
@@ -234,36 +179,6 @@ public class GameViewController implements Initializable {
         } else {
             drawAMGraph(graph);
         }
-    }
-
-    public static void gameOver() {
-        isGameRunning = false;
-    }
-
-    public void timerGameOver() {
-        gameOver();
-        timer.stopTimer();
-    }
-
-    @FXML
-    public void powerUp() {
-        powerUpController.powerUp(this.graph);
-        wasPowerUpUsed = true;
-    }
-
-    public void paintEdgeRed(Edge<String, BombWrapper> edge) {
-        double targetX = edge.getVertex2().getValue().X;
-        double targetY = edge.getVertex2().getValue().Y;
-
-        // Calculate the coordinates to start and end the line at the vertex borders
-        double startX = edge.getVertex1().getValue().X;
-        double startY = edge.getVertex1().getValue().Y;
-        double endX = targetX;
-        double endY = targetY;
-
-        // Draw edge from (startX, startY) to (endX, endY) on the Canvas
-        gc.setStroke(Color.RED);
-        gc.strokeLine(startX, startY, endX, endY);
     }
 
     private void drawAMGraph(IGraph<String, BombWrapper> graph2) {
@@ -333,12 +248,23 @@ public class GameViewController implements Initializable {
         }
     }
 
-    public void setPlayerName(String text) {
-        this.player.setNickname(text);
+    private void paintEdgeRed(Edge<String, BombWrapper> edge) {
+        double targetX = edge.getVertex2().getValue().X;
+        double targetY = edge.getVertex2().getValue().Y;
+
+        // Calculate the coordinates to start and end the line at the vertex borders
+        double startX = edge.getVertex1().getValue().X;
+        double startY = edge.getVertex1().getValue().Y;
+        double endX = targetX;
+        double endY = targetY;
+
+        // Draw edge from (startX, startY) to (endX, endY) on the Canvas
+        gc.setStroke(Color.RED);
+        gc.strokeLine(startX, startY, endX, endY);
     }
 
-    private void highglightConnectedVertex() {
-        Vertex<String, BombWrapper> vertex = detectAvatarColisionWithVertex(player.getAvatar().getX(),
+    private void highLightConnectedVertex() {
+        Vertex<String, BombWrapper> vertex = detectAvatarCollisionWithVertex(player.getAvatar().getX(),
                 player.getAvatar().getY());
         ArrayList<Vertex<String, BombWrapper>> connectedVertices = new ArrayList<>();
         if (vertex != null) {
@@ -348,38 +274,12 @@ public class GameViewController implements Initializable {
                 drawEdgeWeight(edge);
             }
             for (Vertex<String, BombWrapper> vertex1 : connectedVertices) {
-                highlightVertex(vertex1);
+                highLightVertex(vertex1);
             }
         }
     }
 
-    /**
-     * Este es el metodo encargado de poner el peso de la arista en el canvas
-     * Calcula el peso del vertice y luego se lo pinta en las cordiandas del vertice
-     * 
-     * @param edge la arista a la que se le va a poner el peso
-     */
-    private void drawEdgeWeight(Edge<String, BombWrapper> edge) {
-        double targetX = edge.getVertex2().getValue().X;
-        double targetY = edge.getVertex2().getValue().Y;
-
-        // Como se va a ver el texto
-        Text text = new Text(edge.getWeight() + "");
-        text.setFill(Color.RED);
-        text.setFont(new Font(32));
-        gc.setFill(text.getFill());
-        gc.setFont(text.getFont());
-        gc.fillText(text.getText(), targetX - 10, targetY - 5);
-    }
-
-    private List<Edge<String, BombWrapper>> getEdges(Vertex<String, BombWrapper> vertex) {
-        if (graph instanceof GraphAL) {
-            return vertex.getEdges();
-        }
-        return ((GraphAM<String, BombWrapper>) graph).getVertexEdges(vertex);
-    }
-
-    private void highlightVertex(Vertex<String, BombWrapper> vertex) {
+    private void highLightVertex(Vertex<String, BombWrapper> vertex) {
         if (vertex.getValue().getType().equals(model.enums.TypeOfNode.SPAWN)
                 || vertex.getValue().getType().equals(model.enums.TypeOfNode.END)) {
             return;
@@ -402,7 +302,77 @@ public class GameViewController implements Initializable {
 
     }
 
-    private Vertex<String, BombWrapper> detectAvatarColisionWithVertex(double positionX, double positionY) {
+    /**
+     * Este es el metodo encargado de poner el peso de la arista en el canvas
+     * Calcula el peso del vertice y luego se lo pinta en las cordiandas del vertice
+     * 
+     * @param edge la arista a la que se le va a poner el peso
+     */
+    private void drawEdgeWeight(Edge<String, BombWrapper> edge) {
+        double targetX = edge.getVertex2().getValue().X;
+        double targetY = edge.getVertex2().getValue().Y;
+
+        // Como se va a ver el texto
+        Text text = new Text(edge.getWeight() + "");
+        text.setFill(Color.RED);
+        text.setFont(new Font(32));
+        gc.setFill(text.getFill());
+        gc.setFont(text.getFont());
+        gc.fillText(text.getText(), targetX - 10, targetY - 5);
+    }
+
+    // -------------- CONTROL ------------------
+    
+    public void setPlayerName(String text) {
+        this.player.setNickname(text);
+    }
+
+    private void initActions() {
+
+        powerUp.setOnKeyPressed(e -> {
+
+            player.setOnKeyPressed(e,
+                    getEdges(detectAvatarCollisionWithVertex(player.getAvatar().getX(),
+                            player.getAvatar().getY())));
+        });
+
+        canvas.setOnKeyPressed(e ->
+
+        {
+            player.setOnKeyPressed(e,
+                    getEdges(detectAvatarCollisionWithVertex(player.getAvatar().getXForDrawing(),
+                            player.getAvatar().getYForDrawing())));
+        });
+
+    }
+
+    public static void gameOver() {
+        isGameRunning = false;
+    }
+
+    private IGraph<String, BombWrapper> generateRandomGraph(String graphType) {
+        if (graphType.equals("ADJACENCY LIST")) {
+            this.graph = new GraphAL<>();
+        } else {
+            this.graph = new GraphAM<>();
+        }
+
+        LevelGenerator levelGenerator = new LevelGenerator(graph);
+        IGraph<String, BombWrapper> graph = levelGenerator.generateRandomLevel(NUM_VERTICES, this.canvas.getHeight(),
+                this.canvas.getWidth() + 50);
+        this.amountOfBombs = levelGenerator.amountOfBombs();
+        return graph;
+
+    }
+
+    private List<Edge<String, BombWrapper>> getEdges(Vertex<String, BombWrapper> vertex) {
+        if (graph instanceof GraphAL) {
+            return vertex.getEdges();
+        }
+        return ((GraphAM<String, BombWrapper>) graph).getVertexEdges(vertex);
+    }
+
+    private Vertex<String, BombWrapper> detectAvatarCollisionWithVertex(double positionX, double positionY) {
         for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
             double x = vertex.getValue().X;
             double y = vertex.getValue().Y;
