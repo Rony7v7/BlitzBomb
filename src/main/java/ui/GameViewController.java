@@ -115,7 +115,7 @@ public class GameViewController implements Initializable {
                 seconds += 5;
             }
         }
-        timer = new Timer(seconds);
+        timer = new Timer(5);
         timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
 
         updateTimerLabel(seconds);
@@ -134,10 +134,16 @@ public class GameViewController implements Initializable {
 
     private void handleTimerFinish() {
         try {
+            killAllthreads();
             MainApp.gameOver();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void killAllthreads() {
+        isGameRunning = false;
+        timer.stopTimer();
     }
 
     // -------------- VIEW ------------------
