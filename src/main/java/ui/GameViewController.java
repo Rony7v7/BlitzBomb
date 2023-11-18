@@ -222,11 +222,6 @@ public class GameViewController implements Initializable {
         isGameRunning = false;
     }
 
-    public void timerGameOver() {
-        gameOver();
-        timer.stopTimer();
-    }
-
     @FXML
     public void powerUp() {
         powerUpController.powerUp(this.graph);
