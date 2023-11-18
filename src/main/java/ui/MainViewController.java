@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 
 public class MainViewController implements Initializable {
 
@@ -27,7 +28,7 @@ public class MainViewController implements Initializable {
     private void play(ActionEvent event) {
         try {
             if (nameInput.getText().strip().equals("")) {
-                MainApp.showAlert("Missing NickName", "Please enter a nickname");
+                MainApp.showAlert(AlertType.INFORMATION,"Missing NickName", "Please enter a nickname");
                 return;
             }
             GameViewController controller = MainApp.setRoot("game-view", "Blitz Bomb").getController();
