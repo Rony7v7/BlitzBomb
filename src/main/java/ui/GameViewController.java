@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -20,7 +21,9 @@ import structures.interfaces.IGraph;
 import model.BombWrapper;
 import model.Player;
 import model.enums.Difficulty;
+import model.enums.TypeOfNode;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -383,6 +386,50 @@ public class GameViewController implements Initializable {
                 && !vertex.getValue().getBomb().isDetonated()) {
             vertex.getValue().detonateBomb();
             amountOfBombsDetonated++;
+
+            // Verify if the player has detonated all the bombs and reached the end
+            if (checkForAllBombsDetonated() && vertex.getValue().getType() == TypeOfNode.END) {
+                
+                player.setScore(secondsRemaining);
+
+                handleGameFinishWon();
+            } else {
+                handleGameFinishLost();
+            }
+        }
+    }
+
+    private void handleGameFinishLost() {
+        killAllthreads();
+
+        // show the alert
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("You lost!    :(");
+        alert.setHeaderText("You detonated a bomb!");
+
+    
+        try {
+            MainApp.gameOver();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+
+    private void handleGameFinishWon() {
+        
+        killAllthreads();
+
+        // show the alert
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("You won!    :D");
+        alert.setHeaderText("Congratulations " + player.getNickname() + "!");
+
+        // Llama al método de la ventana principal para manejar el final del juego
+        try {
+            MainApp.gameOver();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
