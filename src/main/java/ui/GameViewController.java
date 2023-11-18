@@ -318,21 +318,23 @@ public class GameViewController implements Initializable {
 
     private void initActions() {
 
-        powerUp.setOnKeyPressed(e -> {
-
+        pane.setOnKeyPressed(e -> {
             player.setOnKeyPressed(e,
                     getEdges(detectAvatarCollisionWithVertex(player.getAvatar().getX(),
                             player.getAvatar().getY())));
         });
 
-        canvas.setOnKeyPressed(e ->
-
-        {
+        canvas.setOnKeyPressed(e -> {
             player.setOnKeyPressed(e,
-                    getEdges(detectAvatarCollisionWithVertex(player.getAvatar().getXForDrawing(),
-                            player.getAvatar().getYForDrawing())));
+                    getEdges(detectAvatarCollisionWithVertex(player.getAvatar().getX(),
+                            player.getAvatar().getY())));
         });
 
+        powerUp.setOnKeyPressed(e -> {
+            player.setOnKeyPressed(e,
+                    getEdges(detectAvatarCollisionWithVertex(player.getAvatar().getX(),
+                            player.getAvatar().getY())));
+        });
     }
 
     public static void gameOver() {
