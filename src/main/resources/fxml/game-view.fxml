@@ -6,14 +6,21 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #c8c8a9;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.GameViewController">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #E6D5B8;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.GameViewController">
    <children>
-      <Pane layoutX="834.0" layoutY="16.0" prefHeight="670.0" prefWidth="155.0" style="-fx-background-color: #556270; -fx-border-color: BLACK;">
+      <ImageView fitHeight="700.0" fitWidth="1115.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Map.png" />
+         </image>
+      </ImageView>
+      <Pane layoutX="834.0" layoutY="16.0" prefHeight="670.0" prefWidth="155.0" style="-fx-background-color: #1B1A17; -fx-border-color: BLACK;">
          <children>
             <VBox alignment="TOP_CENTER" layoutY="14.0" prefHeight="412.0" prefWidth="155.0">
                <children>
@@ -39,6 +46,6 @@
             <Button fx:id="powerUp" layoutX="24.0" layoutY="609.0" mnemonicParsing="false" onAction="#powerUp" text="dijkstra power up" />
          </children>
       </Pane>
-      <Canvas fx:id="canvas" height="670.0" layoutX="15.0" layoutY="16.0" width="784.0" />
+      <Canvas fx:id="canvas" height="670.0" layoutX="68.0" layoutY="16.0" width="713.0" />
    </children>
 </AnchorPane>

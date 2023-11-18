@@ -47,7 +47,6 @@ public class MainApp extends Application {
 
     private static void loadCss(Scene scene) {
         scene.getStylesheets().add(MainApp.class.getResource("/styles/style.css").toExternalForm());
-        Font.loadFont(MainApp.class.getResource("/fonts/kenvector_future.ttf").toExternalForm(), 10);
     }
 
     public static void showWindow(String fxml) throws IOException {
