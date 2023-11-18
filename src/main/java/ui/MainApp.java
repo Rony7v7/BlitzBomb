@@ -42,7 +42,6 @@ public class MainApp extends Application {
 
     private static FXMLLoader loadFXML(String fxml) throws IOException {
         return new FXMLLoader(MainApp.class.getResource("/fxml/" + fxml + ".fxml"));
-
     }
 
     private static void loadCss(Scene scene) {
