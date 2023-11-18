@@ -81,6 +81,7 @@ public class MainApp extends Application {
 
     public static void showAlert(Alert.AlertType alertType,String title, String content) {
         Alert alert = new Alert(alertType);
+        alert.setHeaderText(null);
         alert.setTitle(title);
         alert.setContentText(content);
         Platform.runLater(alert::showAndWait);
