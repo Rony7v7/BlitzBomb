@@ -49,7 +49,6 @@ public class GameViewController implements Initializable {
     private IGraph<String, BombWrapper> graph;
     private PowerUpController powerUpController;
     private boolean wasPowerUpUsed = false;
-    private Difficulty difficulty;
     private static final int NUM_VERTICES = 51;
     private int amountOfBombs = 0;
     private int amountOfBombsDetonated = 0;
@@ -98,7 +97,6 @@ public class GameViewController implements Initializable {
     // -------------- TIMER ------------------
 
     public void initTimer(Difficulty difficulty) {
-        this.difficulty = difficulty;
         timerLabel = new Label(timerFormat(secondsRemaining)); // Se hace desde fxml
 
         timerLabel.setFont(new Font(32));// Se hace desde fxml
@@ -150,10 +148,6 @@ public class GameViewController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void setDifficulty(Difficulty difficulty) {
-        this.difficulty = difficulty;
     }
 
     // -------------- VIEW ------------------
