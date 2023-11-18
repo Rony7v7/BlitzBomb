@@ -111,4 +111,8 @@ public class PowerUpController {
         });
 
     }
+
+    public void setPowerUpActive(boolean powerUpActive) {
+        this.isPowerUpActive = powerUpActive;
+    }
 }
