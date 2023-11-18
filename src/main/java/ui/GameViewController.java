@@ -20,6 +20,7 @@ import structures.interfaces.IGraph;
 import model.BombWrapper;
 import model.Player;
 import model.enums.Difficulty;
+import model.enums.TypeOfNode;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -77,6 +78,8 @@ public class GameViewController implements Initializable {
                         powerUp();
                     }
                 });
+
+                checkGameStatus();
                 checkForAllBombsDetonated();
                 try {
                     Thread.sleep(50);
@@ -135,7 +138,7 @@ public class GameViewController implements Initializable {
     private void handleTimerFinish() {
         try {
             killAllthreads();
-            MainApp.gameOver();
+            MainApp.gameStatus(GameStatus.LOSE_TIME);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -380,6 +383,14 @@ public class GameViewController implements Initializable {
         return amountOfBombsDetonated == amountOfBombs;
     }
 
+    /**
+     * The function activates a bomb in a graph vertex and checks if all bombs have been detonated and the
+     * player has reached the end.
+     * 
+     * @param vertex The `vertex` parameter is an object of type `Vertex<String, BombWrapper>`. It
+     * represents a vertex in a graph data structure. The vertex contains a value of type `BombWrapper`,
+     * which is a wrapper class for a bomb object.
+     */
     private void activateBomb(Vertex<String, BombWrapper> vertex) {
         if (vertex.getValue().getType().equals(model.enums.TypeOfNode.BOMB)
                 && !vertex.getValue().getBomb().isDetonated()) {
@@ -387,5 +398,60 @@ public class GameViewController implements Initializable {
             amountOfBombsDetonated++;
         }
     }
+
+
+    // -------------- GAME STATUS ------------------
+    private void checkGameStatus() {
+        if (checkForAllBombsDetonated() && playerHasReachedEnd()) {
+            handleWinGame();
+        } else if (!checkForAllBombsDetonated() && playerHasReachedEnd()) {
+            int peanltyTime =  (amountOfBombsDetonated - amountOfBombs) * 30;
+            secondsRemaining -= peanltyTime;
+            handleWinGameWithPenality();
+        }
+        player.setScore(secondsRemaining);
+    }
+
+    private void handleWinGame() {
+        Platform.runLater(() -> {
+            try {
+                killAllthreads();
+                MainApp.gameStatus(GameStatus.WIN);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void handleWinGameWithPenality() {
+        secondsRemaining -= 30;
+        Platform.runLater(() -> {
+            try {
+                killAllthreads();
+                MainApp.gameStatus(GameStatus.WIN_PENALITY);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private boolean playerHasReachedEnd() {
+        for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
+            if (vertex.getValue().getType().equals(TypeOfNode.END)) {
+                double x = vertex.getValue().X;
+                double y = vertex.getValue().Y;
+                double radius = vertex.getValue().radius;
+                if (Math.sqrt(Math.pow(player.getAvatar().getX() - x, 2) + Math.pow(player.getAvatar().getY() - y, 2))
+                        <= radius * 2) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+
 
 }
