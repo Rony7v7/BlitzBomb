@@ -249,10 +249,6 @@ public class GameViewController implements Initializable {
         gc.strokeLine(startX, startY, endX, endY);
     }
 
-    public void setPlayerName(String text) {
-        this.player.setNickname(text);
-    }
-
     private void highLightConnectedVertex() {
         Vertex<String, BombWrapper> vertex = detectAvatarCollisionWithVertex(player.getAvatar().getX(),
                 player.getAvatar().getY());
@@ -312,6 +308,10 @@ public class GameViewController implements Initializable {
     }
 
     // -------------- CONTROL ------------------
+    
+    public void setPlayerName(String text) {
+        this.player.setNickname(text);
+    }
 
     private void initActions() {
 
