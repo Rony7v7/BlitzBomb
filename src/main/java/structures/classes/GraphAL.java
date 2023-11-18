@@ -408,7 +408,7 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             Edge<K, V> minEdge = minHeap.poll();
 
             if (minEdge != null) {
-                // Get the next vertex connected by the selected edge
+                // Get the next vertex connected by the selected edge9
                 Vertex<K, V> nextVertex = minEdge.getVertex2();
 
                 // Add the edge to the Minimum Spanning Tree
