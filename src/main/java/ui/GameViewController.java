@@ -64,7 +64,7 @@ public class GameViewController implements Initializable {
         pane.getChildren().add(timerLabel);
         timerLabel.setLayoutX(10);
         timerLabel.setLayoutY(10);
-    
+
         this.graph = generateRandomGraph(MainViewController.getGraphType());
         initActions();
         player = new Player("", 0, canvas); // player que llega de la clase controladora
@@ -89,8 +89,6 @@ public class GameViewController implements Initializable {
             }
         }).start();
 
-
-
         // Calculate the minimum spanning tree of the graph, i.e. the shortest path
         IGraph<String, BombWrapper> MST = graph.prim(graph.getVertexList().get(0));
 
@@ -99,19 +97,17 @@ public class GameViewController implements Initializable {
         timer = new Timer(seconds);
         timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
     }
-    
+
     private void updateTimerLabel(int secondsRemaining) {
-        this.secondsRemaining = secondsRemaining; 
+        this.secondsRemaining = secondsRemaining;
         timerLabel.setText(timerFormat(secondsRemaining));
     }
-    
+
     private String timerFormat(int seconds) {
         int minutes = seconds / 60;
         int remainingSeconds = seconds % 60;
         return String.format("%02d:%02d", minutes, remainingSeconds);
     }
-
-    
 
     private void handleTimerFinish() {
         try {
@@ -122,7 +118,6 @@ public class GameViewController implements Initializable {
             e.printStackTrace();
         }
     }
-
 
     // Use this method to send all the data that you need.
     private void initDraw() {
@@ -409,7 +404,7 @@ public class GameViewController implements Initializable {
     private void activateBomb(Vertex<String, BombWrapper> vertex) {
         if (vertex.getValue().getType().equals(model.enums.TypeOfNode.BOMB)
                 && !vertex.getValue().getBomb().isDetonated()) {
-            vertex.getValue().getBomb().setDetonated(true);
+            vertex.getValue().detonateBomb();
             amountOfBombsDetonated++;
         }
     }
