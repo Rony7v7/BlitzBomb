@@ -60,9 +60,9 @@ public class GameViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.gc = this.canvas.getGraphicsContext2D();
         this.graph = generateRandomGraph(MainViewController.getGraphType());
         this.player = new Player("", 0, canvas); // player que llega de la clase controladora
+        gc = this.canvas.getGraphicsContext2D();
         isGameRunning = true;
         powerUpController = new PowerUpController(canvas);
 
