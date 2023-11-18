@@ -2,6 +2,7 @@ package ui;
 
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -94,17 +95,20 @@ public class PowerUpController {
     }
 
     public void paintEdgeRed(Edge<String, BombWrapper> edge) {
-        double targetX = edge.getVertex2().getValue().X;
-        double targetY = edge.getVertex2().getValue().Y;
+        Platform.runLater(() -> {
+            double targetX = edge.getVertex2().getValue().X;
+            double targetY = edge.getVertex2().getValue().Y;
 
-        // Calculate the coordinates to start and end the line at the vertex borders
-        double startX = edge.getVertex1().getValue().X;
-        double startY = edge.getVertex1().getValue().Y;
-        double endX = targetX;
-        double endY = targetY;
+            // Calculate the coordinates to start and end the line at the vertex borders
+            double startX = edge.getVertex1().getValue().X;
+            double startY = edge.getVertex1().getValue().Y;
+            double endX = targetX;
+            double endY = targetY;
 
-        // Draw edge from (startX, startY) to (endX, endY) on the Canvas
-        gc.setStroke(Color.RED);
-        gc.strokeLine(startX, startY, endX, endY);
+            // Draw edge from (startX, startY) to (endX, endY) on the Canvas
+            gc.setStroke(Color.RED);
+            gc.strokeLine(startX, startY, endX, endY);
+        });
+
     }
 }
