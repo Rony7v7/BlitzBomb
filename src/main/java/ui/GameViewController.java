@@ -99,17 +99,17 @@ public class GameViewController implements Initializable {
     // -------------- TIMER ------------------
 
     private void initTimer() {
-        timerLabel = new Label(timerFormat(secondsRemaining));
+        timerLabel = new Label(timerFormat(secondsRemaining)); //Se hace desde fxml
 
-        timerLabel.setFont(new Font(32));
-        timerLabel.setTextFill(Color.RED);
+        timerLabel.setFont(new Font(32));//Se hace desde fxml
+        timerLabel.setTextFill(Color.RED);//Se hace desde fxml
 
-        pane.setTopAnchor(timerLabel, 10.0);
-        pane.setRightAnchor(timerLabel, 10.0);
+        pane.setTopAnchor(timerLabel, 10.0);//Se hace desde fxml
+        pane.setRightAnchor(timerLabel, 10.0);//Se hace desde fxml
 
-        pane.getChildren().add(timerLabel);
-        timerLabel.setLayoutX(10);
-        timerLabel.setLayoutY(10);
+        pane.getChildren().add(timerLabel);//Se hace desde fxml
+        timerLabel.setLayoutX(10);//Se hace desde fxml
+        timerLabel.setLayoutY(10);//Se hace desde fxml
 
         // Calculate the minimum spanning tree of the graph, i.e. the shortest path
         IGraph<String, BombWrapper> MST = graph.prim(graph.getVertexList().get(0));
@@ -332,7 +332,7 @@ public class GameViewController implements Initializable {
 
     }
 
-    public static void gameOver() {
+    private static void gameOver() {
         isGameRunning = false;
     }
 
