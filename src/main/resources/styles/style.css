@@ -1,30 +1,35 @@
-.main-title {
-    -fx-font-size: 70px;
+.userName-textField {
+    -fx-font-family: "Simsun";
+    -fx-font-size: 15px;
     -fx-text-fill: #FFFFFF;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
+    -fx-background-color: #000000;
+    -fx-border-color: #FFFFFF;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-prompt-text-fill: #FFFFFF;
 }
 
 .menu-button {
-    -fx-font-size: 25px;
+    -fx-font-family: "Simsun";
+    -fx-font-size: 40px;
     -fx-color: #FFFFFF;
-    /* -fx-text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); */
+    -fx-background-color: transparent;
+    -fx-text-fill: #FFFFFF;
+    -fx-alignment: center-left;
+    -fx-min-width: 0;
+
 }
 
 .menu-button:hover {
     -fx-color: #FFFFFF;
-    -fx-text-fill: #000000;
+    -fx-text-fill: #FD8C2A;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
+    -fx-cursor: hand;
 }
 
 .menu-button:pressed {
     -fx-color: #FFFFFF;
-    -fx-text-fill: #000000;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
-}
-
-.menu-button:focused {
-    -fx-color: #FFFFFF;
-    -fx-text-fill: #000000;
+    -fx-text-fill: #FD8C2A;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
 }
 
@@ -39,4 +44,5 @@
     -fx-text-fill: #000000;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
 }
+
 
