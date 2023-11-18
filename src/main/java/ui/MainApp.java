@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import model.enums.Difficulty;
+import model.enums.GameStatus;
 
 import java.io.IOException;
 
