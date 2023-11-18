@@ -3,20 +3,40 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #c8c8a9;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.GameViewController">
    <children>
       <Pane layoutX="834.0" layoutY="16.0" prefHeight="670.0" prefWidth="155.0" style="-fx-background-color: #556270; -fx-border-color: BLACK;">
          <children>
+            <VBox alignment="TOP_CENTER" layoutY="14.0" prefHeight="412.0" prefWidth="155.0">
+               <children>
+                  <Label fx:id="timerLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="51.0" prefWidth="129.0" style="-fx-background-color: WHITE;" text="00:00" textAlignment="CENTER">
+                     <font>
+                        <Font name="SimSun" size="48.0" />
+                     </font>
+                  </Label>
+                  <Separator prefWidth="200.0" style="-fx-padding: 15;" />
+                  <Label text="Ranking" textFill="WHITE">
+                     <font>
+                        <Font name="SimSun" size="36.0" />
+                     </font>
+                  </Label>
+                  <TableView prefHeight="200.0" prefWidth="140.0" styleClass="rankingTable-tableView" stylesheets="@../styles/style.css">
+                    <columns>
+                      <TableColumn prefWidth="75.0" text="C1" />
+                      <TableColumn prefWidth="75.0" text="C2" />
+                    </columns>
+                  </TableView>
+               </children>
+            </VBox>
             <Button fx:id="powerUp" layoutX="24.0" layoutY="609.0" mnemonicParsing="false" onAction="#powerUp" text="dijkstra power up" />
-            <Label fx:id="timerLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="51.0" prefWidth="129.0" style="-fx-background-color: WHITE;" text="00:00" textAlignment="CENTER">
-               <font>
-                  <Font name="SimSun" size="48.0" />
-               </font>
-            </Label>
          </children>
       </Pane>
       <Canvas fx:id="canvas" height="670.0" layoutX="15.0" layoutY="16.0" width="784.0" />

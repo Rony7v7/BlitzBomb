@@ -57,3 +57,17 @@
     -fx-body-color: #00000000;
 
 }
+
+.rankingTable-tableView {
+    -fx-font-family: "Simsun";
+    -fx-font-size: 15px;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #00000000;
+    -fx-border-color: #ffffff00;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+
+    /* sin nombres */
+    -fx-table-header-background-color: #00000000;
+    -fx-table-header-border-color: #00000000;
+}
