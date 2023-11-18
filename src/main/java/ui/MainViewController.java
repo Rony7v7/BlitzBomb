@@ -34,7 +34,7 @@ public class MainViewController implements Initializable {
             }
             GameViewController controller = MainApp.setRoot("game-view", "Blitz Bomb").getController();
             controller.setPlayerName(nameInput.getText());
-            controller.setDifficulty(difficulty);
+            controller.initTimer(difficulty);
         } catch (IOException e) {
             e.printStackTrace();
         }

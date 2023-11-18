@@ -44,7 +44,7 @@ public class GameViewController implements Initializable {
     private Label timerLabel;
 
     private static GraphicsContext gc;
-    
+
     private Player player;
     private IGraph<String, BombWrapper> graph;
     private PowerUpController powerUpController;
@@ -53,7 +53,7 @@ public class GameViewController implements Initializable {
     private static final int NUM_VERTICES = 51;
     private int amountOfBombs = 0;
     private int amountOfBombsDetonated = 0;
-    
+
     private Timer timer;
     private int secondsRemaining;
     private static boolean isGameRunning = false;
@@ -66,7 +66,6 @@ public class GameViewController implements Initializable {
         isGameRunning = true;
         powerUpController = new PowerUpController(canvas);
 
-        initTimer();
         initActions();
 
         new Thread(() -> {
@@ -98,24 +97,36 @@ public class GameViewController implements Initializable {
 
     // -------------- TIMER ------------------
 
-    private void initTimer() {
-        timerLabel = new Label(timerFormat(secondsRemaining)); //Se hace desde fxml
+    public void initTimer(Difficulty difficulty) {
+        this.difficulty = difficulty;
+        timerLabel = new Label(timerFormat(secondsRemaining)); // Se hace desde fxml
 
-        timerLabel.setFont(new Font(32));//Se hace desde fxml
-        timerLabel.setTextFill(Color.RED);//Se hace desde fxml
+        timerLabel.setFont(new Font(32));// Se hace desde fxml
+        timerLabel.setTextFill(Color.RED);// Se hace desde fxml
 
-        pane.setTopAnchor(timerLabel, 10.0);//Se hace desde fxml
-        pane.setRightAnchor(timerLabel, 10.0);//Se hace desde fxml
+        pane.setTopAnchor(timerLabel, 10.0);// Se hace desde fxml
+        pane.setRightAnchor(timerLabel, 10.0);// Se hace desde fxml
 
-        pane.getChildren().add(timerLabel);//Se hace desde fxml
-        timerLabel.setLayoutX(10);//Se hace desde fxml
-        timerLabel.setLayoutY(10);//Se hace desde fxml
+        pane.getChildren().add(timerLabel);// Se hace desde fxml
+        timerLabel.setLayoutX(10);// Se hace desde fxml
+        timerLabel.setLayoutY(10);// Se hace desde fxml
 
         // Calculate the minimum spanning tree of the graph, i.e. the shortest path
         IGraph<String, BombWrapper> MST = graph.prim(graph.getVertexList().get(0));
 
         // Calculate the time it takes to traverse the shortest path
         int seconds = graph.DFS(MST);
+        switch (difficulty) {
+            case EASY -> {
+                seconds += 15;
+            }
+            case MEDIUM -> {
+                seconds += 10;
+            }
+            case HARD -> {
+                seconds += 5;
+            }
+        }
         timer = new Timer(seconds);
         timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
 
@@ -142,22 +153,10 @@ public class GameViewController implements Initializable {
     }
 
     public void setDifficulty(Difficulty difficulty) {
-        int seconds = this.secondsRemaining;
-        switch (difficulty) {
-            case EASY -> {
-                seconds += 15;
-            }
-            case MEDIUM -> {
-                seconds += 10;
-            }
-            case HARD -> {
-                seconds += 5;
-            }
-        }
         this.difficulty = difficulty;
     }
 
-     // -------------- VIEW ------------------
+    // -------------- VIEW ------------------
 
     private void initDraw() {
         gc.setFill(Color.web("#f7efd8")); // Set your desired background color
@@ -322,7 +321,7 @@ public class GameViewController implements Initializable {
     }
 
     // -------------- CONTROL ------------------
-    
+
     public void setPlayerName(String text) {
         this.player.setNickname(text);
     }
