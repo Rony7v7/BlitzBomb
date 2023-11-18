@@ -80,22 +80,16 @@ public class MainApp extends Application {
         auxStage.close();
     }
 
-    public static void showAlert(String titel,String content){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titel);
+    public static void showAlert(Alert.AlertType alertType,String title,String content){
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
         alert.setContentText(content);
         Platform.runLater(alert::showAndWait);
-    }
-
-    public static void showWarning(String titel,String content){
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(titel);
-        alert.setContentText(content);
-        Platform.runLater(alert::showAndWait);
+    
     }
 
     public static void gameOver() throws IOException {
-        showWarning("Game Over", "Your time is over :p");
+        showAlert(Alert.AlertType.ERROR,"Game Over", "Your time is over :p");
         setRoot("main-view", "Blitz Bomb");
     }
 }
