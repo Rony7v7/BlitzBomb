@@ -45,4 +45,15 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
 }
 
+.optionsWindow-anchorPane {
+    -fx-background-color: #000000;
+    -fx-min-width: 380px;
+    -fx-min-height: 300px;
+}
 
+.options-spinner {
+    -fx-font-family: "Simsun";
+    -fx-font-size: 15px;
+    -fx-body-color: #00000000;
+
+}

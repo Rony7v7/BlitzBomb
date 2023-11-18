@@ -10,9 +10,9 @@
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000" style="-fx-background-color: BLACK;" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.MainViewController">
     <children>
-      <ImageView fitHeight="541.0" fitWidth="928.0" layoutX="459.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="417.0" fitWidth="541.0" layoutX="426.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/BackgroundMenu.gif" />
+            <Image url="@../images/kelvinAnimation.gif" />
          </image></ImageView>
       <ImageView fitHeight="303.0" fitWidth="530.0" layoutX="38.0" layoutY="-45.0" pickOnBounds="true" preserveRatio="true">
          <image>
