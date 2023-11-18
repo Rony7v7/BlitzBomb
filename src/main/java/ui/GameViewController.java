@@ -70,6 +70,14 @@ public class GameViewController implements Initializable {
         player = new Player("", 0, canvas); // player que llega de la clase controladora
         isGameRunning = true;
         powerUpController = new PowerUpController(canvas);
+        // Calculate the minimum spanning tree of the graph, i.e. the shortest path
+        IGraph<String, BombWrapper> MST = graph.prim(graph.getVertexList().get(0));
+
+        // Calculate the time it takes to traverse the shortest path
+        int seconds = graph.DFS(MST);
+        timer = new Timer(seconds);
+        timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
+        updateTimerLabel(seconds);
         new Thread(() -> {
             while (isGameRunning) {
                 Platform.runLater(() -> {
@@ -89,15 +97,6 @@ public class GameViewController implements Initializable {
             }
         }).start();
 
-        // Calculate the minimum spanning tree of the graph, i.e. the shortest path
-        IGraph<String, BombWrapper> MST = graph.prim(graph.getVertexList().get(0));
-
-        // Calculate the time it takes to traverse the shortest path
-        int seconds = graph.DFS(MST);
-        timer = new Timer(seconds);
-        timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
-
-        updateTimerLabel(seconds);
     }
 
     private void updateTimerLabel(int secondsRemaining) {

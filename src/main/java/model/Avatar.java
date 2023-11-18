@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import Controller.Timer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -75,6 +76,7 @@ public class Avatar {
                         .filter(edge -> edge.getVertex2().getValue().Y < currentY)
                         .findFirst()
                         .ifPresent(edge -> {
+                            Timer.substractSeconds(edge.getWeight());
                             setY(edge.getVertex2().getValue().Y);
                             setX(edge.getVertex2().getValue().X);
                         });
@@ -84,6 +86,7 @@ public class Avatar {
                         .filter(edge -> edge.getVertex2().getValue().Y > currentY)
                         .findFirst()
                         .ifPresent(edge -> {
+                            Timer.substractSeconds(edge.getWeight());
                             setY(edge.getVertex2().getValue().Y);
                             setX(edge.getVertex2().getValue().X);
                         });
@@ -94,6 +97,7 @@ public class Avatar {
                                 && edge.getVertex2().getValue().Y == currentY)
                         .findFirst()
                         .ifPresent(edge -> {
+                            Timer.substractSeconds(edge.getWeight());
                             setY(edge.getVertex2().getValue().Y);
                             setX(edge.getVertex2().getValue().X);
                         });
@@ -105,6 +109,7 @@ public class Avatar {
                                 && edge.getVertex2().getValue().Y == currentY)
                         .findFirst()
                         .ifPresent(edge -> {
+                            Timer.substractSeconds(edge.getWeight());
                             setY(edge.getVertex2().getValue().Y);
                             setX(edge.getVertex2().getValue().X);
                         });
@@ -112,9 +117,6 @@ public class Avatar {
             default -> {
             }
         }
-    }
-
-    public void setOnKeyReleased(KeyEvent event) {
     }
 
 }
