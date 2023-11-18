@@ -5,7 +5,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.enums.Difficulty;
 
@@ -88,8 +87,14 @@ public class MainApp extends Application {
     
     }
 
-    public static void gameOver() throws IOException {
-        showAlert(Alert.AlertType.ERROR,"Game Over", "Your time is over :p");
+    public static void gameStatus(GameStatus status) throws IOException {
+        if (status == GameStatus.WIN) {
+            showAlert(Alert.AlertType.INFORMATION,"Congratulations!", "You won!");
+        } else if (status == GameStatus.WIN_PENALITY) {
+            showAlert(Alert.AlertType.INFORMATION,"Congratulations!", "You win but you have a penality of 30 seconds beacuse you have not exploded all the bombs");
+        } else if (status == GameStatus.LOSE_TIME) {
+            showAlert(Alert.AlertType.INFORMATION,"Game Over", "You lost :( because your time is over");
+        }
         setRoot("main-view", "Blitz Bomb");
     }
 }
