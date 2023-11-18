@@ -98,6 +98,8 @@ public class GameViewController implements Initializable {
         int seconds = graph.DFS(MST);
         timer = new Timer(seconds);
         timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
+
+        updateTimerLabel(seconds);
     }
     
     private void updateTimerLabel(int secondsRemaining) {
