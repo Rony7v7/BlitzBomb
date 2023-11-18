@@ -73,7 +73,7 @@ public class GameViewController implements Initializable {
                     initDraw();
                     player.paint();
                     highLightConnectedVertex();
-                    if (wasPowerUpUsed) {
+                    if (wasPowerUpUsed) { 
                         powerUp();
                     }
                 });
