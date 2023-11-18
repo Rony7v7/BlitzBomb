@@ -332,7 +332,7 @@ public class GameViewController implements Initializable {
 
     }
 
-    private static void gameOver() {
+    public static void gameOver() {
         isGameRunning = false;
     }
 
