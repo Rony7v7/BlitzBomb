@@ -138,7 +138,6 @@ public class GameViewController implements Initializable {
         this.difficulty = difficulty;
     }
 
-    // Use this method to send all the data that you need.
     private void initDraw() {
         gc.setFill(Color.web("#f7efd8")); // Set your desired background color
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
