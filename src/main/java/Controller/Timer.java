@@ -1,17 +1,17 @@
 package Controller;
 
-import javafx.util.Duration;  
+import javafx.util.Duration;
 import java.util.function.Consumer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 
 public class Timer {
 
-    private int secondsRemaining;
+    private static int secondsRemaining;
     private Timeline timeline;
 
     public Timer(int seconds) {
-        this.secondsRemaining = seconds;
+        secondsRemaining = seconds;
     }
 
     public void startTimer(Consumer<Integer> onTick, Runnable onFinish) {
@@ -27,6 +27,18 @@ public class Timer {
 
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+    }
+
+    public int getSecondsRemaining() {
+        return secondsRemaining;
+    }
+
+    public void setSecondsRemaining(int seconds) {
+        secondsRemaining = seconds;
+    }
+
+    public static void substractSeconds(int seconds) {
+        secondsRemaining -= seconds;
     }
 
     public void stopTimer() {
