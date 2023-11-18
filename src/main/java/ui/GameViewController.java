@@ -125,7 +125,7 @@ public class GameViewController implements Initializable {
                 seconds += 5;
             }
         }
-        timer = new Timer(seconds);
+        timer = new Timer(5);
         timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
 
         updateTimerLabel(seconds);
