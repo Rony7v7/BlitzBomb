@@ -1,9 +1,12 @@
 package ui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -40,18 +43,29 @@ public class GameViewController implements Initializable {
 
     private boolean isPowerUpActive = false;
 
+    private int amountOfBombs = 0;
+    private int amountOfBombsDetonated = 0;
+
+    @FXML
+    private Button powerUp;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gc = this.canvas.getGraphicsContext2D();
-        initDraw();
-
+        this.graph = generateRandomGraph(MainViewController.getGraphType());
+        initActions();
         player = new Player("", 0, canvas); // player que llega de la clase controladora
         isGameRunning = true;
         new Thread(() -> {
             while (isGameRunning) {
-                try {
+                Platform.runLater(() -> {
+                    initDraw();
                     player.paint();
-                    Thread.sleep(65);
+                    highglightConnectedVertex();
+                });
+                checkForAllBombsDetonated();
+                try {
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -68,10 +82,68 @@ public class GameViewController implements Initializable {
 
         // Draw a rectangle around the Canvas to represent the borders
         gc.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        this.graph = generateRandomGraph(MainViewController.getGraphType());
-
         drawGraph(graph);
+    }
+
+    private void initActions() {
+
+        powerUp.setOnKeyPressed(e -> {
+
+            Vertex<String, BombWrapper> vertex = detectAvatarColisionWithVertex(player.getAvatar().getX(),
+                    player.getAvatar().getY());
+            ArrayList<Vertex<String, BombWrapper>> connectedVertices = new ArrayList<>();
+            if (vertex != null) {
+                for (Edge<String, BombWrapper> edge : getEdges(vertex)) {
+                    connectedVertices.add(edge.getVertex2());
+                }
+            }
+            connectedVertices.stream().forEach(v -> {
+                resetVertexAfterMoved(v);
+            });
+
+            player.setOnKeyPressed(e,
+                    getEdges(detectAvatarColisionWithVertex(player.getAvatar().getX(),
+                            player.getAvatar().getY())));
+        });
+
+        canvas.setOnKeyPressed(e ->
+
+        {
+            player.setOnKeyPressed(e,
+                    getEdges(detectAvatarColisionWithVertex(player.getAvatar().getXForDrawing(),
+                            player.getAvatar().getYForDrawing())));
+        });
+
+    }
+
+    private void resetVertexAfterMoved(Vertex<String, BombWrapper> vertex) {
+        vertex.getValue().setSelected(false);
+        switch (vertex.getValue().getType()) {
+            case SPAWN -> {
+                vertex.getValue()
+                        .setIdle(new Image(getClass().getResource("/assets/Graph/spawn_node.png").toExternalForm()));
+            }
+            case END -> {
+                vertex.getValue()
+                        .setIdle(new Image(getClass().getResource("/assets/Graph/end_node.png").toExternalForm()));
+            }
+            case BOMB -> {
+                if (vertex.getValue().getBomb().isDetonated()) {
+                    vertex.getValue().setIdle(
+                            new Image(getClass().getResource("/assets/Graph/activated_vertex.png").toExternalForm()));
+                } else {
+                    vertex.getValue()
+                            .setIdle(new Image(getClass().getResource("/assets/Graph/bomb.png").toExternalForm()));
+                }
+            }
+            case NORMAL -> {
+                vertex.getValue()
+                        .setIdle(new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm()));
+            }
+
+            default -> {
+            }
+        }
     }
 
     private IGraph<String, BombWrapper> generateRandomGraph(String graphType) {
@@ -82,8 +154,10 @@ public class GameViewController implements Initializable {
         }
 
         LevelGenerator levelGenerator = new LevelGenerator(graph);
-        return levelGenerator.generateRandomLevel(NUM_VERTICES, this.canvas.getHeight(),
+        IGraph<String, BombWrapper> graph = levelGenerator.generateRandomLevel(NUM_VERTICES, this.canvas.getHeight(),
                 this.canvas.getWidth() + 50);
+        this.amountOfBombs = levelGenerator.amountOfBombs();
+        return graph;
 
     }
 
@@ -186,17 +260,16 @@ public class GameViewController implements Initializable {
     private void drawAMGraph(IGraph<String, BombWrapper> graph2) {
         GraphAM<String, BombWrapper> auxGraph = (GraphAM<String, BombWrapper>) graph2;
         ArrayList<ArrayList<Edge<String, BombWrapper>>> matrix = auxGraph.getAdjacencyMatrix();
-        System.out.println(matrix.size());
         // Draw vertex
         for (int i = 0; i < matrix.size(); i++) {
             double x = auxGraph.getVertexList().get(i).getValue().X;
             double y = auxGraph.getVertexList().get(i).getValue().Y;
             double radius = auxGraph.getVertexList().get(i).getValue().radius;
             // Draw vertex at (x, y) on the Canvas
-            gc.drawImage(auxGraph.getVertexList().get(i).getValue().getIdle(), x - radius, y - radius, radius * 2 + 5,
-                    radius * 2 + 5);
 
-            int numEdges = 0;
+            gc.drawImage(auxGraph.getVertexList().get(i).getValue().getIdle(), x - radius, y - radius,
+                    radius * 2 + 5, radius * 2 + 5);
+
             for (int j = 0; j < matrix.get(i).size(); j++) {
 
                 if (matrix.get(i).get(j) != null) {
@@ -212,17 +285,9 @@ public class GameViewController implements Initializable {
                     // Draw edge from (startX, startY) to (endX, endY) on the Canvas
                     gc.setStroke(Color.web("#273142"));
                     gc.strokeLine(startX, startY, endX, endY);
-                    numEdges++;
                 }
             }
 
-            Text grade = new Text(numEdges + "");
-            grade.setX(auxGraph.getVertexList().get(i).getValue().X);
-            grade.setY(auxGraph.getVertexList().get(i).getValue().Y + 30);
-            grade.setFont(Font.font(20));
-            gc.setFill(Color.BLACK);
-            gc.fillText(grade.getText(), auxGraph.getVertexList().get(i).getValue().X,
-                    auxGraph.getVertexList().get(i).getValue().Y);
         }
 
     }
@@ -233,17 +298,14 @@ public class GameViewController implements Initializable {
             double y = vertex.getValue().Y;
             double radius = vertex.getValue().radius;
             // Draw vertex at (x, y) on the Canvas
+            // Si esta seleccionado hazlo mas grandre sino simplemente graficalo del tamaño
+            // del radio
             gc.drawImage(vertex.getValue().getIdle(), x - radius, y - radius, radius * 2 + 5, radius * 2 + 5);
 
             Text grade = new Text(vertex.getEdges().size() + "");
             grade.setX(vertex.getValue().X);
             grade.setY(vertex.getValue().Y + 30);
             grade.setFont(Font.font(20));
-            gc.setFill(Color.BLACK);
-            gc.fillText(grade.getText(), vertex.getValue().X, vertex.getValue().Y);
-
-            // Image image = new
-            // Image(getClass().getResource("/assets/Graph/edge.png").toExternalForm());
 
             for (Edge<String, BombWrapper> edge : vertex.getEdges()) {
                 double targetX = edge.getVertex2().getValue().X;
@@ -264,6 +326,96 @@ public class GameViewController implements Initializable {
 
     public void setPlayerName(String text) {
         this.player.setNickname(text);
+    }
+
+    private void highglightConnectedVertex() {
+        Vertex<String, BombWrapper> vertex = detectAvatarColisionWithVertex(player.getAvatar().getX(),
+                player.getAvatar().getY());
+        ArrayList<Vertex<String, BombWrapper>> connectedVertices = new ArrayList<>();
+        if (vertex != null) {
+            for (Edge<String, BombWrapper> edge : getEdges(vertex)) {
+                connectedVertices.add(edge.getVertex2());
+                paintEdgeRed(edge);
+                drawEdgeWeight(edge);
+            }
+            for (Vertex<String, BombWrapper> vertex1 : connectedVertices) {
+                highlightVertex(vertex1);
+            }
+        }
+    }
+
+    /**
+     * Este es el metodo encargado de poner el peso de la arista en el canvas
+     * Calcula el peso del vertice y luego se lo pinta en las cordiandas del vertice
+     * 
+     * @param edge la arista a la que se le va a poner el peso
+     */
+    private void drawEdgeWeight(Edge<String, BombWrapper> edge) {
+        double targetX = edge.getVertex2().getValue().X;
+        double targetY = edge.getVertex2().getValue().Y;
+
+        // Como se va a ver el texto
+        Text text = new Text(edge.getWeight() + "");
+        text.setFill(Color.RED);
+        text.setFont(new Font(32));
+        gc.setFill(text.getFill());
+        gc.setFont(text.getFont());
+        gc.fillText(text.getText(), targetX - 10, targetY - 5);
+    }
+
+    private List<Edge<String, BombWrapper>> getEdges(Vertex<String, BombWrapper> vertex) {
+        if (graph instanceof GraphAL) {
+            return vertex.getEdges();
+        }
+        return ((GraphAM<String, BombWrapper>) graph).getVertexEdges(vertex);
+    }
+
+    private void highlightVertex(Vertex<String, BombWrapper> vertex) {
+        if (vertex.getValue().getType().equals(model.enums.TypeOfNode.SPAWN)
+                || vertex.getValue().getType().equals(model.enums.TypeOfNode.END)) {
+            return;
+        }
+
+        double x = vertex.getValue().X;
+        double y = vertex.getValue().Y;
+        double radius = vertex.getValue().radius;
+
+        double scaleFactor = 1;
+        double height = (radius * 2 * scaleFactor);
+        double newWidth = vertex.getValue().getIdle().getWidth()
+                * (height / vertex.getValue().getIdle().getHeight());
+        double newX = x - newWidth / 2;
+        double newY = y - height / 2;
+
+        gc.drawImage(new Image(getClass().getResource("/assets/Graph/highlighted_vertex.png").toExternalForm()), newX,
+                newY, newWidth, height);
+        vertex.getValue().setSelected(true);
+
+    }
+
+    private Vertex<String, BombWrapper> detectAvatarColisionWithVertex(double positionX, double positionY) {
+        for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
+            double x = vertex.getValue().X;
+            double y = vertex.getValue().Y;
+            double radius = vertex.getValue().radius;
+            if (Math.sqrt(Math.pow(positionX - x, 2) + Math.pow(positionY - y, 2)) <= radius * 2) {
+                activateBomb(vertex);
+                return vertex;
+            }
+        }
+        return null;
+    }
+
+    private boolean checkForAllBombsDetonated() {
+        return amountOfBombsDetonated == amountOfBombs;
+    }
+
+    private void activateBomb(Vertex<String, BombWrapper> vertex) {
+        if (vertex.getValue().getType().equals(model.enums.TypeOfNode.BOMB)
+                && !vertex.getValue().getBomb().isDetonated()) {
+            vertex.getValue().getBomb().setDetonated(true);
+            amountOfBombsDetonated++;
+        }
     }
 
 }

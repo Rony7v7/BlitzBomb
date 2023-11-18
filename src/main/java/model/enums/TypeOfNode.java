@@ -1,5 +1,5 @@
 package model.enums;
 
 public enum TypeOfNode {
-    SPAWN, END, NORMAL
+    SPAWN, END, NORMAL, BOMB
 }
