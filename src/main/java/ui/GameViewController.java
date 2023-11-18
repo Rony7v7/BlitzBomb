@@ -134,10 +134,16 @@ public class GameViewController implements Initializable {
 
     private void handleTimerFinish() {
         try {
+            killAllthreads();
             MainApp.gameOver();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void killAllthreads() {
+        isGameRunning = false;
+        timer.stopTimer();
     }
 
     // -------------- VIEW ------------------
