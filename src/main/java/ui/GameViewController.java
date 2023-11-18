@@ -97,17 +97,7 @@ public class GameViewController implements Initializable {
     // -------------- TIMER ------------------
 
     public void initTimer(Difficulty difficulty) {
-        timerLabel = new Label(timerFormat(secondsRemaining)); // Se hace desde fxml
-
-        timerLabel.setFont(new Font(32));// Se hace desde fxml
-        timerLabel.setTextFill(Color.RED);// Se hace desde fxml
-
-        pane.setTopAnchor(timerLabel, 10.0);// Se hace desde fxml
-        pane.setRightAnchor(timerLabel, 10.0);// Se hace desde fxml
-
-        pane.getChildren().add(timerLabel);// Se hace desde fxml
-        timerLabel.setLayoutX(10);// Se hace desde fxml
-        timerLabel.setLayoutY(10);// Se hace desde fxml
+        timerLabel.setText(timerFormat(secondsRemaining));
 
         // Calculate the minimum spanning tree of the graph, i.e. the shortest path
         IGraph<String, BombWrapper> MST = graph.prim(graph.getVertexList().get(0));
