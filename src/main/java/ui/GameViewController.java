@@ -94,7 +94,7 @@ public class GameViewController implements Initializable {
 
         // Calculate the time it takes to traverse the shortest path
         int seconds = graph.DFS(MST);
-        timer = new Timer(seconds);
+        timer = new Timer(5);
         timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
 
         updateTimerLabel(seconds);
@@ -113,9 +113,7 @@ public class GameViewController implements Initializable {
 
     private void handleTimerFinish() {
         try {
-            // TODO: Game Over screen and show it
-            Stage stage = (Stage) pane.getScene().getWindow();
-            stage.close();
+            MainApp.setRoot("main-view");
         } catch (Exception e) {
             e.printStackTrace();
         }

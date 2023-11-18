@@ -86,4 +86,14 @@ public class MainApp extends Application {
         alert.showAndWait();
     }
 
+    public static void showWarning(String titel,String content){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(titel);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    public static void gameOver() {
+        GameViewController.gameOver();
+    }
 }
