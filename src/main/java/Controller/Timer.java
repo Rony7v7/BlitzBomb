@@ -10,8 +10,8 @@ public class Timer {
     private int secondsRemaining;
     private Timeline timeline;
 
-    public Timer(int durationMinutes) {
-        this.secondsRemaining = durationMinutes * 60;
+    public Timer(int seconds) {
+        this.secondsRemaining = seconds;
     }
 
     public void startTimer(Consumer<Integer> onTick, Runnable onFinish) {

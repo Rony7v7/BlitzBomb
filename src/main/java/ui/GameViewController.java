@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import structures.classes.Edge;
 import structures.classes.GraphAL;
 import structures.classes.GraphAM;
@@ -34,29 +35,24 @@ public class GameViewController implements Initializable {
     private Canvas canvas;
     @FXML
     private AnchorPane pane;
+    @FXML
+    private Button powerUp;
 
+    private Player player;
+    private IGraph<String, BombWrapper> graph;
+    private PowerUpController powerUpController;
+    private static GraphicsContext gc;
+
+    private static final int NUM_VERTICES = 51;
+    private static boolean isGameRunning = false;
+    private int amountOfBombs = 0;
+    private int amountOfBombsDetonated = 0;
+    private boolean wasPowerUpUsed = false;
+    private int secondsRemaining;
+    private Timer timer;
     @FXML
     private Label timerLabel;
 
-
-    private static final int NUM_VERTICES = 51;
-
-    private static boolean isGameRunning = false;
-    private Player player;
-
-    private IGraph<String, BombWrapper> graph;
-
-    private static GraphicsContext gc;
-
-    private boolean isPowerUpActive = false;
-
-    private int amountOfBombs = 0;
-    private int amountOfBombsDetonated = 0;
-    private int secondsRemaining;
-    private Timer timer;
-
-    @FXML
-    private Button powerUp;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gc = this.canvas.getGraphicsContext2D();
@@ -73,13 +69,16 @@ public class GameViewController implements Initializable {
         initActions();
         player = new Player("", 0, canvas); // player que llega de la clase controladora
         isGameRunning = true;
-        
+        powerUpController = new PowerUpController(canvas);
         new Thread(() -> {
             while (isGameRunning) {
                 Platform.runLater(() -> {
                     initDraw();
                     player.paint();
                     highglightConnectedVertex();
+                    if (wasPowerUpUsed) {
+                        powerUp();
+                    }
                 });
                 checkForAllBombsDetonated();
                 try {
@@ -89,13 +88,20 @@ public class GameViewController implements Initializable {
                 }
             }
         }).start();
-    
-        timer = new Timer(2);
+
+
+
+        // Calculate the minimum spanning tree of the graph, i.e. the shortest path
+        IGraph<String, BombWrapper> MST = graph.prim(graph.getVertexList().get(0));
+
+        // Calculate the time it takes to traverse the shortest path
+        int seconds = graph.DFS(MST);
+        timer = new Timer(seconds);
         timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
     }
     
     private void updateTimerLabel(int secondsRemaining) {
-        this.secondsRemaining = secondsRemaining; // Actualizar la variable de clase
+        this.secondsRemaining = secondsRemaining; 
         timerLabel.setText(timerFormat(secondsRemaining));
     }
     
@@ -109,7 +115,9 @@ public class GameViewController implements Initializable {
 
     private void handleTimerFinish() {
         try {
-            MainApp.showWindow("gameOver-view");
+            // TODO: Game Over screen and show it
+            Stage stage = (Stage) pane.getScene().getWindow();
+            stage.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -225,56 +233,9 @@ public class GameViewController implements Initializable {
     }
 
     @FXML
-    @SuppressWarnings("unchecked")
     public void powerUp() {
-        Vertex<String, BombWrapper>[] selectedVertices = new Vertex[2]; // Create a new array for selected vertices
-
-        if (!isPowerUpActive) {
-            isPowerUpActive = true;
-
-            new Thread(() -> {
-                dijkstraPowerUp(selectedVertices);
-                isPowerUpActive = false;
-            }).start();
-        }
-    }
-
-    private void dijkstraPowerUp(Vertex<String, BombWrapper>[] selectedVertices) {
-        while (isPowerUpActive) {
-            canvas.setOnMouseClicked(event -> {
-                double mouseX = event.getX();
-                double mouseY = event.getY();
-                Vertex<String, BombWrapper> clickedVertex = detectVertexClicked(mouseX, mouseY);
-
-                if (clickedVertex != null) {
-                    if (selectedVertices[0] == null) {
-                        selectedVertices[0] = clickedVertex;
-                    } else if (selectedVertices[1] == null) {
-                        selectedVertices[1] = clickedVertex;
-                        isPowerUpActive = false; // Stop the power-up
-                    }
-                }
-            });
-
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (selectedVertices[0] != null && selectedVertices[1] != null) {
-
-            List<Edge<String, BombWrapper>> shortestPath = graph.Dijkstra(selectedVertices[0],
-                    selectedVertices[1]);
-
-            for (Edge<String, BombWrapper> edge : shortestPath) {
-                paintEdgeRed(edge);
-            }
-
-            selectedVertices[0] = null;
-            selectedVertices[1] = null;
-        }
+        powerUpController.powerUp(this.graph);
+        wasPowerUpUsed = true;
     }
 
     public void paintEdgeRed(Edge<String, BombWrapper> edge) {
@@ -290,18 +251,6 @@ public class GameViewController implements Initializable {
         // Draw edge from (startX, startY) to (endX, endY) on the Canvas
         gc.setStroke(Color.RED);
         gc.strokeLine(startX, startY, endX, endY);
-    }
-
-    private Vertex<String, BombWrapper> detectVertexClicked(double positionX, double positionY) {
-        for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
-            double x = vertex.getValue().X;
-            double y = vertex.getValue().Y;
-            double radius = vertex.getValue().radius;
-            if (Math.sqrt(Math.pow(positionX - x, 2) + Math.pow(positionY - y, 2)) <= radius) {
-                return vertex;
-            }
-        }
-        return null;
     }
 
     private void drawAMGraph(IGraph<String, BombWrapper> graph2) {
