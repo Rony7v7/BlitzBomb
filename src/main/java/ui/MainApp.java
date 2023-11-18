@@ -94,6 +94,14 @@ public class MainApp extends Application {
     }
 
     public static void gameOver() {
-        GameViewController.gameOver();
+        try {
+            setRoot("main-view", "Blitz Bomb");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        showWarning("Game Over", "You lost the game :p");
+
     }
 }
