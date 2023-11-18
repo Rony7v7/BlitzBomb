@@ -19,7 +19,7 @@
             <Image url="@../images/mainTitle.png" />
          </image>
       </ImageView>
-      <TextField fx:id="nameInput" layoutX="610.0" layoutY="57.0" prefHeight="35.0" prefWidth="239.0" promptText="Insert username" styleClass="userName-textField" stylesheets="@../styles/style.css">
+      <TextField fx:id="nameInput" layoutX="38.0" layoutY="154.0" prefHeight="35.0" prefWidth="239.0" promptText="Insert username" styleClass="textField" stylesheets="@../styles/style.css">
          <font>
             <Font name="SimSun" size="12.0" />
          </font>
