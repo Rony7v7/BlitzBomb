@@ -48,7 +48,6 @@ public class GameViewController implements Initializable {
     private Player player;
     private IGraph<String, BombWrapper> graph;
     private PowerUpController powerUpController;
-    private boolean wasPowerUpUsed = false;
     private static final int NUM_VERTICES = 51;
     private int amountOfBombs = 0;
     private int amountOfBombsDetonated = 0;
@@ -73,9 +72,8 @@ public class GameViewController implements Initializable {
                     initDraw();
                     player.paint();
                     highLightConnectedVertex();
-                    if (wasPowerUpUsed) { 
-                        powerUp();
-                    }
+                    powerUpController.paintDijkstra();
+
                 });
                 checkForAllBombsDetonated();
                 try {
@@ -91,7 +89,6 @@ public class GameViewController implements Initializable {
     @FXML
     public void powerUp() {
         powerUpController.powerUp(this.graph);
-        wasPowerUpUsed = true;
     }
 
     // -------------- TIMER ------------------
@@ -101,6 +98,13 @@ public class GameViewController implements Initializable {
 
         // Calculate the minimum spanning tree of the graph, i.e. the shortest path
         IGraph<String, BombWrapper> MST = graph.prim(graph.getVertexList().get(0));
+
+        // ighlits all edges visited in the MST
+        for (Vertex<String, BombWrapper> vertex : MST.getVertexList()) {
+            for (Edge<String, BombWrapper> edge : vertex.getEdges()) {
+                paintEdgeRed(edge);
+            }
+        }
 
         // Calculate the time it takes to traverse the shortest path
         int seconds = graph.DFS(MST);
@@ -115,7 +119,7 @@ public class GameViewController implements Initializable {
                 seconds += 5;
             }
         }
-        timer = new Timer(seconds);
+        timer = new Timer(10000000); // TODO UPDATE THIS
         timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
 
         updateTimerLabel(seconds);
