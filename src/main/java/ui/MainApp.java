@@ -1,7 +1,6 @@
 package ui;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -80,23 +79,12 @@ public class MainApp extends Application {
         auxStage.close();
     }
 
-    public static void showAlert(Alert.AlertType alertType,String title, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setHeaderText(null);
-        alert.setTitle(title);
-        alert.setContentText(content);
-        Platform.runLater(alert::showAndWait);
-    
+    public static void showAlert(Alert.AlertType alertType, String title, String content) {
+        AlertController.showAlert(alertType, GameStatus.NOT_STARTED, title, content);
     }
 
-    public static void gameStatus(GameStatus status) throws IOException {
-        if (status == GameStatus.WIN) {
-            showAlert(Alert.AlertType.INFORMATION,"Congratulations!", "You won! ");
-        } else if (status == GameStatus.WIN_PENALITY) {
-            showAlert(Alert.AlertType.INFORMATION,"Congratulations!", "You win but you have a penality of 30 seconds beacuse you have not exploded all the bombs");
-        } else if (status == GameStatus.LOSE_TIME) {
-            showAlert(Alert.AlertType.INFORMATION,"Game Over", "You lost :( because your time is over");
-        }
+    public static void gameOver(GameStatus status) throws IOException {
+        AlertController.showAlert(Alert.AlertType.INFORMATION, status, "","");
         setRoot("main-view", "Blitz Bomb");
     }
 }

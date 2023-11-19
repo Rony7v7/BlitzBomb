@@ -71,3 +71,23 @@
     -fx-table-header-background-color: #00000000;
     -fx-table-header-border-color: #00000000;
 }
+
+.alert {
+    -fx-font-family: "Simsun";
+    -fx-font-size: 30px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #000000;
+    -fx-border-color: #FFFFFF;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
+
+.alert > .button {
+    -fx-font-family: "Simsun";
+    -fx-font-size: 15px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #000000;
+    -fx-border-color: #FFFFFF;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}

@@ -139,7 +139,7 @@ public class GameViewController implements Initializable {
     private void handleTimerFinish() {
         try {
             killAllthreads();
-            MainApp.gameStatus(GameStatus.LOSE_TIME);
+            MainApp.gameOver(GameStatus.LOSE_TIME);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -417,7 +417,7 @@ public class GameViewController implements Initializable {
         Platform.runLater(() -> {
             try {
                 killAllthreads();
-                MainApp.gameStatus(GameStatus.WIN);
+                MainApp.gameOver(GameStatus.WIN);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -429,7 +429,7 @@ public class GameViewController implements Initializable {
         Platform.runLater(() -> {
             try {
                 killAllthreads();
-                MainApp.gameStatus(GameStatus.WIN_PENALITY);
+                MainApp.gameOver(GameStatus.WIN_PENALTY);
             } catch (Exception e) {
                 e.printStackTrace();
             }
