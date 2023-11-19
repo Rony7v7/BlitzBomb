@@ -14,10 +14,15 @@ public class MainApp extends Application {
     private static Stage stage;
     private static Stage auxStage;
 
+    private static SoundController soundController;
+
     @Override
     public void start(Stage s) throws IOException {
         stage = s;
         setRoot("main-view", "Blitz Bomb");
+        
+        soundController = new SoundController("/audio/BackgroundThemeSong.wav", true);
+        soundController.play(-30f);
     }
 
     static void setRoot(String fxml) throws IOException {
