@@ -77,7 +77,7 @@ public class GameViewController implements Initializable {
                 });
                 checkForAllBombsDetonated();
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -88,7 +88,7 @@ public class GameViewController implements Initializable {
 
     @FXML
     public void powerUp() {
-        powerUpController.powerUp(this.graph);
+        powerUpController.powerUp(graph);
     }
 
     // -------------- TIMER ------------------
@@ -323,18 +323,6 @@ public class GameViewController implements Initializable {
     private void initActions() {
 
         pane.setOnKeyPressed(e -> {
-            player.setOnKeyPressed(e,
-                    getEdges(detectAvatarCollisionWithVertex(player.getAvatar().getX(),
-                            player.getAvatar().getY())));
-        });
-
-        canvas.setOnKeyPressed(e -> {
-            player.setOnKeyPressed(e,
-                    getEdges(detectAvatarCollisionWithVertex(player.getAvatar().getX(),
-                            player.getAvatar().getY())));
-        });
-
-        powerUp.setOnKeyPressed(e -> {
             player.setOnKeyPressed(e,
                     getEdges(detectAvatarCollisionWithVertex(player.getAvatar().getX(),
                             player.getAvatar().getY())));

@@ -74,6 +74,7 @@ public class PowerUpController {
                                 isPowerUpActive = false;
                                 selectedVertices[0] = null;
                                 selectedVertices[1] = null;
+                                break;
                             }
                         }
 
