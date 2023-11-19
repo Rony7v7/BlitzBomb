@@ -15,9 +15,11 @@ public class PowerUpController {
     private Canvas canvas;
     private Vertex<String, BombWrapper>[] selectedVertices = new Vertex[2];
     private List<Edge<String, BombWrapper>> shortestPath;
-    private boolean isPowerUpActive;
     private boolean wasPowerUpUsed;
+    private boolean isPowerUpActive;
     private GraphicsContext gc;
+    private double mouseX;
+    private double mouseY;
 
     public PowerUpController(Canvas canvas) {
         this.canvas = canvas;
@@ -26,59 +28,60 @@ public class PowerUpController {
     }
 
     public void powerUp(IGraph<String, BombWrapper> graph) {
-        if (!wasPowerUpUsed) {
-            dijkstraPowerUp(graph, selectedVertices);
-            isPowerUpActive = true;
-        } else {
-            for (Edge<String, BombWrapper> edge : shortestPath) {
-                paintEdgeRed(edge);
-            }
+        if (wasPowerUpUsed) {
+            return;
         }
+        dijkstraPowerUp(graph, selectedVertices);
 
     }
 
+    public void paintDijkstra() {
+        if (!wasPowerUpUsed) {
+            return;
+        }
+        Platform.runLater(() -> {
+            for (Edge<String, BombWrapper> edge : shortestPath) {
+                paintEdgeRed(edge);
+            }
+        });
+    }
+
     private void dijkstraPowerUp(IGraph<String, BombWrapper> graph, Vertex<String, BombWrapper>[] selectedVertices) {
-        Thread thread = new Thread(
+        isPowerUpActive = true;
+        canvas.setOnMouseClicked(event -> {
+            this.mouseX = event.getX();
+            this.mouseY = event.getY();
+            Vertex<String, BombWrapper> clickedVertex = detectVertexClicked(graph, mouseX, mouseY);
+
+            if (clickedVertex != null) {
+                if (selectedVertices[0] == null) {
+                    selectedVertices[0] = clickedVertex;
+                } else if (selectedVertices[1] == null) {
+                    selectedVertices[1] = clickedVertex;
+                }
+            }
+        });
+        new Thread(
                 () -> {
                     while (isPowerUpActive) {
-                        canvas.setOnMouseClicked(event -> {
-                            double mouseX = event.getX();
-                            double mouseY = event.getY();
-                            Vertex<String, BombWrapper> clickedVertex = detectVertexClicked(graph, mouseX, mouseY);
 
-                            if (clickedVertex != null) {
-                                if (selectedVertices[0] == null) {
-                                    selectedVertices[0] = clickedVertex;
-                                } else if (selectedVertices[1] == null) {
-                                    selectedVertices[1] = clickedVertex;
-                                    isPowerUpActive = false; // Stop the power-up
-                                }
+                        synchronized (this) {
+                            if (selectedVertices[0] != null && selectedVertices[1] != null) {
+                                List<Edge<String, BombWrapper>> shortestPath = graph.Dijkstra(selectedVertices[0],
+                                        selectedVertices[1]);
+                                this.shortestPath = shortestPath;
+                                wasPowerUpUsed = true;
+                                isPowerUpActive = false;
+                                selectedVertices[0] = null;
+                                selectedVertices[1] = null;
+                                break;
                             }
-                        });
-
-                    }
-
-                    if (selectedVertices[0] != null && selectedVertices[1] != null) {
-
-                        List<Edge<String, BombWrapper>> shortestPath = graph.Dijkstra(selectedVertices[0],
-                                selectedVertices[1]);
-                        this.shortestPath = shortestPath;
-
-                        for (Edge<String, BombWrapper> edge : shortestPath) {
-                            paintEdgeRed(edge);
                         }
-                        wasPowerUpUsed = true;
-                        selectedVertices[0] = null;
-                        selectedVertices[1] = null;
+
                     }
 
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
-        thread.start();
+                }).start();
+
     }
 
     private Vertex<String, BombWrapper> detectVertexClicked(IGraph<String, BombWrapper> graph, double positionX,
@@ -94,7 +97,7 @@ public class PowerUpController {
         return null;
     }
 
-    public void paintEdgeRed(Edge<String, BombWrapper> edge) {
+    private void paintEdgeRed(Edge<String, BombWrapper> edge) {
         Platform.runLater(() -> {
             double targetX = edge.getVertex2().getValue().X;
             double targetY = edge.getVertex2().getValue().Y;
@@ -112,7 +115,4 @@ public class PowerUpController {
 
     }
 
-    public void setPowerUpActive(boolean powerUpActive) {
-        this.isPowerUpActive = powerUpActive;
-    }
 }
