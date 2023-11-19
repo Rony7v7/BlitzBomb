@@ -143,7 +143,7 @@ public class GameViewController implements Initializable {
     private void handleTimerFinish() {
         try {
             killAllthreads();
-            MainApp.gameOver(GameStatus.LOSE_TIME);
+            MainApp.gameOver(GameStatus.LOSE_TIME,0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -400,8 +400,8 @@ public class GameViewController implements Initializable {
         if (checkForAllBombsDetonated() && playerHasReachedEnd()) {
             handleWinGame();
         } else if (!checkForAllBombsDetonated() && playerHasReachedEnd()) {
-            int peanltyTime = (amountOfBombsDetonated - amountOfBombs) * 30;
-            secondsRemaining -= peanltyTime;
+            int penaltyTime = (amountOfBombsDetonated - amountOfBombs) * 30;
+            secondsRemaining -= penaltyTime;
             handleWinGameWithPenality();
         }
         player.setScore(secondsRemaining);
@@ -411,7 +411,7 @@ public class GameViewController implements Initializable {
         Platform.runLater(() -> {
             try {
                 killAllthreads();
-                MainApp.gameOver(GameStatus.WIN);
+                MainApp.gameOver(GameStatus.WIN, player.getScore());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -423,7 +423,7 @@ public class GameViewController implements Initializable {
         Platform.runLater(() -> {
             try {
                 killAllthreads();
-                MainApp.gameOver(GameStatus.WIN_PENALTY);
+                MainApp.gameOver(GameStatus.WIN_PENALTY, player.getScore());
             } catch (Exception e) {
                 e.printStackTrace();
             }

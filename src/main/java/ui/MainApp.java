@@ -101,8 +101,8 @@ public class MainApp extends Application {
         AlertController.showAlert(alertType, GameStatus.NOT_STARTED, title, content);
     }
 
-    public static void gameOver(GameStatus status) throws IOException {
-        AlertController.showAlert(Alert.AlertType.INFORMATION, status, "","");
+    public static void gameOver(GameStatus status, int score) throws IOException {
+        AlertController.showAlert(Alert.AlertType.INFORMATION, status, "",score+"");
         setRoot("main-view", "Blitz Bomb");
     }
 }
