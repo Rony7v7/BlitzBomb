@@ -21,6 +21,23 @@ public class MainApp extends Application {
     public void start(Stage s) throws IOException {
         stage = s;
         setRoot("main-view", "Blitz Bomb");
+
+        // setear icono
+        stage.getIcons().add(new javafx.scene.image.Image(MainApp.class.getResourceAsStream("/images/icon.png")));
+
+        // Deshabilitar maximizar
+        stage.setResizable(false);
+
+        // Centrar ventana
+        stage.setX(Screen.getPrimary().getVisualBounds().getMaxX() / 2 - stage.getWidth() / 2);
+        stage.setY(Screen.getPrimary().getVisualBounds().getMaxY() / 2 - stage.getHeight() / 2);
+
+        stage.setOnCloseRequest(e -> {
+            if (isAuxStageOpen()) {
+                auxStage.close();
+            }
+            GameViewController.gameOver();
+        });
         
         soundController = new SoundController("/audio/BackgroundThemeSong.wav", true);
         soundController.play(-30f);
@@ -38,20 +55,6 @@ public class MainApp extends Application {
         stage.setScene(scene);
         stage.show();
 
-        // Deshabilitar maximizar o minimizar
-        stage.setResizable(false);
-
-        // Centrar ventana
-        stage.setX(Screen.getPrimary().getVisualBounds().getMaxX() / 2 - stage.getWidth() / 2);
-        stage.setY(Screen.getPrimary().getVisualBounds().getMaxY() / 2 - stage.getHeight() / 2);
-
-        stage.setOnCloseRequest(e -> {
-            if (isAuxStageOpen()) {
-                auxStage.close();
-            }
-            GameViewController.gameOver();
-        });
-        
         return loader;
     }
 
