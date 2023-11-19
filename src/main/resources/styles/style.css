@@ -58,20 +58,6 @@
 
 }
 
-.rankingTable-tableView {
-    -fx-font-family: "Simsun";
-    -fx-font-size: 15px;
-    -fx-text-fill: #FFFFFF;
-    -fx-background-color: #00000000;
-    -fx-border-color: #ffffff00;
-    -fx-border-width: 2px;
-    -fx-border-radius: 5px;
-
-    /* sin nombres */
-    -fx-table-header-background-color: #00000000;
-    -fx-table-header-border-color: #00000000;
-}
-
 .alert {
     -fx-font-family: "Simsun";
     -fx-font-size: 30px;
@@ -90,4 +76,33 @@
     -fx-border-color: #FFFFFF;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
+}
+
+.ranking-HBox {
+    -fx-font-family: "Simsun";
+    -fx-font-size: 15px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #000000;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+
+    -fx-spacing: 10px;
+    -fx-padding: 10px;
+
+}
+
+.rankingName-label {
+    -fx-font-family: "Simsun";
+    -fx-font-size: 15px;
+    -fx-text-fill: #ffffff;
+    /* set min and max widht */
+    -fx-min-width: 50px;
+    -fx-max-width: 50px;
+}
+
+.rankingScore-label {
+    -fx-font-family: "Simsun";
+    -fx-font-size: 15px;
+    -fx-text-fill: #FD8C2A;
 }

@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import Controller.FileManager;
 import Controller.LevelGenerator;
 import Controller.Timer;
 
@@ -45,6 +48,9 @@ public class GameViewController implements Initializable {
     @FXML
     private Label timerLabel;
 
+    @FXML
+    private VBox rankingVBox;
+
     private static GraphicsContext gc;
 
     private Player player;
@@ -54,6 +60,8 @@ public class GameViewController implements Initializable {
     private int amountOfBombs = 0;
     private int amountOfBombsDetonated = 0;
 
+    private FileManager fileManager;
+
     private Timer timer;
     private int secondsRemaining;
     private static boolean isGameRunning = false;
@@ -61,12 +69,14 @@ public class GameViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.graph = generateRandomGraph(MainViewController.getGraphType());
-        this.player = new Player("", 0, canvas); // player que llega de la clase controladora
+        this.player = new Player("", 0, canvas); // asignacion temporal
+        this.fileManager = new FileManager();
         gc = this.canvas.getGraphicsContext2D();
         isGameRunning = true;
         powerUpController = new PowerUpController(canvas);
 
         initActions();
+        loadRanking();
 
         new Thread(() -> {
             while (isGameRunning) {
@@ -152,6 +162,7 @@ public class GameViewController implements Initializable {
     private void killAllthreads() {
         isGameRunning = false;
         timer.stopTimer();
+        savePlayer();
     }
 
     // -------------- VIEW ------------------
@@ -318,6 +329,12 @@ public class GameViewController implements Initializable {
         gc.fillText(text.getText(), targetX - 10, targetY - 5);
     }
 
+    private void setHBoxStyle(HBox hBox) {
+        hBox.getStyleClass().add("ranking-HBox");
+        
+        hBox.getChildren().get(0).getStyleClass().add("rankingName-label");
+        hBox.getChildren().get(1).getStyleClass().add("rankingScore-label");
+    }
     // -------------- CONTROL ------------------
 
     public void setPlayerName(String text) {
@@ -393,6 +410,45 @@ public class GameViewController implements Initializable {
             vertex.getValue().detonateBomb();
             amountOfBombsDetonated++;
         }
+    }
+
+    private void loadRanking() {
+        ArrayList<String> playersRanking = fileManager.loadPlayers();
+
+        for (String player : playersRanking) {
+            String[] playerInfo = player.split(":");
+            String nickname = playerInfo[0];
+            String score = playerInfo[1];
+
+            HBox hBox = new HBox();
+
+            Label label = new Label(nickname);
+            hBox.getChildren().add(label);
+
+            label = new Label(score);
+            hBox.getChildren().add(label);
+
+            rankingVBox.getChildren().add(hBox);
+
+            setHBoxStyle(hBox);
+        }
+    }
+
+    private void savePlayer() {
+        ArrayList<String> playersRanking = fileManager.loadPlayers();
+        playersRanking.add(player.getNickname() + ":" + player.getScore());
+
+        //Sort the players by score
+        // if (playersRanking.size() > 2) {
+        //     playersRanking.sort((o1, o2) -> {
+        //         String[] player1 = o1.split(":");
+        //         String[] player2 = o2.split(":");
+
+        //         return Integer.parseInt(player2[2]) - Integer.parseInt(player1[1]);
+        //     });
+        // }
+
+        fileManager.savePlayers(playersRanking);
     }
 
     // -------------- GAME STATUS ------------------
