@@ -19,7 +19,6 @@ public class FileManager {
 
     private final File projectDir;
     private final File dataFolder;
-    private final Gson gson;
 
     public FileManager() {
         projectDir = new File(System.getProperty("user.dir"));
@@ -29,7 +28,6 @@ public class FileManager {
             dataFolder.mkdirs();
         }
 
-        gson = new Gson();
     }
 
     public void savePlayers(ArrayList<Player> players) {
@@ -49,7 +47,6 @@ public class FileManager {
         }
 
     }
-
 
     public ArrayList<Player> loadPlayers() {
 

@@ -123,7 +123,7 @@ public class GameViewController implements Initializable {
                 seconds += 5;
             }
         }
-        timer = new Timer(10000000); // TODO UPDATE THIS
+        timer = new Timer(seconds);
         timer.startTimer(this::updateTimerLabel, this::handleTimerFinish);
 
         updateTimerLabel(seconds);
@@ -377,12 +377,15 @@ public class GameViewController implements Initializable {
     }
 
     /**
-     * The function activates a bomb in a graph vertex and checks if all bombs have been detonated and the
+     * The function activates a bomb in a graph vertex and checks if all bombs have
+     * been detonated and the
      * player has reached the end.
      * 
-     * @param vertex The `vertex` parameter is an object of type `Vertex<String, BombWrapper>`. It
-     * represents a vertex in a graph data structure. The vertex contains a value of type `BombWrapper`,
-     * which is a wrapper class for a bomb object.
+     * @param vertex The `vertex` parameter is an object of type `Vertex<String,
+     *               BombWrapper>`. It
+     *               represents a vertex in a graph data structure. The vertex
+     *               contains a value of type `BombWrapper`,
+     *               which is a wrapper class for a bomb object.
      */
     private void activateBomb(Vertex<String, BombWrapper> vertex) {
         if (vertex.getValue().getType().equals(model.enums.TypeOfNode.BOMB)
@@ -392,13 +395,12 @@ public class GameViewController implements Initializable {
         }
     }
 
-
     // -------------- GAME STATUS ------------------
     private void checkGameStatus() {
         if (checkForAllBombsDetonated() && playerHasReachedEnd()) {
             handleWinGame();
         } else if (!checkForAllBombsDetonated() && playerHasReachedEnd()) {
-            int peanltyTime =  (amountOfBombsDetonated - amountOfBombs) * 30;
+            int peanltyTime = (amountOfBombsDetonated - amountOfBombs) * 30;
             secondsRemaining -= peanltyTime;
             handleWinGameWithPenality();
         }
@@ -434,17 +436,13 @@ public class GameViewController implements Initializable {
                 double x = vertex.getValue().X;
                 double y = vertex.getValue().Y;
                 double radius = vertex.getValue().radius;
-                if (Math.sqrt(Math.pow(player.getAvatar().getX() - x, 2) + Math.pow(player.getAvatar().getY() - y, 2))
-                        <= radius * 2) {
+                if (Math.sqrt(Math.pow(player.getAvatar().getX() - x, 2)
+                        + Math.pow(player.getAvatar().getY() - y, 2)) <= radius * 2) {
                     return true;
                 }
             }
         }
         return false;
     }
-
-
-
-
 
 }
