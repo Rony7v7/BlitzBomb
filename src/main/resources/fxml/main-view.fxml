@@ -32,7 +32,7 @@
             <Button onAction="#setGraph" prefHeight="37.0" prefWidth="180.0" styleClass="menu-button" stylesheets="@../styles/style.css" text="Set Graph" />
          </children>
       </VBox>
-      <Label alignment="CENTER_RIGHT" layoutX="315.0" layoutY="613.0" prefHeight="17.0" prefWidth="729.0" text="COMPUTACIÓN Y ESTRUCTURAS DISCRETAS I - TAREA INTEGRADORA II - DAVID ARTUNDUIAGA , JUAN JOSE DE LA PAVA &amp; RONY ORDOÑEZ" textFill="WHITE">
+      <Label alignment="CENTER_RIGHT" layoutX="315.0" layoutY="613.0" prefHeight="17.0" prefWidth="729.0" text="COMPUTACIÓN Y ESTRUCTURAS DISCRETAS I - TAREA INTEGRADORA II - DAVID ARTUNDUAGA , JUAN JOSE DE LA PAVA &amp; RONY ORDOÑEZ" textFill="WHITE">
          <font>
             <Font name="SimSun-ExtB" size="12.0" />
          </font>
