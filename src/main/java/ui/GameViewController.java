@@ -104,7 +104,7 @@ public class GameViewController implements Initializable {
         IGraph<String, BombWrapper> MST = graph.prim(graph.getVertexList().get(0));
 
         //TODO: QUITAR ESTO Y PONER EL DFS
-        
+
         int totalTime = 0;
         for (Edge<String, BombWrapper> edge : MST.getEdgeList()) {
             totalTime += edge.getWeight();
@@ -114,13 +114,13 @@ public class GameViewController implements Initializable {
         int seconds = graph.DFS(MST);
         switch (difficulty) {
             case EASY -> {
-                totalTime += 15;
+                totalTime += 30;
             }
             case MEDIUM -> {
-                totalTime += 10;
+                totalTime += 15;
             }
             case HARD -> {
-                totalTime += 5;
+                totalTime += 10;
             }
         }
         timer = new Timer(totalTime);
