@@ -98,12 +98,13 @@ public class GameViewController implements Initializable {
     // -------------- TIMER ------------------
 
     public void initTimer(Difficulty difficulty) {
+        int gap = 30;
         timerLabel.setText(timerFormat(secondsRemaining));
 
         // Calculate the minimum spanning tree of the graph, i.e. the shortest path
         IGraph<String, BombWrapper> MST = graph.prim(graph.getVertexList().get(0));
 
-        //TODO: QUITAR ESTO Y PONER EL DFS
+        // TODO: QUITAR ESTO Y PONER EL DFS
 
         int totalTime = 0;
         for (Edge<String, BombWrapper> edge : MST.getEdgeList()) {
@@ -114,13 +115,13 @@ public class GameViewController implements Initializable {
         int seconds = graph.DFS(MST);
         switch (difficulty) {
             case EASY -> {
-                totalTime += 30;
+                totalTime += 30 + gap;
             }
             case MEDIUM -> {
-                totalTime += 15;
+                totalTime += 15 + gap;
             }
             case HARD -> {
-                totalTime += 10;
+                totalTime += 10 + gap;
             }
         }
         timer = new Timer(totalTime);
