@@ -63,7 +63,7 @@ public class AlertController {
             alert.setGraphic(new ImageView(gif));
         }
 
-        alert.setContentText(content);
+        alert.setContentText(content+alert.getContentText()+" seconds left");
     }
 
     private static void setAlertStyle(Alert alert) {
