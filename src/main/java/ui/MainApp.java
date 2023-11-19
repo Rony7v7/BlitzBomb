@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.enums.Difficulty;
 import model.enums.GameStatus;
@@ -36,12 +37,21 @@ public class MainApp extends Application {
         stage.setTitle(title);
         stage.setScene(scene);
         stage.show();
+
+        // Deshabilitar maximizar o minimizar
+        stage.setResizable(false);
+
+        // Centrar ventana
+        stage.setX(Screen.getPrimary().getVisualBounds().getMaxX() / 2 - stage.getWidth() / 2);
+        stage.setY(Screen.getPrimary().getVisualBounds().getMaxY() / 2 - stage.getHeight() / 2);
+
         stage.setOnCloseRequest(e -> {
             if (isAuxStageOpen()) {
                 auxStage.close();
             }
             GameViewController.gameOver();
         });
+        
         return loader;
     }
 
