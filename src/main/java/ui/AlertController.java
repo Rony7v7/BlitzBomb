@@ -53,7 +53,7 @@ public class AlertController {
                 gif = WIN_PENALTY_GIF;
                 break;
             case LOSE_TIME:
-                content = "You lose c:";
+                content = "You lose by time! \n\nYour score: ";
                 gif = LOSE_GIF;
                 break;
             default:
@@ -63,7 +63,7 @@ public class AlertController {
             alert.setGraphic(new ImageView(gif));
         }
 
-        alert.setContentText(content+alert.getContentText()+" seconds left");
+        alert.setContentText(content+alert.getContentText()+" Kelvin Points");
     }
 
     private static void setAlertStyle(Alert alert) {
