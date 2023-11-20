@@ -68,7 +68,7 @@
     -fx-border-radius: 5px;
 }
 
-.alert > .button {
+.alert {
     -fx-font-family: "Simsun";
     -fx-font-size: 15px;
     -fx-text-fill: #ffffff;
@@ -82,7 +82,7 @@
     -fx-font-family: "Simsun";
     -fx-font-size: 15px;
     -fx-text-fill: #ffffff;
-    -fx-background-color: #000000;
+    -fx-background-color:  #1B1A17;
     -fx-border-color: #ffffff;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
@@ -105,4 +105,60 @@
     -fx-font-family: "Simsun";
     -fx-font-size: 15px;
     -fx-text-fill: #FD8C2A;
+}
+
+.powerup-button {
+    -fx-font-family: "Simsun";
+    -fx-font-size: 15px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #FD8C2A;
+    -fx-border-color: #FFFFFF;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-alignment: center;
+}
+
+.powerup-button:hover {
+    -fx-font-family: "Simsun";
+    -fx-font-size: 15px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #FD8C2A;
+    -fx-border-color: #FFFFFF;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
+    -fx-cursor: hand;
+}
+
+.powerup-button:pressed {
+    -fx-font-family: "Simsun";
+    -fx-font-size: 15px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #1B1A17;
+    -fx-border-color: #FFFFFF;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 1, 2);
+}
+
+.powerup-button:disabled {
+    -fx-font-family: "Simsun";
+    -fx-font-size: 15px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #FD8C2A;
+    -fx-border-color: #FFFFFF;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
+}
+
+.powerup-button:default {
+    -fx-font-family: "Simsun";
+    -fx-font-size: 15px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #FD8C2A;
+    -fx-border-color: #FFFFFF;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 0, 0, 0, 1);
 }

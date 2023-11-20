@@ -21,7 +21,6 @@
       </ImageView>
       <Pane layoutX="834.0" layoutY="16.0" prefHeight="670.0" prefWidth="155.0" style="-fx-background-color: #1B1A17;">
          <children>
-            <Button fx:id="powerUp" layoutX="24.0" layoutY="609.0" mnemonicParsing="false" onAction="#powerUp" text="dijkstra power up" />
             <Label fx:id="timerLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="13.0" layoutY="14.0" prefHeight="51.0" prefWidth="129.0" style="-fx-background-color: WHITE;" text="00:00" textAlignment="CENTER">
                <font>
                   <Font name="SimSun" size="48.0" />
@@ -37,11 +36,16 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="132.0">
                      <children>
-                        <VBox fx:id="rankingVBox" prefHeight="410.0" prefWidth="126.0" style="-fx-background-color: WHITE; -fx-spacing: 5;" />
+                        <VBox fx:id="rankingVBox" prefHeight="410.0" prefWidth="119.0" style="-fx-background-color: WHITE; -fx-spacing: 5;" />
                      </children>
                   </AnchorPane>
               </content>
             </ScrollPane>
+            <Button fx:id="powerUp" layoutX="11.0" layoutY="596.0" mnemonicParsing="false" onAction="#powerUp" prefHeight="31.0" prefWidth="135.0" styleClass="powerup-button" stylesheets="@../styles/style.css" text="PowerUp">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
       <Canvas fx:id="canvas" height="670.0" layoutX="68.0" layoutY="16.0" width="713.0" />
