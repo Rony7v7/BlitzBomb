@@ -417,6 +417,7 @@ public class GameViewController implements Initializable {
     private void loadRanking() {
         ArrayList<String> playersRanking = fileManager.loadPlayers();
 
+
         for (String player : playersRanking) {
             String[] playerInfo = player.split(":");
             String nickname = playerInfo[0];
@@ -439,19 +440,25 @@ public class GameViewController implements Initializable {
     private void savePlayer() {
         ArrayList<String> playersRanking = fileManager.loadPlayers();
         playersRanking.add(player.getNickname() + ":" + player.getScore());
+    
+        // Sort the players by score
+        if (playersRanking.size() > 1) {
+            playersRanking.sort((o1, o2) -> {
+                // Convert each line of the ranking into a String array by splitting at ":"
+                String[] player1 = o1.split(":");
+                String[] player2 = o2.split(":");
+                
+                // Compare players' scores in descending order
+                // (subtract the score of the second player from the score of the first player)
+                // This is done to have the player with a higher score appear first in the list
+                return Integer.parseInt(player2[1]) - Integer.parseInt(player1[1]);
+            });
+        }
 
-        //Sort the players by score
-        // if (playersRanking.size() > 2) {
-        //     playersRanking.sort((o1, o2) -> {
-        //         String[] player1 = o1.split(":");
-        //         String[] player2 = o2.split(":");
-
-        //         return Integer.parseInt(player2[2]) - Integer.parseInt(player1[1]);
-        //     });
-        // }
-
+    
         fileManager.savePlayers(playersRanking);
     }
+    
 
     // -------------- GAME STATUS ------------------
     private void checkGameStatus() {
