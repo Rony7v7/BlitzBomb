@@ -153,6 +153,7 @@ public class GameViewController implements Initializable {
     }
 
     private void handleTimerFinish() {
+        updateTimerLabel(secondsRemaining);
         try {
             killAllthreads();
             MainApp.gameOver(GameStatus.LOSE_TIME,0);
@@ -462,14 +463,16 @@ public class GameViewController implements Initializable {
 
     // -------------- GAME STATUS ------------------
     private void checkGameStatus() {
+
         if (checkForAllBombsDetonated() && playerHasReachedEnd()) {
+            player.setScore(secondsRemaining);
             handleWinGame();
         } else if (!checkForAllBombsDetonated() && playerHasReachedEnd()) {
             int penaltyTime = (amountOfBombsDetonated - amountOfBombs) * 30;
             secondsRemaining -= penaltyTime;
+            player.setScore(-secondsRemaining);
             handleWinGameWithPenality();
         }
-        player.setScore(secondsRemaining);
     }
 
     private void handleWinGame() {
@@ -484,7 +487,7 @@ public class GameViewController implements Initializable {
     }
 
     private void handleWinGameWithPenality() {
-        secondsRemaining -= 30;
+
         Platform.runLater(() -> {
             try {
                 killAllthreads();
