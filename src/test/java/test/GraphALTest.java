@@ -19,12 +19,12 @@ public class GraphALTest {
 
     public GraphAL<Integer, Integer> graph;
 
-    public void setupSimple1() {
+    public void setUp1() {
         graph = new GraphAL<Integer, Integer>();
     }
 
-    public void setupSimple2() {
-        setupSimple1();
+    public void setUp2() {
+        setUp1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
@@ -175,7 +175,7 @@ public class GraphALTest {
 
     @Test
     public void testInsertVertex() {
-        setupSimple1();
+        setUp1();
         graph.insertVertex(1, 1);
         graph.insertVertex(2, 2);
         graph.insertVertex(3, 3);
@@ -186,7 +186,7 @@ public class GraphALTest {
 
     @Test
     public void testInsertSimpleEdge() {
-        setupSimple2();
+        setUp2();
 
         Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
         Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
@@ -207,7 +207,7 @@ public class GraphALTest {
 
     @Test
     public void testInsertVertexAndSearchVertexSimpleGraph() {
-        setupSimple1();
+        setUp1();
         graph.insertVertex(1, 100);
         graph.insertVertex(2, 200);
         graph.insertVertex(3, 300);
@@ -222,7 +222,7 @@ public class GraphALTest {
 
     @Test
     public void testRemoveVertex() {
-        setupSimple1();
+        setUp1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
