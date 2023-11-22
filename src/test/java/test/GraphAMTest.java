@@ -183,7 +183,7 @@ public class GraphAMTest {
     }
 
     @Test
-    public void testInsertVertex() {
+    public void test1InsertVertex() {
         setupSimple1();
         graph.insertVertex(1, 1);
         graph.insertVertex(2, 2);
@@ -191,6 +191,28 @@ public class GraphAMTest {
         graph.insertVertex(4, 4);
 
         assert (graph.getVertexAmount() == 4);
+    }
+
+    @Test
+    public void test2InsertVertex() {
+        setupSimple1();
+        graph.insertVertex(1, 1);
+        graph.insertVertex(1, 1);
+        graph.insertVertex(1, 1);
+        graph.insertVertex(1, 1);
+
+        assert (graph.getVertexAmount() == 1);
+    }
+    
+    @Test
+    public void test3InsertVertex() {
+        setupSimple1();
+        graph.insertVertex(1, 1);
+        graph.insertVertex(1, 2);
+        graph.insertVertex(3, 3);
+        graph.insertVertex(3, 4);
+
+        assert (graph.getVertexAmount() == 2);
     }
 
     @Test
