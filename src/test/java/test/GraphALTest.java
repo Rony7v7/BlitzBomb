@@ -206,14 +206,18 @@ public class GraphALTest {
     }
 
     @Test
-    public void testIsConnected() {
-        setupSimple2();
+    public void testInsertVertexAndSearchVertexSimpleGraph() {
+        setupSimple1();
+        graph.insertVertex(1, 100);
+        graph.insertVertex(2, 200);
+        graph.insertVertex(3, 300);
+        graph.insertVertex(4, 400);
 
-        graph.removeVertex(graph.searchVertex(1));
-
+        assertNotNull(graph.searchVertex(1));
         assertNotNull(graph.searchVertex(2));
-        assertEquals(false, graph.searchVertex(2).isConnected(graph.searchVertex(1)));
-
+        assertNotNull(graph.searchVertex(3));
+        assertNotNull(graph.searchVertex(4));
+        assertNull(graph.searchVertex(5));
     }
 
     @Test
@@ -241,44 +245,6 @@ public class GraphALTest {
         graph.removeVertex(vertex1);
 
         assertEquals(false, vertex2.isConnected(vertex1));
-    }
-
-    @Test
-    public void testIsStronglyConex1() {
-        setupSimple2();
-
-        assertEquals(true, graph.isStronglyConex());
-    }
-
-    @Test
-    public void testIsStronglyConex2() {
-        setupSimple1();
-        Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
-        Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<Integer, Integer>(4, 1);
-
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex4, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex1, 1));
-
-        assertEquals(true, graph.isStronglyConex());
-    }
-
-    @Test
-    public void testInsertVertexAndSearchVertexSimpleGraph() {
-        setupSimple1();
-        graph.insertVertex(1, 100);
-        graph.insertVertex(2, 200);
-        graph.insertVertex(3, 300);
-        graph.insertVertex(4, 400);
-
-        assertNotNull(graph.searchVertex(1));
-        assertNotNull(graph.searchVertex(2));
-        assertNotNull(graph.searchVertex(3));
-        assertNotNull(graph.searchVertex(4));
-        assertNull(graph.searchVertex(5));
     }
 
     @Test

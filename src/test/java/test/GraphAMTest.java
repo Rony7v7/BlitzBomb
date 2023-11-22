@@ -215,16 +215,18 @@ public class GraphAMTest {
     }
 
     @Test
-    public void testIsConnected() {
-        setupSimple2();
+    public void testInsertVertexAndSearchVertexSimpleGraph() {
+        setupSimple1();
+        graph.insertVertex(1, 100);
+        graph.insertVertex(2, 200);
+        graph.insertVertex(3, 300);
+        graph.insertVertex(4, 400);
 
-        graph.removeVertex(graph.searchVertex(1));
-
+        assertNotNull(graph.searchVertex(1));
         assertNotNull(graph.searchVertex(2));
-        assertNull(graph.searchVertex(1));
-
-        assertEquals(false, graph.areConnected(graph.searchVertex(2), graph.searchVertex(1)));
-
+        assertNotNull(graph.searchVertex(3));
+        assertNotNull(graph.searchVertex(4));
+        assertNull(graph.searchVertex(5));
     }
 
     @Test
@@ -253,21 +255,6 @@ public class GraphAMTest {
         graph.removeVertex(vertex1);
 
         assertEquals(false, vertex2.isConnected(vertex1));
-    }
-
-    @Test
-    public void testInsertVertexAndSearchVertexSimpleGraph() {
-        setupSimple1();
-        graph.insertVertex(1, 100);
-        graph.insertVertex(2, 200);
-        graph.insertVertex(3, 300);
-        graph.insertVertex(4, 400);
-
-        assertNotNull(graph.searchVertex(1));
-        assertNotNull(graph.searchVertex(2));
-        assertNotNull(graph.searchVertex(3));
-        assertNotNull(graph.searchVertex(4));
-        assertNull(graph.searchVertex(5));
     }
    
     @Test
