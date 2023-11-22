@@ -3,7 +3,8 @@ package test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import org.junit.Test;
 
@@ -12,7 +13,6 @@ import structures.classes.Vertex;
 import structures.enums.Color;
 import structures.interfaces.IGraph;
 import structures.classes.Edge;
-import structures.classes.GraphAL;
 
 public class GraphAMTest {
 
@@ -165,6 +165,22 @@ public class GraphAMTest {
         graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
     }
 
+    public void setUp10() {
+        graph = new GraphAM<>();
+
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 2);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 3);
+        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 4);
+        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 5);
+
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 10));
+        graph.insertEdge(new Edge<>(vertex2, vertex4, 5));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 2));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 11));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+    }
 
     @Test
     public void testInsertVertex() {
@@ -254,6 +270,33 @@ public class GraphAMTest {
         assertNull(graph.searchVertex(5));
     }
    
+    @Test
+    public void test1Dijsktra(){
+        setUp10();
+
+        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+
+        assertEquals(4, path.size());
+    }
+
+    @Test
+    public void test2Dijsktra(){
+        setUp10();
+
+        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+
+        assertEquals(4, path.get(1).getVertex2().getValue().intValue());
+    }
+
+    @Test
+    public void test3Dijsktra(){
+        setUp10();
+
+        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+
+        assertEquals(5, path.get(3).getVertex2().getValue().intValue());
+    }
+
     @Test
     public void test1FloydWarshall() {
         setUp5();
