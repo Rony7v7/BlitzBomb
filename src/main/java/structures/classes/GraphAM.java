@@ -276,7 +276,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
     }
 
     @Override
-    public List<Edge<K, V>> Dijkstra(Vertex<K, V> startVertex, Vertex<K, V> endVertex) {
+    public List<Edge<K, V>> dijkstra(Vertex<K, V> startVertex, Vertex<K, V> endVertex) {
         // Initialize data structures for the algorithm
         Map<Vertex<K, V>, Integer> distance = new HashMap<>();
         Map<Vertex<K, V>, Edge<K, V>> previousEdge = new HashMap<>();

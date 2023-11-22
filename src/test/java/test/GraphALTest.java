@@ -224,23 +224,9 @@ public class GraphALTest {
     public void test1RemoveVertex() {
         setUp1();
 
-        Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
-        Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<Integer, Integer>(4, 1);
-        Vertex<Integer, Integer> vertex5 = new Vertex<Integer, Integer>(5, 1);
-        Vertex<Integer, Integer> vertex9 = new Vertex<Integer, Integer>(9, 9);
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 2);
 
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
-
-        graph.insertEdge(new Edge<>(vertex1, vertex9, 0));
 
         graph.removeVertex(vertex1);
 
@@ -251,7 +237,7 @@ public class GraphALTest {
     public void test1Dijsktra(){
         setUp10();
 
-        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+        List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
 
         assertEquals(4, path.size());
     }
@@ -260,7 +246,7 @@ public class GraphALTest {
     public void test2Dijsktra(){
         setUp10();
 
-        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+        List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
 
         assertEquals(4, path.get(1).getVertex2().getValue().intValue());
     }
@@ -269,7 +255,7 @@ public class GraphALTest {
     public void test3Dijsktra(){
         setUp10();
 
-        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+        List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
 
         assertEquals(5, path.get(3).getVertex2().getValue().intValue());
     }

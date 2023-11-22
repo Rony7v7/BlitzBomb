@@ -38,7 +38,7 @@ public interface IGraph<K, V> {
 
     public int DFS(IGraph<K, V> minimumSpanningTree);
 
-    public List<Edge<K, V>> Dijkstra(Vertex<K, V> s, Vertex<K, V> e);
+    public List<Edge<K, V>> dijkstra(Vertex<K, V> s, Vertex<K, V> e);
 
     public int[][] floydWarshall();
 

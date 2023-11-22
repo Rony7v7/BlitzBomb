@@ -261,7 +261,7 @@ public class GraphAMTest {
     public void test1Dijsktra(){
         setUp10();
 
-        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+        List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
 
         assertEquals(4, path.size());
     }
@@ -270,7 +270,7 @@ public class GraphAMTest {
     public void test2Dijsktra(){
         setUp10();
 
-        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+        List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
 
         assertEquals(4, path.get(1).getVertex2().getValue().intValue());
     }
@@ -279,7 +279,7 @@ public class GraphAMTest {
     public void test3Dijsktra(){
         setUp10();
 
-        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+        List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
 
         assertEquals(5, path.get(3).getVertex2().getValue().intValue());
     }
