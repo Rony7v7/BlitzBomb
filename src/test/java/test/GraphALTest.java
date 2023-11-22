@@ -174,7 +174,7 @@ public class GraphALTest {
     }
 
     @Test
-    public void testInsertVertex() {
+    public void test1InsertVertex() {
         setUp1();
         graph.insertVertex(1, 1);
         graph.insertVertex(2, 2);
@@ -185,7 +185,7 @@ public class GraphALTest {
     }
 
     @Test
-    public void testInsertSimpleEdge() {
+    public void test1InsertEdge() {
         setUp2();
 
         Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
@@ -206,7 +206,7 @@ public class GraphALTest {
     }
 
     @Test
-    public void testInsertVertexAndSearchVertexSimpleGraph() {
+    public void text1SearchVertex() {
         setUp1();
         graph.insertVertex(1, 100);
         graph.insertVertex(2, 200);
@@ -221,7 +221,7 @@ public class GraphALTest {
     }
 
     @Test
-    public void testRemoveVertex() {
+    public void test1RemoveVertex() {
         setUp1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
