@@ -18,12 +18,12 @@ public class GraphAMTest {
 
     public IGraph<Integer, Integer> graph;
 
-    public void setupSimple1() {
+    public void setUp1() {
         graph = new GraphAM<Integer, Integer>();
     }
 
-    public void setupSimple2() {
-        setupSimple1();
+    public void setUp2() {
+        setUp1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
@@ -48,7 +48,7 @@ public class GraphAMTest {
 
     }
 
-    public void setup3() {
+    public void setUp3() {
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 100);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 200);
 
@@ -184,7 +184,7 @@ public class GraphAMTest {
 
     @Test
     public void test1InsertVertex() {
-        setupSimple1();
+        setUp1();
         graph.insertVertex(1, 1);
         graph.insertVertex(2, 2);
         graph.insertVertex(3, 3);
@@ -195,7 +195,7 @@ public class GraphAMTest {
 
     @Test
     public void test2InsertVertex() {
-        setupSimple1();
+        setUp1();
         graph.insertVertex(1, 1);
         graph.insertVertex(1, 1);
         graph.insertVertex(1, 1);
@@ -206,7 +206,7 @@ public class GraphAMTest {
     
     @Test
     public void test3InsertVertex() {
-        setupSimple1();
+        setUp1();
         graph.insertVertex(1, 1);
         graph.insertVertex(1, 2);
         graph.insertVertex(3, 3);
@@ -217,7 +217,7 @@ public class GraphAMTest {
 
     @Test
     public void test1InsertEdge() {
-        setupSimple1();
+        setUp1();
         graph.insertVertex(1, 1);
         graph.insertVertex(2, 2);
         graph.insertVertex(3, 3);
@@ -232,7 +232,7 @@ public class GraphAMTest {
 
     @Test
     public void test2InsertEdge() {
-        setupSimple1();
+        setUp1();
         graph.insertVertex(1, 1);
         graph.insertVertex(2, 2);
         graph.insertVertex(3, 3);
@@ -248,23 +248,7 @@ public class GraphAMTest {
 
     @Test
     public void test3InsertEdge() {
-        setupSimple1();
-        graph.insertVertex(1, 1);
-        graph.insertVertex(2, 2);
-        graph.insertVertex(3, 3);
-        graph.insertVertex(4, 4);
-
-        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(2), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(2), graph.searchVertex(1), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(3), graph.searchVertex(4), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(4), graph.searchVertex(3), 2));
-
-        assert (graph.getEdgesAmount() == 2);
-    }
-
-    @Test
-    public void testInsertEdge() {
-        setupSimple2();
+        setUp2();
 
         Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
         Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
@@ -284,12 +268,13 @@ public class GraphAMTest {
     }
 
     @Test
-    public void testInsertVertexAndSearchVertexSimpleGraph() {
-        setupSimple1();
+    public void test1SearchVertex() {
+        setUp1();
         graph.insertVertex(1, 100);
         graph.insertVertex(2, 200);
         graph.insertVertex(3, 300);
         graph.insertVertex(4, 400);
+
 
         assertNotNull(graph.searchVertex(1));
         assertNotNull(graph.searchVertex(2));
@@ -299,9 +284,29 @@ public class GraphAMTest {
     }
 
     @Test
-    public void testRemoveVertex() {
+    public void test2SearchVertex() {
+        setUp1();
+        graph.insertVertex(1, 100);
+        graph.insertVertex(1, 200);
+        graph.insertVertex(1, 300);
+        graph.insertVertex(1, 400);
 
-        setupSimple1();
+        assertNotNull(graph.searchVertex(1));
+    }
+
+    @Test
+    public void test3SearchVertex() {
+        setUp1();
+        graph.insertVertex(1, 100);
+        graph.removeVertex(graph.searchVertex(1));
+
+        assertNull(graph.searchVertex(1));
+    }
+
+    @Test
+    public void test1RemoveVertex() {
+
+        setUp1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
@@ -324,6 +329,32 @@ public class GraphAMTest {
         graph.removeVertex(vertex1);
 
         assertEquals(false, vertex2.isConnected(vertex1));
+        assertEquals(false, vertex1.isConnected(vertex2));
+    }
+   
+    @Test
+    public void test2RemoveVertex() {
+
+        setUp2();
+        
+        graph.removeVertex(graph.searchVertex(1));
+        graph.removeVertex(graph.searchVertex(2));
+        graph.removeVertex(graph.searchVertex(3));
+        graph.removeVertex(graph.searchVertex(4));
+        graph.removeVertex(graph.searchVertex(5));
+
+        assertEquals(0, graph.getVertexAmount());
+        
+    }
+
+    @Test
+    public void test3RemoveVertex() {
+
+        setUp1();
+        
+        graph.removeVertex(graph.searchVertex(1));
+
+        assertEquals(0, graph.getVertexAmount());
     }
    
     @Test
