@@ -271,13 +271,14 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return totalWeight;
     }
 
+    @Override
     /**
      * Implements Dijkstra's algorithm to find the shortest path between two
      * vertices in a graph.
      * Returns a list of edges to get from the first vertex to the second one in the
      * shortest way.
      */
-    public List<Edge<K, V>> Dijkstra(Vertex<K, V> source, Vertex<K, V> destination) {
+    public List<Edge<K, V>> dijkstra(Vertex<K, V> source, Vertex<K, V> destination) {
         // Initialize distances and previous vertices
         Map<Vertex<K, V>, Integer> distances = new HashMap<>();
         Map<Vertex<K, V>, Vertex<K, V>> previousVertices = new HashMap<>();

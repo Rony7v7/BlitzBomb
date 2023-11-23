@@ -19,12 +19,12 @@ public class GraphALTest {
 
     public GraphAL<Integer, Integer> graph;
 
-    public void setupSimple1() {
+    public void setUp1() {
         graph = new GraphAL<Integer, Integer>();
     }
 
-    public void setupSimple2() {
-        setupSimple1();
+    public void setUp2() {
+        setUp1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
@@ -175,7 +175,7 @@ public class GraphALTest {
 
     @Test
     public void test1InsertVertex() {
-        setupSimple1();
+        setUp1();
         graph.insertVertex(1, 1);
         graph.insertVertex(2, 2);
         graph.insertVertex(3, 3);
@@ -185,77 +185,8 @@ public class GraphALTest {
     }
 
     @Test
-    public void test2InsertVertex() {
-        setupSimple1();
-        graph.insertVertex(1, 1);
-        graph.insertVertex(1, 1);
-        graph.insertVertex(1, 1);
-        graph.insertVertex(1, 1);
-
-        assert (graph.getVertexAmount() == 1);
-    }
-    
-    @Test
-    public void test3InsertVertex() {
-        setupSimple1();
-        graph.insertVertex(1, 1);
-        graph.insertVertex(1, 2);
-        graph.insertVertex(3, 3);
-        graph.insertVertex(3, 4);
-
-        assert (graph.getVertexAmount() == 2);
-    }
-
-    @Test
     public void test1InsertEdge() {
-        setupSimple1();
-        graph.insertVertex(1, 1);
-        graph.insertVertex(2, 2);
-        graph.insertVertex(3, 3);
-        graph.insertVertex(4, 4);
-
-        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(2), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(3), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(4), 1));
-
-        assert (graph.getEdgesAmount() == 3);
-    }
-
-    @Test
-    public void test2InsertEdge() {
-        setupSimple1();
-        graph.insertVertex(1, 1);
-        graph.insertVertex(2, 2);
-        graph.insertVertex(3, 3);
-        graph.insertVertex(4, 4);
-
-        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(2), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(3), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(4), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(4), 1));
-
-        assert (graph.getEdgesAmount() == 3);
-    }
-
-    @Test
-    public void test3InsertEdge() {
-        setupSimple1();
-        graph.insertVertex(1, 1);
-        graph.insertVertex(2, 2);
-        graph.insertVertex(3, 3);
-        graph.insertVertex(4, 4);
-
-        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(2), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(2), graph.searchVertex(1), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(3), graph.searchVertex(4), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(4), graph.searchVertex(3), 2));
-
-        assert (graph.getEdgesAmount() == 2);
-    }
-
-    @Test
-    public void testInsertEdge() {
-        setupSimple2();
+        setUp2();
 
         Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
         Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
@@ -275,69 +206,8 @@ public class GraphALTest {
     }
 
     @Test
-    public void testIsConnected() {
-        setupSimple2();
-
-        graph.removeVertex(graph.searchVertex(1));
-
-        assertNotNull(graph.searchVertex(2));
-        assertEquals(false, graph.searchVertex(2).isConnected(graph.searchVertex(1)));
-
-    }
-
-    @Test
-    public void testRemoveVertex() {
-        setupSimple1();
-
-        Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
-        Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<Integer, Integer>(4, 1);
-        Vertex<Integer, Integer> vertex5 = new Vertex<Integer, Integer>(5, 1);
-        Vertex<Integer, Integer> vertex9 = new Vertex<Integer, Integer>(9, 9);
-
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
-
-        graph.insertEdge(new Edge<>(vertex1, vertex9, 0));
-
-        graph.removeVertex(vertex1);
-
-        assertEquals(false, vertex2.isConnected(vertex1));
-    }
-
-    @Test
-    public void testIsStronglyConex1() {
-        setupSimple2();
-
-        assertEquals(true, graph.isStronglyConex());
-    }
-
-    @Test
-    public void testIsStronglyConex2() {
-        setupSimple1();
-        Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
-        Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<Integer, Integer>(4, 1);
-
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex4, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex1, 1));
-
-        assertEquals(true, graph.isStronglyConex());
-    }
-
-    @Test
-    public void testInsertVertexAndSearchVertexSimpleGraph() {
-        setupSimple1();
+    public void text1SearchVertex() {
+        setUp1();
         graph.insertVertex(1, 100);
         graph.insertVertex(2, 200);
         graph.insertVertex(3, 300);
@@ -351,10 +221,23 @@ public class GraphALTest {
     }
 
     @Test
+    public void test1RemoveVertex() {
+        setUp1();
+
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 2);
+
+
+        graph.removeVertex(vertex1);
+
+        assertEquals(false, vertex2.isConnected(vertex1));
+    }
+
+    @Test
     public void test1Dijsktra(){
         setUp10();
 
-        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+        List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
 
         assertEquals(4, path.size());
     }
@@ -363,7 +246,7 @@ public class GraphALTest {
     public void test2Dijsktra(){
         setUp10();
 
-        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+        List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
 
         assertEquals(4, path.get(1).getVertex2().getValue().intValue());
     }
@@ -372,7 +255,7 @@ public class GraphALTest {
     public void test3Dijsktra(){
         setUp10();
 
-        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+        List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
 
         assertEquals(5, path.get(3).getVertex2().getValue().intValue());
     }

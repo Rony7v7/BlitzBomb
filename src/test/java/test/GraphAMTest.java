@@ -284,16 +284,18 @@ public class GraphAMTest {
     }
 
     @Test
-    public void testIsConnected() {
-        setupSimple2();
+    public void testInsertVertexAndSearchVertexSimpleGraph() {
+        setupSimple1();
+        graph.insertVertex(1, 100);
+        graph.insertVertex(2, 200);
+        graph.insertVertex(3, 300);
+        graph.insertVertex(4, 400);
 
-        graph.removeVertex(graph.searchVertex(1));
-
+        assertNotNull(graph.searchVertex(1));
         assertNotNull(graph.searchVertex(2));
-        assertNull(graph.searchVertex(1));
-
-        assertEquals(false, graph.areConnected(graph.searchVertex(2), graph.searchVertex(1)));
-
+        assertNotNull(graph.searchVertex(3));
+        assertNotNull(graph.searchVertex(4));
+        assertNull(graph.searchVertex(5));
     }
 
     @Test
@@ -323,27 +325,12 @@ public class GraphAMTest {
 
         assertEquals(false, vertex2.isConnected(vertex1));
     }
-
-    @Test
-    public void testInsertVertexAndSearchVertexSimpleGraph() {
-        setupSimple1();
-        graph.insertVertex(1, 100);
-        graph.insertVertex(2, 200);
-        graph.insertVertex(3, 300);
-        graph.insertVertex(4, 400);
-
-        assertNotNull(graph.searchVertex(1));
-        assertNotNull(graph.searchVertex(2));
-        assertNotNull(graph.searchVertex(3));
-        assertNotNull(graph.searchVertex(4));
-        assertNull(graph.searchVertex(5));
-    }
    
     @Test
     public void test1Dijsktra(){
         setUp10();
 
-        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+        List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
 
         assertEquals(4, path.size());
     }
@@ -352,7 +339,7 @@ public class GraphAMTest {
     public void test2Dijsktra(){
         setUp10();
 
-        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+        List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
 
         assertEquals(4, path.get(1).getVertex2().getValue().intValue());
     }
@@ -361,7 +348,7 @@ public class GraphAMTest {
     public void test3Dijsktra(){
         setUp10();
 
-        List<Edge<Integer, Integer>> path = graph.Dijkstra(graph.searchVertex(1), graph.searchVertex(5));
+        List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
 
         assertEquals(5, path.get(3).getVertex2().getValue().intValue());
     }

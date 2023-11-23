@@ -67,7 +67,7 @@ public class PowerUpController {
 
                         synchronized (this) {
                             if (selectedVertices[0] != null && selectedVertices[1] != null) {
-                                List<Edge<String, BombWrapper>> shortestPath = graph.Dijkstra(selectedVertices[0],
+                                List<Edge<String, BombWrapper>> shortestPath = graph.dijkstra(selectedVertices[0],
                                         selectedVertices[1]);
                                 this.shortestPath = shortestPath;
                                 wasPowerUpUsed = true;
