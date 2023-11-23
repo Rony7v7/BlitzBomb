@@ -216,7 +216,54 @@ public class GraphAMTest {
     }
 
     @Test
-    public void testInsertSimpleEdge() {
+    public void test1InsertEdge() {
+        setupSimple1();
+        graph.insertVertex(1, 1);
+        graph.insertVertex(2, 2);
+        graph.insertVertex(3, 3);
+        graph.insertVertex(4, 4);
+
+        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(2), 1));
+        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(3), 1));
+        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(4), 1));
+
+        assert (graph.getEdgesAmount() == 3);
+    }
+
+    @Test
+    public void test2InsertEdge() {
+        setupSimple1();
+        graph.insertVertex(1, 1);
+        graph.insertVertex(2, 2);
+        graph.insertVertex(3, 3);
+        graph.insertVertex(4, 4);
+
+        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(2), 1));
+        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(3), 1));
+        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(4), 1));
+        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(4), 1));
+
+        assert (graph.getEdgesAmount() == 3);
+    }
+
+    @Test
+    public void test3InsertEdge() {
+        setupSimple1();
+        graph.insertVertex(1, 1);
+        graph.insertVertex(2, 2);
+        graph.insertVertex(3, 3);
+        graph.insertVertex(4, 4);
+
+        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(2), 1));
+        graph.insertEdge(new Edge<>(graph.searchVertex(2), graph.searchVertex(1), 1));
+        graph.insertEdge(new Edge<>(graph.searchVertex(3), graph.searchVertex(4), 1));
+        graph.insertEdge(new Edge<>(graph.searchVertex(4), graph.searchVertex(3), 2));
+
+        assert (graph.getEdgesAmount() == 2);
+    }
+
+    @Test
+    public void testInsertEdge() {
         setupSimple2();
 
         Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
