@@ -14,18 +14,21 @@ import ui.MainApp;
 
 public class setDifficultyViewController implements Initializable {
 
+    /**
+     * The spinner used to select the difficulty level.
+     */
     @FXML
     private Spinner<Difficulty> difficultySpinner;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initSpinner(); 
+        initSpinner();
     }
 
     private void initSpinner() {
         difficultySpinner.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
         difficultySpinner.editorProperty().get().setAlignment(Pos.CENTER);
-        
+
         difficultySpinner.setValueFactory(new SpinnerValueFactory<Difficulty>() {
             @Override
             public void decrement(int steps) {
@@ -54,14 +57,17 @@ public class setDifficultyViewController implements Initializable {
     }
 
     @FXML
-    public void save( ActionEvent event) {
+    public void save(ActionEvent event) {
         Difficulty difficulty = difficultySpinner.getValue();
-        MainApp.setDifficulty(difficulty);
+        MainViewController.setDifficulty(difficulty);
+        MainApp.closeAuxStage();
     }
 
     @FXML
     public void cancel(ActionEvent event) {
-        MainApp.setDifficulty(Difficulty.MEDIUM);
+        MainViewController.setDifficulty(Difficulty.MEDIUM);
+        MainApp.closeAuxStage();
+
     }
-    
+
 }

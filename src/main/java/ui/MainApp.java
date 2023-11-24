@@ -6,12 +6,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import model.enums.Difficulty;
 import model.enums.GameStatus;
 import ui.game.GameViewController;
 import ui.game.SoundController;
 import ui.menu.AlertController;
-import ui.menu.MainViewController;
 
 import java.io.IOException;
 
@@ -26,13 +24,12 @@ public class MainApp extends Application {
         stage = s;
         setRoot("main-view", "Blitz Bomb");
 
-        // setear icono
+        // Set icon
         stage.getIcons().add(new javafx.scene.image.Image(MainApp.class.getResourceAsStream("/images/icon.png")));
 
-        // Deshabilitar maximizar
         stage.setResizable(false);
 
-        // Centrar ventana
+        // Center window
         stage.setX(Screen.getPrimary().getVisualBounds().getMaxX() / 2 - stage.getWidth() / 2);
         stage.setY(Screen.getPrimary().getVisualBounds().getMaxY() / 2 - stage.getHeight() / 2);
 
@@ -42,7 +39,7 @@ public class MainApp extends Application {
             }
             GameViewController.gameOver();
         });
-        
+
         soundController = new SoundController("/audio/BackgroundThemeSong.wav", true);
         soundController.play(-30f);
     }
@@ -72,7 +69,7 @@ public class MainApp extends Application {
 
     public static void showWindow(String fxml) throws IOException {
 
-        // Cerrar ventana auxiliar si esta abierta
+        // Close the auxiliar window if opened.
         if (isAuxStageOpen()) {
             auxStage.close();
         }
@@ -91,13 +88,7 @@ public class MainApp extends Application {
         launch(args);
     }
 
-    public static void setDifficulty(Difficulty difficulty) {
-        MainViewController.setDifficulty(difficulty);
-        auxStage.close();
-    }
-
-    public static void setGraph(String graph) {
-        MainViewController.setGraph(graph);
+    public static void closeAuxStage() {
         auxStage.close();
     }
 
@@ -106,7 +97,7 @@ public class MainApp extends Application {
     }
 
     public static void gameOver(GameStatus status, int score) throws IOException {
-        AlertController.showAlert(Alert.AlertType.INFORMATION, status, "",score+"");
+        AlertController.showAlert(Alert.AlertType.INFORMATION, status, "", score + "");
         setRoot("main-view", "Blitz Bomb");
     }
 }

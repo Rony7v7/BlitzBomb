@@ -26,7 +26,7 @@ import model.Player;
 import model.Timer;
 import model.enums.Difficulty;
 import model.enums.GameStatus;
-import model.enums.TypeOfNode;
+import model.enums.GraphType;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -126,7 +126,7 @@ public class GameViewController implements Initializable {
         int seconds = graph.DFS(MST);
         System.out.println("Seconds: " + seconds);
         // TODO: QUITAR ESTO Y PONER EL DFS
-        
+
         switch (difficulty) {
             case EASY -> {
                 totalTime += 40;
@@ -159,7 +159,7 @@ public class GameViewController implements Initializable {
         updateTimerLabel(secondsRemaining);
         try {
             killAllthreads();
-            MainApp.gameOver(GameStatus.LOSE_TIME,0);
+            MainApp.gameOver(GameStatus.LOSE_TIME, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -312,7 +312,6 @@ public class GameViewController implements Initializable {
 
         gc.drawImage(new Image(getClass().getResource("/assets/Graph/highlighted_vertex.png").toExternalForm()), newX,
                 newY, newWidth, height);
-        vertex.getValue().setSelected(true);
 
     }
 
@@ -337,7 +336,7 @@ public class GameViewController implements Initializable {
 
     private void setHBoxStyle(HBox hBox) {
         hBox.getStyleClass().add("ranking-HBox");
-        
+
         hBox.getChildren().get(0).getStyleClass().add("rankingName-label");
         hBox.getChildren().get(1).getStyleClass().add("rankingScore-label");
     }
@@ -360,8 +359,8 @@ public class GameViewController implements Initializable {
         isGameRunning = false;
     }
 
-    private IGraph<String, BombWrapper> generateRandomGraph(String graphType) {
-        if (graphType.equals("ADJACENCY LIST")) {
+    private IGraph<String, BombWrapper> generateRandomGraph(GraphType graphType) {
+        if (graphType.equals(GraphType.ADJACENCY_LIST)) {
             this.graph = new GraphAL<>();
         } else {
             this.graph = new GraphAM<>();
@@ -421,7 +420,6 @@ public class GameViewController implements Initializable {
     private void loadRanking() {
         ArrayList<String> playersRanking = fileManager.loadPlayers();
 
-
         for (String player : playersRanking) {
             String[] playerInfo = player.split(":");
             String nickname = playerInfo[0];
@@ -444,14 +442,14 @@ public class GameViewController implements Initializable {
     private void savePlayer() {
         ArrayList<String> playersRanking = fileManager.loadPlayers();
         playersRanking.add(player.getNickname() + ":" + player.getScore());
-    
+
         // Sort the players by score
         if (playersRanking.size() > 1) {
             playersRanking.sort((o1, o2) -> {
                 // Convert each line of the ranking into a String array by splitting at ":"
                 String[] player1 = o1.split(":");
                 String[] player2 = o2.split(":");
-                
+
                 // Compare players' scores in descending order
                 // (subtract the score of the second player from the score of the first player)
                 // This is done to have the player with a higher score appear first in the list
@@ -459,10 +457,8 @@ public class GameViewController implements Initializable {
             });
         }
 
-    
         fileManager.savePlayers(playersRanking);
     }
-    
 
     // -------------- GAME STATUS ------------------
     private void checkGameStatus() {
@@ -502,16 +498,13 @@ public class GameViewController implements Initializable {
     }
 
     private boolean playerHasReachedEnd() {
-        for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
-            if (vertex.getValue().getType().equals(TypeOfNode.END)) {
-                double x = vertex.getValue().X;
-                double y = vertex.getValue().Y;
-                double radius = vertex.getValue().radius;
-                if (Math.sqrt(Math.pow(player.getAvatar().getX() - x, 2)
-                        + Math.pow(player.getAvatar().getY() - y, 2)) <= radius * 2) {
-                    return true;
-                }
-            }
+        Vertex<String, BombWrapper> finalVertex = graph.getVertexList().get(graph.getVertexList().size() - 1);
+        double x = finalVertex.getValue().X;
+        double y = finalVertex.getValue().Y;
+        double radius = finalVertex.getValue().radius;
+        if (Math.sqrt(Math.pow(player.getAvatar().getX() - x, 2)
+                + Math.pow(player.getAvatar().getY() - y, 2)) <= radius * 2) {
+            return true;
         }
         return false;
     }

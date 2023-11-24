@@ -9,53 +9,59 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import model.enums.GraphType;
 import ui.MainApp;
 
 public class setGraphViewController implements Initializable {
 
+    /**
+     * The spinner used for selecting the type of graph.
+     */
     @FXML
-    private Spinner<String> graphSpinner;
+    private Spinner<GraphType> graphSpinner;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initSpinner(); 
+        initSpinner();
     }
 
     private void initSpinner() {
         graphSpinner.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
         graphSpinner.editorProperty().get().setAlignment(Pos.CENTER);
-        
-        graphSpinner.setValueFactory(new SpinnerValueFactory<String>() {
+
+        graphSpinner.setValueFactory(new SpinnerValueFactory<GraphType>() {
             @Override
             public void decrement(int steps) {
-                if (getValue() == "ADJACENCY LIST") {
-                    setValue("ADJACENCY MATRIX");
-                } else if (getValue() == "ADJACENCY MATRIX") {
-                    setValue("ADJACENCY LIST");
+                if (getValue().equals(GraphType.ADJACENCY_MATRIX)) {
+                    setValue(GraphType.ADJACENCY_LIST);
+                } else if (getValue().equals(GraphType.ADJACENCY_LIST)) {
+                    setValue(GraphType.ADJACENCY_MATRIX);
                 }
             }
 
             @Override
             public void increment(int steps) {
-                if (getValue() == "ADJACENCY LIST") {
-                    setValue("ADJACENCY MATRIX");
-                } else if (getValue() == "ADJACENCY MATRIX") {
-                    setValue("ADJACENCY LIST");
+                if (getValue().equals(GraphType.ADJACENCY_LIST)) {
+                    setValue(GraphType.ADJACENCY_MATRIX);
+                } else if (getValue().equals(GraphType.ADJACENCY_MATRIX)) {
+                    setValue(GraphType.ADJACENCY_LIST);
                 }
             }
         });
 
-        graphSpinner.getValueFactory().setValue("ADJACENCY LIST");
+        graphSpinner.getValueFactory().setValue(GraphType.ADJACENCY_LIST);
     }
 
     @FXML
-    public void save( ActionEvent event) {
-        MainApp.setGraph(graphSpinner.getValue());
+    public void save(ActionEvent event) {
+        MainViewController.setGraph(graphSpinner.getValue());
+        MainApp.closeAuxStage();
     }
 
     @FXML
     public void cancel(ActionEvent event) {
-        MainApp.setGraph("ADJACENCY LIST");
+        MainViewController.setGraph(GraphType.ADJACENCY_LIST);
+        MainApp.closeAuxStage();
     }
-    
+
 }
