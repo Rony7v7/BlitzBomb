@@ -13,6 +13,7 @@ import structures.interfaces.IGraph;
 
 public class PowerUpController {
     private Canvas canvas;
+    @SuppressWarnings("unchecked")
     private Vertex<String, BombWrapper>[] selectedVertices = new Vertex[2];
     private List<Edge<String, BombWrapper>> shortestPath;
     private boolean wasPowerUpUsed;
