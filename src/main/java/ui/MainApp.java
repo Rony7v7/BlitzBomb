@@ -44,7 +44,7 @@ public class MainApp extends Application {
         });
         
         soundController = new SoundController("/audio/BackgroundThemeSong.wav", true);
-        soundController.play(-30f);
+        soundController.play(-20f);
     }
 
     static void setRoot(String fxml) throws IOException {
