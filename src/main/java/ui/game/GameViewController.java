@@ -124,18 +124,18 @@ public class GameViewController implements Initializable {
         }
         // Calculate the time it takes to traverse the shortest path
         int seconds = graph.DFS(MST);
-        System.out.println("Seconds: " + seconds);
+        System.out.println("DFS Seconds: " + seconds);
         // TODO: QUITAR ESTO Y PONER EL DFS
         
         switch (difficulty) {
             case EASY -> {
-                totalTime += 40;
+                totalTime += 80;
             }
             case MEDIUM -> {
-                totalTime += 30;
+                totalTime += 60;
             }
             case HARD -> {
-                totalTime += 20;
+                totalTime += 30;
             }
         }
         timer = new Timer(totalTime);
@@ -471,7 +471,7 @@ public class GameViewController implements Initializable {
             player.setScore(secondsRemaining);
             handleWinGame();
         } else if (!checkForAllBombsDetonated() && playerHasReachedEnd()) {
-            int penaltyTime = (amountOfBombsDetonated - amountOfBombs) * 30;
+            int penaltyTime = (amountOfBombs - amountOfBombsDetonated) * 5;
             secondsRemaining -= penaltyTime;
             player.setScore(-secondsRemaining);
             handleWinGameWithPenality();
