@@ -83,6 +83,13 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return vertex;
     }
 
+    /**
+     * Inserts an edge into the graph.
+     * If the vertices of the edge are not already present in the graph, they are added.
+     * 
+     * @param edge the edge to be inserted
+     * @return the inserted edge
+     */
     @Override
     public Edge<K, V> insertEdge(Edge<K, V> edge) {
 
@@ -98,6 +105,15 @@ public class GraphAL<K, V> implements IGraph<K, V> {
 
     }
 
+    /**
+     * Inserts an edge into the graph using the Prim's algorithm.
+     * If the vertices of the edge are not already present in the graph, they are added.
+     * The edge is added to the adjacency list of the first vertex and a reverse edge is added to the adjacency list of the second vertex.
+     * The edge is also added to the list of edges in the graph.
+     * 
+     * @param edge the edge to be inserted
+     * @return the inserted edge
+     */
     public Edge<K, V> insertEdgePrim(Edge<K, V> edge) {
 
         if (!vertexList.contains(edge.getVertex1())) {
@@ -120,6 +136,12 @@ public class GraphAL<K, V> implements IGraph<K, V> {
 
     }
 
+    /**
+     * Inserts a simple edge into the graph.
+     * 
+     * @param edge the edge to be inserted
+     * @return the inserted edge, or null if the edge is invalid or already exists
+     */
     private Edge<K, V> insertSimpleEdge(Edge<K, V> edge) {
 
         if (edge.getVertex2().equals(edge.getVertex1())) {
@@ -141,6 +163,12 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return edge;
     }
 
+    /**
+     * Removes a vertex from the graph.
+     * 
+     * @param vertex the vertex to be removed
+     * @return the removed vertex, or null if the vertex is null
+     */
     @Override
     public Vertex<K, V> removeVertex(Vertex<K, V> vertex) {
         if (vertex == null) {
@@ -154,6 +182,12 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return vertex;
     }
 
+    /**
+     * Searches for a vertex with the given key in the graph.
+     * 
+     * @param key the key of the vertex to search for
+     * @return the vertex with the given key, or null if not found
+     */
     @Override
     public Vertex<K, V> searchVertex(K key) {
         for (Vertex<K, V> vertex : vertexList) {
@@ -164,6 +198,15 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return null;
     }
 
+    /**
+     * Performs a Breadth-First Search (BFS) starting from the specified vertex.
+     * BFS explores all the vertices in the graph in breadth-first order, visiting
+     * all the neighbors of a vertex before moving on to the next level of vertices.
+     * This method sets the color, distance, and predecessor attributes of each vertex
+     * during the BFS traversal.
+     *
+     * @param vertex the starting vertex for the BFS traversal
+     */
     @Override
     public void BFS(Vertex<K, V> vertex) {
 
@@ -196,6 +239,11 @@ public class GraphAL<K, V> implements IGraph<K, V> {
 
     }
 
+    /**
+     * Checks if the graph is connected.
+     * 
+     * @return true if the graph is fully connected, false otherwise.
+     */
     public boolean isConex() {
         BFS(vertexList.get(0));
 
@@ -208,6 +256,12 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return true;
     }
 
+    /**
+     * Checks if the graph is strongly connected.
+     * A graph is strongly connected if there is a directed path between any two vertices.
+     * 
+     * @return true if the graph is strongly connected, false otherwise.
+     */
     public boolean isStronglyConex() {
         for (Vertex<K, V> vertex : vertexList) {
             BFS(vertex);
@@ -251,6 +305,13 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return totalWeight;
     }
 
+    /**
+     * Performs a depth-first search (DFS) visit starting from the given vertex.
+     * Returns the total weight of the visited vertices.
+     *
+     * @param vertex the starting vertex for the DFS visit
+     * @return the total weight of the visited vertices
+     */
     private int DFSVisit(Vertex<K, V> vertex) {
         int totalWeight = 0;
 
@@ -488,6 +549,13 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return mst;
     }
 
+    /**
+     * Inserts a vertex into the graph.
+     * If a vertex with the same key already exists, the insertion is not performed.
+     * 
+     * @param vertex the vertex to be inserted
+     * @return the inserted vertex, or null if a vertex with the same key already exists
+     */
     @Override
     public Vertex<K, V> insertVertex(Vertex<K, V> vertex) {
         if (searchVertex(vertex.getKey()) != null) {
@@ -498,6 +566,13 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return vertex;
     }
 
+    /**
+     * Checks if two vertices are connected in the graph.
+     *
+     * @param vertex1 the first vertex
+     * @param vertex2 the second vertex
+     * @return true if the vertices are connected, false otherwise
+     */
     @Override
     public boolean areConnected(Vertex<K, V> vertex1, Vertex<K, V> vertex2) {
         return vertex1.isConnected(vertex2);

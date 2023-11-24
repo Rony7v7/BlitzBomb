@@ -11,6 +11,10 @@ import model.enums.GraphType;
 import ui.MainApp;
 import ui.game.GameViewController;
 
+/**
+ * The controller class for the main view of the application.
+ * This class handles user interactions and controls the flow of the game.
+ */
 public class MainViewController {
 
     @FXML
@@ -22,6 +26,13 @@ public class MainViewController {
     private static GraphType graphType = GraphType.ADJACENCY_LIST;
     private static Difficulty difficulty = Difficulty.EASY;
 
+    /**
+     * Handles the play button action event.
+     * If the nickname input is empty, it shows an information alert.
+     * Otherwise, it sets the player name, initializes the game timer, and switches to the game view.
+     *
+     * @param event the action event triggered by the play button
+     */
     @FXML
     private void play(ActionEvent event) {
         try {

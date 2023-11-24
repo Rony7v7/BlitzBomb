@@ -69,6 +69,18 @@ public class GameViewController implements Initializable {
     private int secondsRemaining;
     private static boolean isGameRunning = false;
 
+    /**
+     * Initializes the game view controller.
+     * This method is called when the game view is loaded.
+     * It sets up the game environment, initializes the player, file manager,
+     * graphics context,
+     * power-up controller, and starts a new thread to continuously update the game
+     * state.
+     *
+     * @param location  The URL location of the game view.
+     * @param resources The resource bundle containing localized resources for the
+     *                  game view.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.graph = generateRandomGraph(MainViewController.getGraphType());
@@ -110,6 +122,11 @@ public class GameViewController implements Initializable {
 
     // -------------- TIMER ------------------
 
+    /**
+     * Initializes the timer for the game based on the specified difficulty level.
+     *
+     * @param difficulty The difficulty level of the game.
+     */
     public void initTimer(Difficulty difficulty) {
 
         timerLabel.setText(timerFormat(secondsRemaining));
@@ -144,17 +161,35 @@ public class GameViewController implements Initializable {
         updateTimerLabel(totalTime);
     }
 
+    /**
+     * Updates the timer label with the given number of seconds remaining.
+     *
+     * @param secondsRemaining the number of seconds remaining
+     */
     private void updateTimerLabel(int secondsRemaining) {
         this.secondsRemaining = secondsRemaining;
         timerLabel.setText(timerFormat(secondsRemaining));
     }
 
+    /**
+     * Formats the given number of seconds into a timer format.
+     * The timer format is in the format "MM:SS", where MM represents minutes and SS
+     * represents seconds.
+     *
+     * @param seconds the number of seconds to be formatted
+     * @return the formatted timer string
+     */
     private String timerFormat(int seconds) {
         int minutes = seconds / 60;
         int remainingSeconds = seconds % 60;
         return String.format("%02d:%02d", minutes, remainingSeconds);
     }
 
+    /**
+     * Handles the event when the timer finishes.
+     * Updates the timer label with the remaining seconds.
+     * Kills all threads and triggers the game over with a loss due to time.
+     */
     private void handleTimerFinish() {
         updateTimerLabel(secondsRemaining);
         try {
@@ -165,6 +200,9 @@ public class GameViewController implements Initializable {
         }
     }
 
+    /**
+     * Stops all running threads and saves the player's progress.
+     */
     private void killAllthreads() {
         isGameRunning = false;
         timer.stopTimer();
@@ -173,6 +211,11 @@ public class GameViewController implements Initializable {
 
     // -------------- VIEW ------------------
 
+    /**
+     * Initializes the drawing environment and sets the background color.
+     * Draws a rectangle around the canvas to represent the borders.
+     * Calls the drawGraph method to draw the graph.
+     */
     private void initDraw() {
         gc.setFill(Color.web("#f7efd8")); // Set your desired background color
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -183,6 +226,11 @@ public class GameViewController implements Initializable {
         drawGraph(graph);
     }
 
+    /**
+     * Draws a graph on the canvas.
+     *
+     * @param graph the graph to be drawn
+     */
     private void drawGraph(IGraph<String, BombWrapper> graph) {
 
         // clear the canvas
@@ -195,6 +243,11 @@ public class GameViewController implements Initializable {
         }
     }
 
+    /**
+     * Draws an adjacency matrix graph on the canvas.
+     * 
+     * @param graph2 The adjacency matrix graph to be drawn.
+     */
     private void drawAMGraph(IGraph<String, BombWrapper> graph2) {
         GraphAM<String, BombWrapper> auxGraph = (GraphAM<String, BombWrapper>) graph2;
         ArrayList<ArrayList<Edge<String, BombWrapper>>> matrix = auxGraph.getAdjacencyMatrix();
@@ -230,6 +283,11 @@ public class GameViewController implements Initializable {
 
     }
 
+    /**
+     * Draws an ALGraph on the canvas.
+     * 
+     * @param graph the ALGraph to be drawn
+     */
     private void drawALGraph(IGraph<String, BombWrapper> graph) {
         for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
             double x = vertex.getValue().X;
@@ -262,6 +320,11 @@ public class GameViewController implements Initializable {
         }
     }
 
+    /**
+     * Paints an edge on the canvas with a red color.
+     * 
+     * @param edge The edge to be painted.
+     */
     private void paintEdgeRed(Edge<String, BombWrapper> edge) {
         double targetX = edge.getVertex2().getValue().X;
         double targetY = edge.getVertex2().getValue().Y;
@@ -277,6 +340,15 @@ public class GameViewController implements Initializable {
         gc.strokeLine(startX, startY, endX, endY);
     }
 
+    /**
+     * Highlights the connected vertices of the player's avatar collision with a
+     * vertex.
+     * If a collision occurs, the method iterates through the edges of the vertex,
+     * adds the connected vertices to a list, and highlights them.
+     * 
+     * This method is used to indicate to which vertex the player's avatar is
+     * connected.
+     */
     private void highLightConnectedVertex() {
         Vertex<String, BombWrapper> vertex = detectAvatarCollisionWithVertex(player.getAvatar().getX(),
                 player.getAvatar().getY());
@@ -293,6 +365,14 @@ public class GameViewController implements Initializable {
         }
     }
 
+    /**
+     * Highlights a vertex on the game view.
+     * If the vertex represents a spawn or end node, it will not be highlighted.
+     * The vertex is highlighted by drawing an image on the specified coordinates
+     * with the specified dimensions.
+     *
+     * @param vertex The vertex to be highlighted.
+     */
     private void highLightVertex(Vertex<String, BombWrapper> vertex) {
         if (vertex.getValue().getType().equals(model.enums.TypeOfNode.SPAWN)
                 || vertex.getValue().getType().equals(model.enums.TypeOfNode.END)) {
@@ -359,6 +439,12 @@ public class GameViewController implements Initializable {
         isGameRunning = false;
     }
 
+    /**
+     * Generates a random graph based on the specified graph type.
+     *
+     * @param graphType the type of graph to generate (ADJACENCY_LIST or ADJACENCY_MATRIX)
+     * @return the generated graph
+     */
     private IGraph<String, BombWrapper> generateRandomGraph(GraphType graphType) {
         if (graphType.equals(GraphType.ADJACENCY_LIST)) {
             this.graph = new GraphAL<>();
@@ -374,6 +460,12 @@ public class GameViewController implements Initializable {
 
     }
 
+    /**
+     * Retrieves the edges connected to a given vertex.
+     *
+     * @param vertex The vertex for which to retrieve the edges.
+     * @return A list of edges connected to the vertex.
+     */
     private List<Edge<String, BombWrapper>> getEdges(Vertex<String, BombWrapper> vertex) {
         if (graph instanceof GraphAL) {
             return vertex.getEdges();
@@ -381,6 +473,14 @@ public class GameViewController implements Initializable {
         return ((GraphAM<String, BombWrapper>) graph).getVertexEdges(vertex);
     }
 
+    /**
+     * Detects collision between the avatar and a vertex in the graph.
+     * If a collision is detected, the bomb associated with the vertex is activated.
+     * 
+     * @param positionX The x-coordinate of the avatar's position.
+     * @param positionY The y-coordinate of the avatar's position.
+     * @return The vertex with which the avatar collided, or null if no collision occurred.
+     */
     private Vertex<String, BombWrapper> detectAvatarCollisionWithVertex(double positionX, double positionY) {
         for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
             double x = vertex.getValue().X;
@@ -417,6 +517,9 @@ public class GameViewController implements Initializable {
         }
     }
 
+    /**
+     * Loads the ranking of players from a file and displays it in the UI.
+     */
     private void loadRanking() {
         ArrayList<String> playersRanking = fileManager.loadPlayers();
 
@@ -439,6 +542,12 @@ public class GameViewController implements Initializable {
         }
     }
 
+    /**
+     * Saves the player's information and updates the players ranking.
+     * The player's nickname and score are added to the ranking list.
+     * The ranking list is then sorted in descending order based on the players' scores.
+     * Finally, the updated ranking list is saved.
+     */
     private void savePlayer() {
         ArrayList<String> playersRanking = fileManager.loadPlayers();
         playersRanking.add(player.getNickname() + ":" + player.getScore());
@@ -461,6 +570,11 @@ public class GameViewController implements Initializable {
     }
 
     // -------------- GAME STATUS ------------------
+    /**
+     * Checks the game status to determine if the player has won or lost.
+     * If all bombs are detonated and the player has reached the end, the player wins the game.
+     * If not all bombs are detonated and the player has reached the end, the player receives a penalty and loses the game.
+     */
     private void checkGameStatus() {
 
         if (checkForAllBombsDetonated() && playerHasReachedEnd()) {
@@ -474,6 +588,11 @@ public class GameViewController implements Initializable {
         }
     }
 
+    /**
+     * Handles the logic for winning the game.
+     * This method is called when the game is won by the player.
+     * It stops all running threads and displays the game over screen with the player's score.
+     */
     private void handleWinGame() {
         Platform.runLater(() -> {
             try {
@@ -485,6 +604,11 @@ public class GameViewController implements Initializable {
         });
     }
 
+    /**
+     * Handles the win game event with penalty.
+     * This method is responsible for stopping all threads, triggering the game over event with the WIN_PENALTY status, and passing the player's score.
+     * It runs on the JavaFX application thread using Platform.runLater().
+     */
     private void handleWinGameWithPenality() {
 
         Platform.runLater(() -> {
@@ -497,6 +621,11 @@ public class GameViewController implements Initializable {
         });
     }
 
+    /**
+     * Checks if the player has reached the end of the game.
+     * 
+     * @return true if the player has reached the end, false otherwise.
+     */
     private boolean playerHasReachedEnd() {
         Vertex<String, BombWrapper> finalVertex = graph.getVertexList().get(graph.getVertexList().size() - 1);
         double x = finalVertex.getValue().X;

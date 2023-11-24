@@ -25,6 +25,14 @@ public class LevelGenerator {
         this.rows = new ArrayList<>();
     }
 
+    /**
+     * Generates a random level graph with the specified number of vertices, canvas height, and canvas width.
+     * 
+     * @param numVertices   The number of vertices in the graph.
+     * @param canvasHeight  The height of the canvas.
+     * @param canvasWidth   The width of the canvas.
+     * @return              The generated graph.
+     */
     public IGraph<String, BombWrapper> generateRandomLevel(int numVertices, double canvasHeight,
             double canvasWidth) {
         int amountOfRows = 5;
@@ -86,11 +94,20 @@ public class LevelGenerator {
         return this.amountOfBombs;
     }
 
+    /**
+     * Sets the type of the first vertex in the graph to SPAWN and the type of the last vertex to END.
+     */
     private void createSpawnAndEnd() {
         graph.getVertexList().get(0).getValue().setType(TypeOfNode.SPAWN);
         graph.getVertexList().get(graph.getVertexList().size() - 1).getValue().setType(TypeOfNode.END);
     }
 
+    /**
+     * Generates random bombs in a given row based on a specified percentage.
+     * 
+     * @param row        the list of vertices representing the row
+     * @param percentage the percentage of bombs to generate
+     */
     public void generateRandomBombs(List<Vertex<String, BombWrapper>> row, double percentage) {
         Random random = new Random();
         int numBombs = (int) (row.size() * percentage);
@@ -116,6 +133,15 @@ public class LevelGenerator {
         }
     }
 
+    /**
+     * Creates a row of vertices with the specified parameters.
+     *
+     * @param positionY     the y-coordinate of the row
+     * @param amountVertex  the number of vertices in the row
+     * @param radius        the radius of each vertex
+     * @param canvasWidth   the width of the canvas
+     * @return              a list of vertices representing the row
+     */
     public List<Vertex<String, BombWrapper>> createVertexRow(double positionY, int amountVertex, double radius,
             double canvasWidth) {
         List<Vertex<String, BombWrapper>> row = new ArrayList<>();
@@ -128,6 +154,14 @@ public class LevelGenerator {
         return row;
     }
 
+    /**
+     * Connects the vertices in a row by creating edges between them in the graph.
+     * The edges are created based on the position of the vertices in the row.
+     * If a vertex is the first or last in the row, it is connected to its adjacent vertex.
+     * If a vertex is in the middle of the row, it is connected to both its adjacent vertices.
+     *
+     * @param row the list of vertices representing a row in the graph
+     */
     public void connectRow(List<Vertex<String, BombWrapper>> row) {
         for (int i = 0; i < row.size(); i++) {
             if (i == 0) {
@@ -145,6 +179,13 @@ public class LevelGenerator {
         }
     }
 
+    /**
+     * Links the vertices in row1 to the vertices in row2 by creating random edges with random weights.
+     * Only vertices in row2 that have less than 1 edge are considered for linking.
+     *
+     * @param row1 The list of vertices in row1.
+     * @param row2 The list of vertices in row2.
+     */
     private void linkVerticesAL(List<Vertex<String, BombWrapper>> row1, List<Vertex<String, BombWrapper>> row2) {
         Random random = new Random();
         for (Vertex<String, BombWrapper> vertex : row1) {
@@ -161,6 +202,13 @@ public class LevelGenerator {
         }
     }
 
+    /**
+     * Links the vertices in row1 to the vertices in row2 by creating random weighted edges between them.
+     * Only vertices in row2 that have less than 1 connection are considered for linking.
+     *
+     * @param row1 The list of vertices in row1.
+     * @param row2 The list of vertices in row2.
+     */
     private void linkVerticesAM(List<Vertex<String, BombWrapper>> row1, List<Vertex<String, BombWrapper>> row2) {
         Random random = new Random();
         for (Vertex<String, BombWrapper> vertex : row1) {
@@ -177,6 +225,12 @@ public class LevelGenerator {
         }
     }
 
+    /**
+     * Calculates the amount of connections for a given vertex in the graph.
+     * 
+     * @param vertex The vertex for which to calculate the amount of connections.
+     * @return The number of connections for the given vertex.
+     */
     private int calculateAmountOfConnections(Vertex<String, BombWrapper> vertex) {
         int vertexIndex = graph.getVertexList().indexOf(vertex);
         int amountOfConnections = 0;

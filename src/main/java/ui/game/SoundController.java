@@ -33,6 +33,11 @@ public class SoundController {
         isLoop = loop;
     }
 
+    /**
+     * Plays the audio clip with the specified volume.
+     * 
+     * @param volume the volume of the audio clip (-80 to 6)
+     */
     public void play(float volume) { // volumen entre -80 y 6
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource(path));

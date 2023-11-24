@@ -28,6 +28,13 @@ public class PowerUpController {
         this.wasPowerUpUsed = false;
     }
 
+    /**
+     * Activates the power-up on the given graph.
+     * If the power-up has already been used, the method returns without performing any action.
+     * Otherwise, it applies Dijkstra's algorithm on the graph using the selected vertices.
+     *
+     * @param graph The graph on which to activate the power-up.
+     */
     public void powerUp(IGraph<String, BombWrapper> graph) {
         if (wasPowerUpUsed) {
             return;
@@ -36,6 +43,10 @@ public class PowerUpController {
 
     }
 
+    /**
+     * Paints the edges of the shortest path found by Dijkstra's algorithm in red.
+     * This method is called when a power-up is used.
+     */
     public void paintDijkstra() {
         if (!wasPowerUpUsed) {
             return;
@@ -47,6 +58,18 @@ public class PowerUpController {
         });
     }
 
+    /**
+     * Executes the Dijkstra algorithm on the given graph using the selected vertices.
+     * Activates a power-up and allows the user to select two vertices by clicking on the canvas.
+     * Once two vertices are selected, the algorithm calculates the shortest path between them.
+     * The shortest path is stored in the 'shortestPath' variable.
+     * Sets the 'wasPowerUpUsed' flag to true and deactivates the power-up.
+     * Clears the selected vertices for future use.
+     *
+     * @param graph            the graph on which to execute the Dijkstra algorithm
+     * @param selectedVertices an array of selected vertices, where selectedVertices[0] represents the starting vertex
+     *                         and selectedVertices[1] represents the destination vertex
+     */
     private void dijkstraPowerUp(IGraph<String, BombWrapper> graph, Vertex<String, BombWrapper>[] selectedVertices) {
         isPowerUpActive = true;
         canvas.setOnMouseClicked(event -> {
@@ -85,6 +108,14 @@ public class PowerUpController {
 
     }
 
+    /**
+     * Detects the vertex that was clicked based on the given position coordinates.
+     * 
+     * @param graph      the graph containing the vertices
+     * @param positionX  the x-coordinate of the clicked position
+     * @param positionY  the y-coordinate of the clicked position
+     * @return the vertex that was clicked, or null if no vertex was found
+     */
     private Vertex<String, BombWrapper> detectVertexClicked(IGraph<String, BombWrapper> graph, double positionX,
             double positionY) {
         for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
@@ -98,6 +129,11 @@ public class PowerUpController {
         return null;
     }
 
+    /**
+     * Paints the given edge in red color on the canvas.
+     *
+     * @param edge The edge to be painted.
+     */
     private void paintEdgeRed(Edge<String, BombWrapper> edge) {
         Platform.runLater(() -> {
             double targetX = edge.getVertex2().getValue().X;

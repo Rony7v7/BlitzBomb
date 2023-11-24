@@ -114,6 +114,11 @@ public class Vertex<K, V> implements IVertex<K, V>, Comparable<Vertex<K, V>> {
 
     }
 
+    /**
+     * Disconnects this vertex from the specified vertex by removing the edge between them.
+     * 
+     * @param vertex the vertex to disconnect from
+     */
     @Override
     public void disconnectFrom(Vertex<K, V> vertex) {
 
@@ -123,6 +128,12 @@ public class Vertex<K, V> implements IVertex<K, V>, Comparable<Vertex<K, V>> {
 
     }
 
+    /**
+     * Removes the edge between this vertex and the specified vertex.
+     * If an edge is found, it is removed from the list of edges.
+     *
+     * @param vertex the vertex to remove the edge with
+     */
     @Override
     public void removeEdge(Vertex<K, V> vertex) {
         for (Edge<K, V> edge : edges) {
@@ -143,6 +154,12 @@ public class Vertex<K, V> implements IVertex<K, V>, Comparable<Vertex<K, V>> {
         return getEdgeFrom(vertex) != null ? true : false;
     }
 
+    /**
+     * Returns the edge connecting this vertex to the specified vertex.
+     *
+     * @param vertex the vertex to find the edge to
+     * @return the edge connecting this vertex to the specified vertex, or null if no such edge exists
+     */
     @Override
     public Edge<K, V> getEdgeFrom(Vertex<K, V> vertex) {
         for (Edge<K, V> edge : edges) {

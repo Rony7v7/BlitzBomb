@@ -60,6 +60,14 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         this.edgeList = edgeList;
     }
 
+    /**
+     * Inserts a new vertex with the specified key and value into the graph.
+     * If a vertex with the same key already exists, returns null.
+     *
+     * @param key   the key of the vertex
+     * @param value the value of the vertex
+     * @return the newly inserted vertex, or null if a vertex with the same key already exists
+     */
     @Override
     public Vertex<K, V> insertVertex(K key, V value) {
 
@@ -85,6 +93,13 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return vertex;
     }
 
+    /**
+     * Inserts an edge into the graph.
+     * If the vertices of the edge do not exist in the graph, they will be inserted first.
+     * 
+     * @param edge the edge to be inserted
+     * @return the inserted edge
+     */
     @Override
     public Edge<K, V> insertEdge(Edge<K, V> edge) {
 
@@ -100,6 +115,16 @@ public class GraphAM<K, V> implements IGraph<K, V> {
 
     }
 
+    /**
+     * Inserts an edge into the graph using Prim's algorithm.
+     * If the vertices of the edge are not already in the graph, they are added.
+     * The edge is added to the adjacency list of the first vertex and a reverse edge is added to the adjacency list of the second vertex.
+     * The edge is also added to the list of edges in the graph.
+     * Returns the inserted edge.
+     *
+     * @param edge the edge to be inserted
+     * @return the inserted edge
+     */
     @Override
     public Edge<K, V> insertEdgePrim(Edge<K, V> edge) {
 
@@ -122,6 +147,12 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return insertSimpleEdge(edge);
     }
 
+    /**
+     * Inserts a simple edge into the graph.
+     * 
+     * @param edge the edge to be inserted
+     * @return the inserted edge, or null if the edge cannot be inserted
+     */
     private Edge<K, V> insertSimpleEdge(Edge<K, V> edge) {
 
         if (edge.getVertex2().equals(edge.getVertex1())) {
@@ -146,6 +177,12 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return edge;
     }
 
+    /**
+     * Removes a vertex from the graph.
+     * 
+     * @param vertex the vertex to be removed
+     * @return the removed vertex, or null if the vertex is null
+     */
     @Override
     public Vertex<K, V> removeVertex(Vertex<K, V> vertex) {
         if (vertex == null) {
@@ -159,6 +196,12 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return vertex;
     }
 
+    /**
+     * Searches for a vertex with the specified key in the graph.
+     * 
+     * @param key the key of the vertex to search for
+     * @return the vertex with the specified key, or null if not found
+     */
     @Override
     public Vertex<K, V> searchVertex(K key) {
         for (Vertex<K, V> vertex : vertexList) {
@@ -169,6 +212,13 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return null;
     }
 
+    /**
+     * Performs a breadth-first search (BFS) starting from the specified vertex.
+     * The BFS algorithm explores all vertices reachable from the starting vertex in a breadth-first manner.
+     * It assigns colors, distances, and predecessors to each vertex during the exploration.
+     *
+     * @param s the starting vertex for the BFS
+     */
     @Override
     public void BFS(Vertex<K, V> s) {
         for (Vertex<K, V> vertex : vertexList) {
@@ -198,6 +248,12 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         }
     }
 
+    /**
+     * Returns a list of adjacent vertices to the given vertex.
+     *
+     * @param vertex the vertex for which to find adjacent vertices
+     * @return a list of adjacent vertices
+     */
     private ArrayList<Vertex<K, V>> getAdjacents(Vertex<K, V> vertex) {
         ArrayList<Vertex<K, V>> adjacents = new ArrayList<>();
         for (Edge<K, V> edge : adjacencyMatrix.get(vertexList.indexOf(vertex))) {
@@ -212,6 +268,13 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return adjacencyMatrix.get(vertexList.indexOf(vertex1)).get(vertexList.indexOf(vertex2));
     }
 
+    /**
+     * Checks if two vertices are connected in the graph.
+     *
+     * @param vertex1 the first vertex
+     * @param vertex2 the second vertex
+     * @return true if the vertices are connected, false otherwise
+     */
     @Override
     public boolean areConnected(Vertex<K, V> vertex1, Vertex<K, V> vertex2) {
         if (vertex1 == null || vertex2 == null) {
@@ -220,6 +283,11 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return adjacencyMatrix.get(vertexList.indexOf(vertex1)).get(vertexList.indexOf(vertex2)) != null;
     }
 
+    /**
+     * Disconnects the given vertex from all its connected vertices in the graph.
+     * 
+     * @param vertex1 the vertex to disconnect from
+     */
     private void disconnect(Vertex<K, V> vertex1) {
         for (Vertex<K, V> vertex2 : vertexList) {
             if (areConnected(vertex1, vertex2)) {
@@ -228,11 +296,24 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         }
     }
 
+    /**
+     * Disconnects two vertices in the graph by removing the corresponding edge between them.
+     * 
+     * @param vertex1 the first vertex to disconnect
+     * @param vertex2 the second vertex to disconnect
+     */
     private void disconnect(Vertex<K, V> vertex1, Vertex<K, V> vertex2) {
         edgeList.remove(adjacencyMatrix.get(vertexList.indexOf(vertex1)).get(vertexList.indexOf(vertex2)));
         adjacencyMatrix.get(vertexList.indexOf(vertex1)).set(vertexList.indexOf(vertex2), null);
     }
 
+    /**
+     * Performs a Depth-First Search (DFS) traversal on the graph represented by the minimumSpanningTree.
+     * Returns the total weight of the visited vertices.
+     *
+     * @param minimumSpanningTree the graph on which the DFS traversal is performed
+     * @return the total weight of the visited vertices
+     */
     @Override
     public int DFS(IGraph<K, V> minimumSpanningTree) {
 
@@ -255,6 +336,13 @@ public class GraphAM<K, V> implements IGraph<K, V> {
 
     }
 
+    /**
+     * Performs a Depth First Search (DFS) visit starting from the given vertex.
+     * This method recursively explores the graph, visiting each vertex and accumulating the total weight of the edges traversed.
+     *
+     * @param vertex the starting vertex for the DFS visit
+     * @return the total weight of the edges traversed during the DFS visit
+     */
     private int DFSVisit(Vertex<K, V> vertex) {
         int totalWeight = 0;
 
@@ -275,6 +363,14 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return totalWeight;
     }
 
+    /**
+     * Applies Dijkstra's algorithm to find the shortest path between two vertices in the graph.
+     * 
+     * @param startVertex the starting vertex
+     * @param endVertex the ending vertex
+     * @return a list of edges representing the shortest path from the start vertex to the end vertex,
+     *         or null if no path is found
+     */
     @Override
     public List<Edge<K, V>> dijkstra(Vertex<K, V> startVertex, Vertex<K, V> endVertex) {
         // Initialize data structures for the algorithm
@@ -316,6 +412,12 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return null; // No path found
     }
 
+    /**
+     * Returns a list of edges connected to the specified vertex.
+     *
+     * @param vertex the vertex for which to retrieve the edges
+     * @return a list of edges connected to the specified vertex
+     */
     public List<Edge<K, V>> getVertexEdges(Vertex<K, V> vertex) {
         List<Edge<K, V>> edges = new ArrayList<>();
         for (Edge<K, V> edge : adjacencyMatrix.get(vertexList.indexOf(vertex))) {
@@ -326,6 +428,14 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return edges;
     }
 
+    /**
+     * Builds a path from the given previousEdge map and endVertex.
+     * The path is represented as a list of edges.
+     *
+     * @param previousEdge a map containing the previous edge for each vertex in the path
+     * @param endVertex the end vertex of the path
+     * @return a list of edges representing the path
+     */
     private List<Edge<K, V>> buildPath(Map<Vertex<K, V>, Edge<K, V>> previousEdge, Vertex<K, V> endVertex) {
         List<Edge<K, V>> path = new ArrayList<>();
         Vertex<K, V> currentVertex = endVertex;
@@ -339,6 +449,12 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return path;
     }
 
+    /**
+     * Applies the Floyd-Warshall algorithm to find the shortest distances between all pairs of vertices in the graph.
+     * Returns a 2D array representing the distance matrix.
+     *
+     * @return The distance matrix with the shortest distances between all pairs of vertices.
+     */
     @Override
     public int[][] floydWarshall() {
 
@@ -484,6 +600,15 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         return mst;
     }
 
+    /**
+     * Inserts a new vertex into the graph.
+     * If a vertex with the same key already exists, returns null.
+     * Otherwise, adds a new row and column to the adjacency matrix,
+     * adds the vertex to the vertex list, and returns the inserted vertex.
+     *
+     * @param vertex the vertex to be inserted
+     * @return the inserted vertex, or null if a vertex with the same key already exists
+     */
     @Override
     public Vertex<K, V> insertVertex(Vertex<K, V> vertex) {
         if (searchVertex(vertex.getKey()) != null) {
