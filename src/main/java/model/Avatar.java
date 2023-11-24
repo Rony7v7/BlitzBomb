@@ -56,6 +56,10 @@ public class Avatar {
         this.y = y;
     }
 
+    /**
+     * Paints the avatar on the canvas.
+     * Deletes the previous frame and draws the current frame of the avatar's idle animation.
+     */
     public void paint() {
         // delete previous frame
         canvas.getGraphicsContext2D().clearRect(getXForDrawing(), getYForDrawing(),
@@ -65,6 +69,12 @@ public class Avatar {
         frame++;
     }
 
+    /**
+     * Sets the behavior of the avatar when a key is pressed.
+     * 
+     * @param event The KeyEvent object representing the key press event.
+     * @param edges The list of edges representing the possible movements of the avatar.
+     */
     public void setOnKeyPressed(KeyEvent event, List<Edge<String, BombWrapper>> edges) {
         double currentX = this.x;
         double currentY = this.y;

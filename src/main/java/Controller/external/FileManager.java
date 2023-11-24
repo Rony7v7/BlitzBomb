@@ -24,6 +24,11 @@ public class FileManager {
 
     }
 
+    /**
+     * Saves the players' ranking to a text file.
+     * 
+     * @param ranking the list of players' names
+     */
     public void savePlayers(ArrayList<String> ranking) {
         File txtFile = new File(dataFolder, "players.txt");
 
@@ -40,6 +45,11 @@ public class FileManager {
         }
     }
 
+    /**
+     * Loads the players' data from a text file and returns them as an ArrayList of strings.
+     * 
+     * @return The ArrayList of strings containing the players' data.
+     */
     public ArrayList<String> loadPlayers() {
         ArrayList<String> playersRank = new ArrayList<>();
 

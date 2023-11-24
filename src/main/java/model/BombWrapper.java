@@ -3,6 +3,11 @@ package model;
 import javafx.scene.image.Image;
 import model.enums.TypeOfNode;
 
+/**
+ * The BombWrapper class represents a wrapper for a Bomb object.
+ * It contains information about the bomb's position, type, and radius.
+ * The BombWrapper class also provides methods to detonate the bomb and retrieve its current state.
+ */
 public class BombWrapper {
     private Bomb bomb;
     private Image idle;
@@ -11,20 +16,12 @@ public class BombWrapper {
     public double Y;
     private TypeOfNode type;
 
-    /**
-     * Estoy usando este atributo para saber si el nodo esta seleccionado o no y
-     * entonces hacerlo mas grande ()
-     * Con seleccionado me refiero a que el kelvin puede llegar a ese nodo
-     */
-    private boolean isSelected;
-
     public double radius;
 
     public BombWrapper(double x, double y, Bomb bomb, double radius) {
         this.X = x;
         this.Y = y;
         this.bomb = bomb;
-        this.isSelected = false;
         if (this.bomb == null) {
             this.type = TypeOfNode.NORMAL;
         } else {
@@ -39,14 +36,6 @@ public class BombWrapper {
         this.idle = new Image(getClass().getResource("/assets/Graph/activated_vertex.png").toExternalForm());
     }
 
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(boolean isSelected) {
-        this.isSelected = isSelected;
-    }
-
     public Image getIdle() {
         return idle;
     }
@@ -59,6 +48,11 @@ public class BombWrapper {
         this.idle = idle;
     }
 
+    /**
+     * Sets the type of the BombWrapper node.
+     * 
+     * @param type the type of the node
+     */
     public void setType(TypeOfNode type) {
         if (type.equals(TypeOfNode.SPAWN)) {
             this.idle = new Image(getClass().getResource("/assets/Graph/spawn_node.png").toExternalForm());
@@ -74,6 +68,13 @@ public class BombWrapper {
         return bomb;
     }
 
+    /**
+     * Sets the bomb for this BombWrapper.
+     * If the bomb is not null, it sets the type of node to TypeOfNode.BOMB
+     * and loads the idle image for the bomb.
+     * 
+     * @param bomb the bomb to set
+     */
     public void setBomb(Bomb bomb) {
         if (bomb != null) {
             this.type = TypeOfNode.BOMB;

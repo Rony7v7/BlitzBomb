@@ -173,7 +173,6 @@ public class GraphAMTest {
         graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
     }
 
-
     @Test
     public void test1InsertVertex() {
         setUp1();
@@ -195,7 +194,7 @@ public class GraphAMTest {
 
         assert (graph.getVertexAmount() == 1);
     }
-    
+
     @Test
     public void test3InsertVertex() {
         setUp1();
@@ -252,7 +251,7 @@ public class GraphAMTest {
         setUp1();
 
         graph.insertVertex(1, 100);
-       
+
         assertNull(graph.searchVertex(5));
     }
 
@@ -268,7 +267,7 @@ public class GraphAMTest {
     @Test
     public void test3SearchVertex() {
         setUp1();
-        
+
         graph.insertVertex(1, 100);
         graph.removeVertex(graph.searchVertex(1));
 
@@ -289,12 +288,12 @@ public class GraphAMTest {
 
         assertEquals(false, vertex1.isConnected(vertex2));
     }
-   
+
     @Test
     public void test2RemoveVertex() {
 
         setUp2();
-        
+
         graph.removeVertex(graph.searchVertex(1));
         graph.removeVertex(graph.searchVertex(2));
         graph.removeVertex(graph.searchVertex(3));
@@ -302,21 +301,21 @@ public class GraphAMTest {
         graph.removeVertex(graph.searchVertex(5));
 
         assertEquals(0, graph.getVertexAmount());
-        
+
     }
 
     @Test
     public void test3RemoveVertex() {
 
         setUp1();
-        
+
         graph.removeVertex(graph.searchVertex(1));
 
         assertEquals(0, graph.getVertexAmount());
     }
-   
+
     @Test
-    public void test1Dijsktra(){
+    public void test1Dijsktra() {
         setUp10();
 
         List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
@@ -325,7 +324,7 @@ public class GraphAMTest {
     }
 
     @Test
-    public void test2Dijsktra(){
+    public void test2Dijsktra() {
         setUp10();
 
         List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
@@ -334,7 +333,7 @@ public class GraphAMTest {
     }
 
     @Test
-    public void test3Dijsktra(){
+    public void test3Dijsktra() {
         setUp10();
 
         List<Edge<Integer, Integer>> path = graph.dijkstra(graph.searchVertex(1), graph.searchVertex(5));
@@ -420,7 +419,6 @@ public class GraphAMTest {
         assertEquals(true, mst.areConnected(mstVertex1, mstVertex5));
     }
 
-
     @Test
     public void test3Prim() {
 
@@ -438,7 +436,6 @@ public class GraphAMTest {
     public void test1Kruskal() {
         setUp4();
         IGraph<Integer, Integer> mst = graph.kruskal();
-
 
         Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
         Vertex<Integer, Integer> mstVertex5 = mst.searchVertex(5);
@@ -488,7 +485,7 @@ public class GraphAMTest {
 
     @Test
     public void test2BFS() {
-        
+
         setUp5();
 
         Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
@@ -503,7 +500,7 @@ public class GraphAMTest {
     public void test3BFS() {
 
         setUp5();
-        
+
         Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
 
         graph.BFS(vertex5);
@@ -535,7 +532,7 @@ public class GraphAMTest {
         int totalWeight = graph.DFS(mst);
 
         assertEquals(7, totalWeight);
-    } 
+    }
 
     @Test
     public void test3DFS() {
