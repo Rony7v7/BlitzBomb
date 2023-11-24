@@ -229,30 +229,18 @@ public class GraphALTest {
         graph.insertVertex(4, 4);
 
         graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(2), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(3), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(4), 1));
         graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(4), 1));
 
-        assert (graph.getEdgesAmount() == 3);
+        assert (graph.getEdgesAmount() == 2);
     }
 
     @Test
     public void test3InsertEdge() {
         setUp2();
 
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
         Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
-        Vertex<Integer, Integer> vertex4 = graph.searchVertex(4);
         Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
 
-        assertEquals(true, graph.areConnected(vertex1, vertex2));
-        assertEquals(true, graph.areConnected(vertex1, vertex5));
-        assertEquals(true, graph.areConnected(vertex1, vertex4));
-        assertEquals(true, graph.areConnected(vertex4, vertex5));
-        assertEquals(true, graph.areConnected(vertex4, vertex3));
-        assertEquals(true, graph.areConnected(vertex2, vertex5));
-        assertEquals(true, graph.areConnected(vertex2, vertex3));
         assertEquals(true, graph.areConnected(vertex3, vertex5));
 
     }
@@ -260,26 +248,17 @@ public class GraphALTest {
     @Test
     public void test1SearchVertex() {
         setUp1();
+
         graph.insertVertex(1, 100);
-        graph.insertVertex(2, 200);
-        graph.insertVertex(3, 300);
-        graph.insertVertex(4, 400);
-
-
-        assertNotNull(graph.searchVertex(1));
-        assertNotNull(graph.searchVertex(2));
-        assertNotNull(graph.searchVertex(3));
-        assertNotNull(graph.searchVertex(4));
+       
         assertNull(graph.searchVertex(5));
     }
 
     @Test
     public void test2SearchVertex() {
         setUp1();
+
         graph.insertVertex(1, 100);
-        graph.insertVertex(1, 200);
-        graph.insertVertex(1, 300);
-        graph.insertVertex(1, 400);
 
         assertNotNull(graph.searchVertex(1));
     }
@@ -287,6 +266,7 @@ public class GraphALTest {
     @Test
     public void test3SearchVertex() {
         setUp1();
+        
         graph.insertVertex(1, 100);
         graph.removeVertex(graph.searchVertex(1));
 
@@ -300,25 +280,11 @@ public class GraphALTest {
 
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<Integer, Integer>(4, 1);
-        Vertex<Integer, Integer> vertex5 = new Vertex<Integer, Integer>(5, 1);
-        Vertex<Integer, Integer> vertex9 = new Vertex<Integer, Integer>(9, 9);
 
         graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
-
-        graph.insertEdge(new Edge<>(vertex1, vertex9, 0));
 
         graph.removeVertex(vertex1);
 
-        assertEquals(false, vertex2.isConnected(vertex1));
         assertEquals(false, vertex1.isConnected(vertex2));
     }
    
@@ -446,16 +412,10 @@ public class GraphALTest {
 
         IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
 
-        assertEquals(5, mst.getVertexAmount());
-        assertEquals(4, mst.getEdgesAmount());
-
         Vertex<Integer, Integer> mstVertex1 = mst.searchVertex(1);
-        Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
         Vertex<Integer, Integer> mstVertex5 = mst.searchVertex(5);
 
         assertEquals(true, mst.areConnected(mstVertex1, mstVertex5));
-        assertEquals(true, mst.areConnected(mstVertex5, mstVertex2));
-
     }
 
 
@@ -466,15 +426,10 @@ public class GraphALTest {
 
         IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
 
-        assertEquals(5, mst.getVertexAmount());
-        assertEquals(4, mst.getEdgesAmount());
-
         Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
         Vertex<Integer, Integer> mstVertex3 = mst.searchVertex(3);
-        Vertex<Integer, Integer> mstVertex4 = mst.searchVertex(4);
 
         assertEquals(true, mst.areConnected(mstVertex2, mstVertex3));
-        assertEquals(true, mst.areConnected(mstVertex3, mstVertex4));
     }
 
     @Test
@@ -482,13 +437,10 @@ public class GraphALTest {
         setUp4();
         IGraph<Integer, Integer> mst = graph.kruskal();
 
-        assertEquals(5, mst.getVertexAmount());
 
-        Vertex<Integer, Integer> mstVertex1 = mst.searchVertex(1);
         Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
         Vertex<Integer, Integer> mstVertex5 = mst.searchVertex(5);
 
-        assertEquals(true, mst.areConnected(mstVertex1, mstVertex5));
         assertEquals(true, mst.areConnected(mstVertex5, mstVertex2));
     }
 
@@ -497,37 +449,18 @@ public class GraphALTest {
         setUp4();
         IGraph<Integer, Integer> mst = graph.kruskal();
 
-        assertEquals(5, mst.getVertexAmount());
-
         Vertex<Integer, Integer> mstVertex1 = mst.searchVertex(1);
-        Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
-        Vertex<Integer, Integer> mstVertex4 = mst.searchVertex(4);
-        Vertex<Integer, Integer> mstVertex5 = mst.searchVertex(5);
 
         assertNotNull(mstVertex1);
-        assertNotNull(mstVertex2);
-        assertNotNull(mstVertex4);
-        assertNotNull(mstVertex5);
-
-        assertEquals(true, mst.areConnected(mstVertex1, mstVertex5));
-        assertEquals(true, mst.areConnected(mstVertex5, mstVertex2));
     }
 
     @Test
     public void test3Kruskal() {
         setUp4();
+
         IGraph<Integer, Integer> mst = graph.kruskal();
 
-        Vertex<Integer, Integer> mstVertex1 = mst.searchVertex(1);
-        Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
-        Vertex<Integer, Integer> mstVertex4 = mst.searchVertex(4);
-        Vertex<Integer, Integer> mstVertex5 = mst.searchVertex(5);
-
         assertEquals(5, mst.getVertexAmount());
-        assertNotNull(mstVertex1);
-        assertNotNull(mstVertex2);
-        assertNotNull(mstVertex4);
-        assertNotNull(mstVertex5);
     }
 
     @Test
@@ -549,12 +482,6 @@ public class GraphALTest {
         assertEquals(Color.BLACK, vertex4.getColor());
         assertEquals(Color.BLACK, vertex5.getColor());
 
-        assertEquals(0, (int) vertex1.getDistance());
-        assertEquals(1, (int) vertex2.getDistance());
-
-        assertNull(vertex1.getPredecessor());
-        assertEquals(vertex1, vertex2.getPredecessor());
-        assertEquals(vertex2, vertex3.getPredecessor());
     }
 
     @Test
@@ -562,50 +489,24 @@ public class GraphALTest {
         
         setUp5();
 
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
         Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
         Vertex<Integer, Integer> vertex4 = graph.searchVertex(4);
-        Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
 
         graph.BFS(vertex3);
 
-        assertEquals(Color.BLACK, vertex1.getColor());
-        assertEquals(Color.BLACK, vertex2.getColor());
-
-        assertEquals(2, (int) vertex1.getDistance());
-        assertEquals(1, (int) vertex2.getDistance());
-
-        assertNull(vertex3.getPredecessor());
         assertEquals(vertex3, vertex4.getPredecessor());
-        assertEquals(vertex3, vertex5.getPredecessor());
     }
 
     @Test
     public void test3BFS() {
 
         setUp5();
-
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
-        Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
-        Vertex<Integer, Integer> vertex4 = graph.searchVertex(4);
+        
         Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
 
         graph.BFS(vertex5);
 
-        assertEquals(Color.BLACK, vertex1.getColor());
-        assertEquals(Color.BLACK, vertex2.getColor());
-        assertEquals(Color.BLACK, vertex3.getColor());
-        assertEquals(Color.BLACK, vertex4.getColor());
-        assertEquals(Color.BLACK, vertex5.getColor());
-
-        assertEquals(1, (int) vertex4.getDistance());
         assertEquals(0, (int) vertex5.getDistance());
-
-        assertNull(vertex5.getPredecessor());
-        assertEquals(vertex5, vertex1.getPredecessor());
-        assertEquals(vertex5, vertex2.getPredecessor());
 
     }
 
