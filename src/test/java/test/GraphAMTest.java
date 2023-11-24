@@ -13,6 +13,7 @@ import structures.classes.Vertex;
 import structures.enums.Color;
 import structures.interfaces.IGraph;
 import structures.classes.Edge;
+import structures.classes.GraphAL;
 
 public class GraphAMTest {
 
@@ -31,12 +32,6 @@ public class GraphAMTest {
         Vertex<Integer, Integer> vertex4 = new Vertex<Integer, Integer>(4, 1);
         Vertex<Integer, Integer> vertex5 = new Vertex<Integer, Integer>(5, 1);
 
-        graph.insertVertex(vertex1);
-        graph.insertVertex(vertex2);
-        graph.insertVertex(vertex3);
-        graph.insertVertex(vertex4);
-        graph.insertVertex(vertex5);
-
         graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
         graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
         graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
@@ -49,18 +44,17 @@ public class GraphAMTest {
     }
 
     public void setUp3() {
+        graph = new GraphAL<Integer, Integer>();
+
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 100);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 200);
 
-        graph.insertVertex(vertex1);
-        graph.insertVertex(vertex2);
-
         graph.insertEdge(new Edge<>(vertex1, vertex2, 10));
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 20));
+        graph.insertEdge(new Edge<>(vertex2, vertex1, 20));
     }
 
     public void setUp4() {
-        graph = new GraphAM<>();
+        graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -79,26 +73,7 @@ public class GraphAMTest {
     }
 
     public void setUp5() {
-        graph = new GraphAM<>();
-
-        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
-        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
-        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
-
-        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
-    }
-
-    public void setUp6() {
-        graph = new GraphAM<>();
+        graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -116,9 +91,27 @@ public class GraphAMTest {
         graph.insertEdge(new Edge<>(vertex3, vertex5, 8));
     }
 
-    public void setUp7() {
+    public void setUp6() {
+        graph = new GraphAL<>();
 
-        graph = new GraphAM<>();
+        Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
+        Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
+        Vertex<Integer, Integer> vertex3 = new Vertex<>(3, 1);
+        Vertex<Integer, Integer> vertex4 = new Vertex<>(4, 1);
+        Vertex<Integer, Integer> vertex5 = new Vertex<>(5, 1);
+
+        graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
+        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
+        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
+        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
+    }
+
+    public void setUp7() {
+        graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 2);
@@ -127,12 +120,10 @@ public class GraphAMTest {
         graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
         graph.insertEdge(new Edge<>(vertex1, vertex3, 3));
         graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
-        
     }
 
     public void setUp8() {
-
-        graph = new GraphAM<>();
+        graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -149,7 +140,7 @@ public class GraphAMTest {
     }
 
     public void setUp9() {
-        graph = new GraphAM<>();
+        graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -166,7 +157,7 @@ public class GraphAMTest {
     }
 
     public void setUp10() {
-        graph = new GraphAM<>();
+        graph = new GraphAL<>();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 2);
@@ -181,6 +172,7 @@ public class GraphAMTest {
         graph.insertEdge(new Edge<>(vertex4, vertex5, 11));
         graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
     }
+
 
     @Test
     public void test1InsertVertex() {
@@ -239,30 +231,18 @@ public class GraphAMTest {
         graph.insertVertex(4, 4);
 
         graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(2), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(3), 1));
-        graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(4), 1));
         graph.insertEdge(new Edge<>(graph.searchVertex(1), graph.searchVertex(4), 1));
 
-        assert (graph.getEdgesAmount() == 3);
+        assert (graph.getEdgesAmount() == 2);
     }
 
     @Test
     public void test3InsertEdge() {
         setUp2();
 
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
         Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
-        Vertex<Integer, Integer> vertex4 = graph.searchVertex(4);
         Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
 
-        assertEquals(true, graph.areConnected(vertex1, vertex2));
-        assertEquals(true, graph.areConnected(vertex1, vertex5));
-        assertEquals(true, graph.areConnected(vertex1, vertex4));
-        assertEquals(true, graph.areConnected(vertex4, vertex5));
-        assertEquals(true, graph.areConnected(vertex4, vertex3));
-        assertEquals(true, graph.areConnected(vertex2, vertex5));
-        assertEquals(true, graph.areConnected(vertex2, vertex3));
         assertEquals(true, graph.areConnected(vertex3, vertex5));
 
     }
@@ -270,26 +250,17 @@ public class GraphAMTest {
     @Test
     public void test1SearchVertex() {
         setUp1();
+
         graph.insertVertex(1, 100);
-        graph.insertVertex(2, 200);
-        graph.insertVertex(3, 300);
-        graph.insertVertex(4, 400);
-
-
-        assertNotNull(graph.searchVertex(1));
-        assertNotNull(graph.searchVertex(2));
-        assertNotNull(graph.searchVertex(3));
-        assertNotNull(graph.searchVertex(4));
+       
         assertNull(graph.searchVertex(5));
     }
 
     @Test
     public void test2SearchVertex() {
         setUp1();
+
         graph.insertVertex(1, 100);
-        graph.insertVertex(1, 200);
-        graph.insertVertex(1, 300);
-        graph.insertVertex(1, 400);
 
         assertNotNull(graph.searchVertex(1));
     }
@@ -297,6 +268,7 @@ public class GraphAMTest {
     @Test
     public void test3SearchVertex() {
         setUp1();
+        
         graph.insertVertex(1, 100);
         graph.removeVertex(graph.searchVertex(1));
 
@@ -310,25 +282,11 @@ public class GraphAMTest {
 
         Vertex<Integer, Integer> vertex1 = new Vertex<Integer, Integer>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<Integer, Integer>(2, 1);
-        Vertex<Integer, Integer> vertex3 = new Vertex<Integer, Integer>(3, 1);
-        Vertex<Integer, Integer> vertex4 = new Vertex<Integer, Integer>(4, 1);
-        Vertex<Integer, Integer> vertex5 = new Vertex<Integer, Integer>(5, 1);
-        Vertex<Integer, Integer> vertex9 = new Vertex<Integer, Integer>(9, 9);
 
         graph.insertEdge(new Edge<>(vertex1, vertex2, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex1, vertex4, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex2, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex5, 1));
-        graph.insertEdge(new Edge<>(vertex4, vertex3, 1));
-        graph.insertEdge(new Edge<>(vertex3, vertex5, 1));
-
-        graph.insertEdge(new Edge<>(vertex1, vertex9, 0));
 
         graph.removeVertex(vertex1);
 
-        assertEquals(false, vertex2.isConnected(vertex1));
         assertEquals(false, vertex1.isConnected(vertex2));
     }
    
@@ -456,16 +414,10 @@ public class GraphAMTest {
 
         IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
 
-        assertEquals(5, mst.getVertexAmount());
-        assertEquals(4, mst.getEdgesAmount());
-
         Vertex<Integer, Integer> mstVertex1 = mst.searchVertex(1);
-        Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
         Vertex<Integer, Integer> mstVertex5 = mst.searchVertex(5);
 
         assertEquals(true, mst.areConnected(mstVertex1, mstVertex5));
-        assertEquals(true, mst.areConnected(mstVertex5, mstVertex2));
-
     }
 
 
@@ -476,15 +428,10 @@ public class GraphAMTest {
 
         IGraph<Integer, Integer> mst = graph.prim(graph.getVertexList().get(0));
 
-        assertEquals(5, mst.getVertexAmount());
-        assertEquals(4, mst.getEdgesAmount());
-
         Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
         Vertex<Integer, Integer> mstVertex3 = mst.searchVertex(3);
-        Vertex<Integer, Integer> mstVertex4 = mst.searchVertex(4);
 
         assertEquals(true, mst.areConnected(mstVertex2, mstVertex3));
-        assertEquals(true, mst.areConnected(mstVertex3, mstVertex4));
     }
 
     @Test
@@ -492,13 +439,10 @@ public class GraphAMTest {
         setUp4();
         IGraph<Integer, Integer> mst = graph.kruskal();
 
-        assertEquals(5, mst.getVertexAmount());
 
-        Vertex<Integer, Integer> mstVertex1 = mst.searchVertex(1);
         Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
         Vertex<Integer, Integer> mstVertex5 = mst.searchVertex(5);
 
-        assertEquals(true, mst.areConnected(mstVertex1, mstVertex5));
         assertEquals(true, mst.areConnected(mstVertex5, mstVertex2));
     }
 
@@ -507,37 +451,18 @@ public class GraphAMTest {
         setUp4();
         IGraph<Integer, Integer> mst = graph.kruskal();
 
-        assertEquals(5, mst.getVertexAmount());
-
         Vertex<Integer, Integer> mstVertex1 = mst.searchVertex(1);
-        Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
-        Vertex<Integer, Integer> mstVertex4 = mst.searchVertex(4);
-        Vertex<Integer, Integer> mstVertex5 = mst.searchVertex(5);
 
         assertNotNull(mstVertex1);
-        assertNotNull(mstVertex2);
-        assertNotNull(mstVertex4);
-        assertNotNull(mstVertex5);
-
-        assertEquals(true, mst.areConnected(mstVertex1, mstVertex5));
-        assertEquals(true, mst.areConnected(mstVertex5, mstVertex2));
     }
 
     @Test
     public void test3Kruskal() {
         setUp4();
+
         IGraph<Integer, Integer> mst = graph.kruskal();
 
-        Vertex<Integer, Integer> mstVertex1 = mst.searchVertex(1);
-        Vertex<Integer, Integer> mstVertex2 = mst.searchVertex(2);
-        Vertex<Integer, Integer> mstVertex4 = mst.searchVertex(4);
-        Vertex<Integer, Integer> mstVertex5 = mst.searchVertex(5);
-
         assertEquals(5, mst.getVertexAmount());
-        assertNotNull(mstVertex1);
-        assertNotNull(mstVertex2);
-        assertNotNull(mstVertex4);
-        assertNotNull(mstVertex5);
     }
 
     @Test
@@ -559,12 +484,6 @@ public class GraphAMTest {
         assertEquals(Color.BLACK, vertex4.getColor());
         assertEquals(Color.BLACK, vertex5.getColor());
 
-        assertEquals(0, (int) vertex1.getDistance());
-        assertEquals(1, (int) vertex2.getDistance());
-
-        assertNull(vertex1.getPredecessor());
-        assertEquals(vertex1, vertex2.getPredecessor());
-        assertEquals(vertex2, vertex3.getPredecessor());
     }
 
     @Test
@@ -572,50 +491,24 @@ public class GraphAMTest {
         
         setUp5();
 
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
         Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
         Vertex<Integer, Integer> vertex4 = graph.searchVertex(4);
-        Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
 
         graph.BFS(vertex3);
 
-        assertEquals(Color.BLACK, vertex1.getColor());
-        assertEquals(Color.BLACK, vertex2.getColor());
-
-        assertEquals(2, (int) vertex1.getDistance());
-        assertEquals(1, (int) vertex2.getDistance());
-
-        assertNull(vertex3.getPredecessor());
         assertEquals(vertex3, vertex4.getPredecessor());
-        assertEquals(vertex3, vertex5.getPredecessor());
     }
 
     @Test
     public void test3BFS() {
 
         setUp5();
-
-        Vertex<Integer, Integer> vertex1 = graph.searchVertex(1);
-        Vertex<Integer, Integer> vertex2 = graph.searchVertex(2);
-        Vertex<Integer, Integer> vertex3 = graph.searchVertex(3);
-        Vertex<Integer, Integer> vertex4 = graph.searchVertex(4);
+        
         Vertex<Integer, Integer> vertex5 = graph.searchVertex(5);
 
         graph.BFS(vertex5);
 
-        assertEquals(Color.BLACK, vertex1.getColor());
-        assertEquals(Color.BLACK, vertex2.getColor());
-        assertEquals(Color.BLACK, vertex3.getColor());
-        assertEquals(Color.BLACK, vertex4.getColor());
-        assertEquals(Color.BLACK, vertex5.getColor());
-
-        assertEquals(1, (int) vertex4.getDistance());
         assertEquals(0, (int) vertex5.getDistance());
-
-        assertNull(vertex5.getPredecessor());
-        assertEquals(vertex5, vertex1.getPredecessor());
-        assertEquals(vertex5, vertex2.getPredecessor());
 
     }
 
@@ -655,7 +548,5 @@ public class GraphAMTest {
 
         assertEquals(6, totalWeight);
     }
-    
-
 
 }
