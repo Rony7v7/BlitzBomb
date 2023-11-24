@@ -1,4 +1,4 @@
-package ui;
+package ui.menu;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import model.enums.Difficulty;
+import ui.MainApp;
 
 public class setDifficultyViewController implements Initializable {
 

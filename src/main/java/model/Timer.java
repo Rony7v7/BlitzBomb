@@ -1,4 +1,4 @@
-package Controller;
+package model;
 
 import javafx.util.Duration;
 import java.util.function.Consumer;

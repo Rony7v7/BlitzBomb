@@ -1,4 +1,4 @@
-package ui;
+package ui.menu;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import ui.MainApp;
 
 public class setGraphViewController implements Initializable {
 

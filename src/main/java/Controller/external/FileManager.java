@@ -1,4 +1,4 @@
-package Controller;
+package Controller.external;
 
 import java.io.BufferedReader;
 import java.io.File;

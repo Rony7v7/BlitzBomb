@@ -1,4 +1,4 @@
-package ui;
+package ui.game;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -19,8 +19,11 @@ import structures.classes.GraphAL;
 import structures.classes.GraphAM;
 import structures.classes.Vertex;
 import structures.interfaces.IGraph;
+import ui.MainApp;
+import ui.menu.MainViewController;
 import model.BombWrapper;
 import model.Player;
+import model.Timer;
 import model.enums.Difficulty;
 import model.enums.GameStatus;
 import model.enums.TypeOfNode;
@@ -30,9 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import Controller.FileManager;
 import Controller.LevelGenerator;
-import Controller.Timer;
+import Controller.PowerUpController;
+import Controller.external.FileManager;
 
 public class GameViewController implements Initializable {
 

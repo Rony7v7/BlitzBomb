@@ -1,10 +1,11 @@
-package ui;
+package ui.menu;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.enums.GameStatus;
+import ui.MainApp;
 
 public class AlertController {
 

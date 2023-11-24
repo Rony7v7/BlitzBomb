@@ -1,4 +1,4 @@
-package ui;
+package ui.menu;
 
 import java.io.IOException;
 import java.net.URL;
@@ -11,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import model.enums.Difficulty;
+import ui.MainApp;
+import ui.game.GameViewController;
 
 public class MainViewController implements Initializable {
 

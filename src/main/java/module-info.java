@@ -6,7 +6,10 @@ module ui {
     requires java.desktop;
 
     opens ui to javafx.fxml;
+    opens ui.game to javafx.fxml;
+    opens ui.menu to javafx.fxml;
     opens Controller to javafx.fxml, com.google.gson;
+    opens Controller.external to javafx.fxml, com.google.gson;
     opens model to com.google.gson;
     opens model.enums to com.google.gson;
 

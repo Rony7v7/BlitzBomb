@@ -8,6 +8,10 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.enums.Difficulty;
 import model.enums.GameStatus;
+import ui.game.GameViewController;
+import ui.game.SoundController;
+import ui.menu.AlertController;
+import ui.menu.MainViewController;
 
 import java.io.IOException;
 
