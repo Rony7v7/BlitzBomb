@@ -20,7 +20,7 @@ public class MainViewController {
     private TextField nameInput;
 
     private static GraphType graphType = GraphType.ADJACENCY_LIST;
-    private static Difficulty difficulty = Difficulty.MEDIUM;
+    private static Difficulty difficulty = Difficulty.EASY;
 
     @FXML
     private void play(ActionEvent event) {

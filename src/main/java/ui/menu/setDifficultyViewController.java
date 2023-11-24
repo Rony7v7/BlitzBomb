@@ -65,7 +65,7 @@ public class setDifficultyViewController implements Initializable {
 
     @FXML
     public void cancel(ActionEvent event) {
-        MainViewController.setDifficulty(Difficulty.MEDIUM);
+        MainViewController.setDifficulty(Difficulty.EASY);
         MainApp.closeAuxStage();
 
     }
