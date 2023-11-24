@@ -1,18 +1,15 @@
 # BlitzBomb
-
-Members:
--  Juan José De La Pava - A00381213          	 + Marlon Gómez Victoria
--  David Artunduaga Penagos - A00396342 	     + Marlon Gómez Victoria
--  Rony Farid Ordoñez - A00397968            	 + Jeison Mejía Trujillo
-
-# Blitz Bomb: Kevin's Challenge
-
 Welcome to Blitz Bomb, where you take on the role of Kevin in a strategic race against time to activate all the bombs! Your mission is to navigate the map efficiently, activating each bomb while avoiding unnecessary detours.
+
+## Team Members
+- [David Artunduaga Penagos](https://github.com/David104087)
+- [Juan José De La Pava](https://github.com/JuanJDlp)
+- [Rony Farid Ordoñez](https://github.com/Rony7v7)
 
 ## **How to Play:**
 
 ### **Movement**
-Control Kevin's movements using the WASD keys. Plan your path wisely to cover all the bombs before time runs out.
+Control Kevin's movements using the ___WASD___ keys. Plan your path wisely to cover all the bombs before time runs out.
 
 ### **Power Up - Dijkstra's Insight**
 Kevin has a special power-up - Dijkstra's Insight. This allows you to find the shortest path between two points on the map. To activate it, follow these steps:
@@ -37,4 +34,4 @@ Use this power-up strategically to optimize your route and reach the bombs more 
 ## **Objective:**
 Activate all the bombs by traversing the shortest path possible. Challenge yourself to improve your strategy and beat your own record!
 
-Are you ready, Kevin? The clock is ticking, and the bombs await activation. Good luck!
+Are you ready, Kelvin? The clock is ticking, and the bombs await activation. Good luck!
