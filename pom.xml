@@ -92,6 +92,19 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-javadoc-plugin</artifactId>
+                 <version>3.6.2</version>
+            <configuration>
+                        <sourcepath>${project.basedir}/src/main/java</sourcepath>
+                        <outputDirectory>docs/javadoc</outputDirectory>
+                        <reportOutputDirectory>docs/javadoc</reportOutputDirectory>
+                        <failOnError>false</failOnError>
+                        <subpackages>ui:Controller:model:structures</subpackages>
+            </configuration>
+            </plugin>
+
             <!-- Makes the jLink setup so you can give it to your friends  -->
             <plugin>
                 <groupId>org.moditect</groupId>
