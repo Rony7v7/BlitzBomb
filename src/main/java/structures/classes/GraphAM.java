@@ -311,24 +311,26 @@ public class GraphAM<K, V> implements IGraph<K, V> {
      * Performs a Depth-First Search (DFS) traversal on the graph represented by the minimumSpanningTree.
      * Returns the total weight of the visited vertices.
      *
-     * @param minimumSpanningTree the graph on which the DFS traversal is performed
+     * @param mst the graph on which the DFS traversal is performed
      * @return the total weight of the visited vertices
      */
     @Override
-    public int DFS(IGraph<K, V> minimumSpanningTree) {
+    public int DFS(IGraph<K, V> mst) {
 
         int totalWeight = 0;
 
         // Initialize the vertices
-        for (Vertex<K, V> vertex : minimumSpanningTree.getVertexList()) {
+        for (Vertex<K, V> vertex : mst.getVertexList()) {
             vertex.setColor(Color.WHITE);
             vertex.setPredecessor(null);
         }
 
+        Set<Vertex<K, V>> visited = new HashSet<>();
+
         // Visit all vertices
-        for (Vertex<K, V> vertex : minimumSpanningTree.getVertexList()) {
+        for (Vertex<K, V> vertex : mst.getVertexList()) {
             if (vertex.getColor() == Color.WHITE) {
-                totalWeight += DFSVisit(vertex);
+                totalWeight += DFSVisit(vertex, visited, mst);
             }
         }
 
@@ -343,7 +345,7 @@ public class GraphAM<K, V> implements IGraph<K, V> {
      * @param vertex the starting vertex for the DFS visit
      * @return the total weight of the edges traversed during the DFS visit
      */
-    private int DFSVisit(Vertex<K, V> vertex) {
+    private int DFSVisit(Vertex<K, V> vertex, Set<Vertex<K, V>> visited, IGraph<K, V> mst) {
         int totalWeight = 0;
 
         vertex.setColor(Color.GRAY);
@@ -351,10 +353,9 @@ public class GraphAM<K, V> implements IGraph<K, V> {
         for (Edge<K, V> edge : getVertexEdges(vertex)) {
             Vertex<K, V> nextVertex = edge.getVertex2();
 
-            if (nextVertex.getColor() == Color.WHITE) {
+            if (!visited.contains(nextVertex) && mst.getEdgeList().contains(edge)) {
                 nextVertex.setPredecessor(vertex);
                 totalWeight += edge.getWeight();
-                totalWeight += DFSVisit(nextVertex);
             }
         }
 
