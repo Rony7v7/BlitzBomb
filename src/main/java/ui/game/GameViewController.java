@@ -135,16 +135,7 @@ public class GameViewController implements Initializable {
         // Calculate the minimum spanning tree of the graph, i.e. the shortest path
         IGraph<String, BombWrapper> MST = graph.prim(graph.getVertexList().get(0));
 
-        // TODO: QUITAR ESTO Y PONER EL DFS
-        int totalTime = 0;
-        for (Edge<String, BombWrapper> edge : MST.getEdgeList()) {
-            totalTime += edge.getWeight();
-        }
-        // Calculate the time it takes to traverse the shortest path
-        int seconds = graph.DFS(MST);
-        System.out.println("DFS Seconds: " + seconds);
-        System.out.println("Total Seconds: " + totalTime);
-        // TODO: QUITAR ESTO Y PONER EL DFS
+        int totalTime = graph.DFS(MST);
 
         switch (difficulty) {
             case EASY -> {

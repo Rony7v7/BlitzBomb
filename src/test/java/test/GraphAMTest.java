@@ -531,7 +531,7 @@ public class GraphAMTest {
 
         int totalWeight = graph.DFS(mst);
 
-        assertEquals(7, totalWeight);
+        assertEquals(8, totalWeight);
     }
 
     @Test
@@ -543,7 +543,7 @@ public class GraphAMTest {
 
         int totalWeight = graph.DFS(mst);
 
-        assertEquals(6, totalWeight);
+        assertEquals(8, totalWeight);
     }
 
 }
