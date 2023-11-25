@@ -295,12 +295,12 @@ public class GraphAL<K, V> implements IGraph<K, V> {
             vertex.setPredecessor(null);
         }
 
-        ArrayList<Edge<K, V>> visitedEdges = new ArrayList<>();
+        Set<Edge<K, V>> visited = new HashSet<>();
 
         // Visit all vertices
         for (Vertex<K, V> vertex : mst.getVertexList()) {
             if (vertex.getColor() == Color.WHITE) {
-                totalWeight += DFSVisit(vertex, visitedEdges, mst);
+                totalWeight += DFSVisit(vertex, visited, mst);
             }
         }
 
@@ -314,13 +314,13 @@ public class GraphAL<K, V> implements IGraph<K, V> {
      * @param vertex the starting vertex for the DFS visit
      * @return the total weight of the visited vertices
      */
-    private int DFSVisit(Vertex<K, V> vertex, ArrayList<Edge<K, V>> visitedEdges, IGraph<K, V> mst) {
+    private int DFSVisit(Vertex<K, V> vertex, Set<Edge<K, V>> visited, IGraph<K, V> mst) {
         int totalWeight = 0;
 
         for (Edge<K, V> edge : vertex.getEdges()) {
 
-            if (!visitedEdges.contains(edge) && mst.getEdgeList().contains(edge)) {
-                visitedEdges.add(edge);
+            if (!visited.contains(edge) && mst.getEdgeList().contains(edge)) {
+                visited.add(edge);
                 totalWeight += edge.getWeight();
             }
 
