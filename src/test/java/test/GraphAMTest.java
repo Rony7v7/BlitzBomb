@@ -54,7 +54,7 @@ public class GraphAMTest {
     }
 
     public void setUp4() {
-        graph = new GraphAL<>();
+        setUp1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -73,7 +73,7 @@ public class GraphAMTest {
     }
 
     public void setUp5() {
-        graph = new GraphAL<>();
+        setUp1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -92,7 +92,7 @@ public class GraphAMTest {
     }
 
     public void setUp6() {
-        graph = new GraphAL<>();
+        setUp1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -111,7 +111,7 @@ public class GraphAMTest {
     }
 
     public void setUp7() {
-        graph = new GraphAL<>();
+        setUp1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 2);
@@ -123,7 +123,7 @@ public class GraphAMTest {
     }
 
     public void setUp8() {
-        graph = new GraphAL<>();
+        setUp1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -140,7 +140,7 @@ public class GraphAMTest {
     }
 
     public void setUp9() {
-        graph = new GraphAL<>();
+        setUp1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 1);
@@ -157,7 +157,7 @@ public class GraphAMTest {
     }
 
     public void setUp10() {
-        graph = new GraphAL<>();
+        setUp1();
 
         Vertex<Integer, Integer> vertex1 = new Vertex<>(1, 1);
         Vertex<Integer, Integer> vertex2 = new Vertex<>(2, 2);

@@ -285,20 +285,22 @@ public class GraphAL<K, V> implements IGraph<K, V> {
      * performed with the DFS algorithm.
      */
     @Override
-    public int DFS(IGraph<K, V> minimumSpanningTree) {
+    public int DFS(IGraph<K, V> mst) {
 
         int totalWeight = 0;
 
         // Initialize the vertices
-        for (Vertex<K, V> vertex : minimumSpanningTree.getVertexList()) {
+        for (Vertex<K, V> vertex : mst.getVertexList()) {
             vertex.setColor(Color.WHITE);
             vertex.setPredecessor(null);
         }
 
+        ArrayList<Edge<K, V>> visitedEdges = new ArrayList<>();
+
         // Visit all vertices
-        for (Vertex<K, V> vertex : minimumSpanningTree.getVertexList()) {
+        for (Vertex<K, V> vertex : mst.getVertexList()) {
             if (vertex.getColor() == Color.WHITE) {
-                totalWeight += DFSVisit(vertex);
+                totalWeight += DFSVisit(vertex, visitedEdges, mst);
             }
         }
 
@@ -312,21 +314,17 @@ public class GraphAL<K, V> implements IGraph<K, V> {
      * @param vertex the starting vertex for the DFS visit
      * @return the total weight of the visited vertices
      */
-    private int DFSVisit(Vertex<K, V> vertex) {
+    private int DFSVisit(Vertex<K, V> vertex, ArrayList<Edge<K, V>> visitedEdges, IGraph<K, V> mst) {
         int totalWeight = 0;
 
-        vertex.setColor(Color.GRAY);
-
         for (Edge<K, V> edge : vertex.getEdges()) {
-            Vertex<K, V> nextVertex = edge.getVertex2();
 
-            if (nextVertex.getColor() == Color.WHITE) {
-                nextVertex.setPredecessor(vertex);
+            if (!visitedEdges.contains(edge) && mst.getEdgeList().contains(edge)) {
+                visitedEdges.add(edge);
                 totalWeight += edge.getWeight();
-                totalWeight += DFSVisit(nextVertex);
             }
-        }
 
+        }
         vertex.setColor(Color.BLACK);
 
         return totalWeight;

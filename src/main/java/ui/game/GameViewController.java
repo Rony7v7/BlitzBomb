@@ -143,6 +143,7 @@ public class GameViewController implements Initializable {
         // Calculate the time it takes to traverse the shortest path
         int seconds = graph.DFS(MST);
         System.out.println("DFS Seconds: " + seconds);
+        System.out.println("Total Seconds: " + totalTime);
         // TODO: QUITAR ESTO Y PONER EL DFS
 
         switch (difficulty) {
