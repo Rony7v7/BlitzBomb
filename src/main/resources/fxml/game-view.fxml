@@ -27,25 +27,21 @@
                </font>
             </Label>
             <Separator layoutX="1.0" layoutY="81.0" prefHeight="33.0" prefWidth="155.0" style="-fx-padding: 15;" />
-            <Label layoutX="15.0" layoutY="125.0" text="Ranking" textFill="WHITE">
+            <Label layoutX="15.0" layoutY="115.0" text="Ranking" textFill="WHITE">
                <font>
                   <Font name="SimSun" size="36.0" />
                </font>
             </Label>
-            <ScrollPane layoutX="11.0" layoutY="123.0" prefHeight="424.0" prefWidth="135.0">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="132.0">
-                     <children>
-                        <VBox fx:id="rankingVBox" prefHeight="410.0" prefWidth="119.0" style="-fx-background-color: WHITE; -fx-spacing: 5;" />
-                     </children>
-                  </AnchorPane>
-              </content>
-            </ScrollPane>
-            <Button fx:id="powerUp" layoutX="11.0" layoutY="596.0" mnemonicParsing="false" onAction="#powerUp" prefHeight="31.0" prefWidth="135.0" styleClass="powerup-button" stylesheets="@../styles/style.css" text="PowerUp">
+            <Button fx:id="powerUp" layoutX="11.0" layoutY="611.0" mnemonicParsing="false" onAction="#powerUp" prefHeight="31.0" prefWidth="135.0" styleClass="powerup-button" stylesheets="@../styles/style.css" text="PowerUp">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
+            <ScrollPane layoutX="1.0" layoutY="163.0" prefHeight="430.0" prefWidth="155.0">
+               <content>
+                  <VBox fx:id="rankingVBox" prefHeight="427.0" prefWidth="151.0" style="-fx-background-color: WHITE;" />
+               </content>
+            </ScrollPane>
          </children>
       </Pane>
       <Canvas fx:id="canvas" height="670.0" layoutX="68.0" layoutY="16.0" width="713.0" />

@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -442,7 +443,8 @@ public class GameViewController implements Initializable {
     /**
      * Generates a random graph based on the specified graph type.
      *
-     * @param graphType the type of graph to generate (ADJACENCY_LIST or ADJACENCY_MATRIX)
+     * @param graphType the type of graph to generate (ADJACENCY_LIST or
+     *                  ADJACENCY_MATRIX)
      * @return the generated graph
      */
     private IGraph<String, BombWrapper> generateRandomGraph(GraphType graphType) {
@@ -479,7 +481,8 @@ public class GameViewController implements Initializable {
      * 
      * @param positionX The x-coordinate of the avatar's position.
      * @param positionY The y-coordinate of the avatar's position.
-     * @return The vertex with which the avatar collided, or null if no collision occurred.
+     * @return The vertex with which the avatar collided, or null if no collision
+     *         occurred.
      */
     private Vertex<String, BombWrapper> detectAvatarCollisionWithVertex(double positionX, double positionY) {
         for (Vertex<String, BombWrapper> vertex : graph.getVertexList()) {
@@ -532,6 +535,7 @@ public class GameViewController implements Initializable {
 
             Label label = new Label(nickname);
             hBox.getChildren().add(label);
+            HBox.setHgrow(label, Priority.ALWAYS);
 
             label = new Label(score);
             hBox.getChildren().add(label);
@@ -545,7 +549,8 @@ public class GameViewController implements Initializable {
     /**
      * Saves the player's information and updates the players ranking.
      * The player's nickname and score are added to the ranking list.
-     * The ranking list is then sorted in descending order based on the players' scores.
+     * The ranking list is then sorted in descending order based on the players'
+     * scores.
      * Finally, the updated ranking list is saved.
      */
     private void savePlayer() {
@@ -572,8 +577,10 @@ public class GameViewController implements Initializable {
     // -------------- GAME STATUS ------------------
     /**
      * Checks the game status to determine if the player has won or lost.
-     * If all bombs are detonated and the player has reached the end, the player wins the game.
-     * If not all bombs are detonated and the player has reached the end, the player receives a penalty and loses the game.
+     * If all bombs are detonated and the player has reached the end, the player
+     * wins the game.
+     * If not all bombs are detonated and the player has reached the end, the player
+     * receives a penalty and loses the game.
      */
     private void checkGameStatus() {
 
@@ -591,7 +598,8 @@ public class GameViewController implements Initializable {
     /**
      * Handles the logic for winning the game.
      * This method is called when the game is won by the player.
-     * It stops all running threads and displays the game over screen with the player's score.
+     * It stops all running threads and displays the game over screen with the
+     * player's score.
      */
     private void handleWinGame() {
         Platform.runLater(() -> {
@@ -606,7 +614,8 @@ public class GameViewController implements Initializable {
 
     /**
      * Handles the win game event with penalty.
-     * This method is responsible for stopping all threads, triggering the game over event with the WIN_PENALTY status, and passing the player's score.
+     * This method is responsible for stopping all threads, triggering the game over
+     * event with the WIN_PENALTY status, and passing the player's score.
      * It runs on the JavaFX application thread using Platform.runLater().
      */
     private void handleWinGameWithPenality() {
