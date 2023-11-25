@@ -37,9 +37,9 @@
                   <Font size="15.0" />
                </font>
             </Button>
-            <ScrollPane layoutX="1.0" layoutY="163.0" prefHeight="430.0" prefWidth="155.0">
+            <ScrollPane layoutX="6.0" layoutY="169.0" prefHeight="430.0" prefWidth="144.0" style="-fx-background-color: TRANSPARENT; -fx-border-radius: 0;">
                <content>
-                  <VBox fx:id="rankingVBox" prefHeight="427.0" prefWidth="151.0" style="-fx-background-color: WHITE;" />
+                  <VBox fx:id="rankingVBox" prefHeight="427.0" prefWidth="136.0" style="-fx-background-color: TRANSPARENT;" />
                </content>
             </ScrollPane>
          </children>

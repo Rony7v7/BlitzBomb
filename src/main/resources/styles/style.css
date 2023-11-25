@@ -87,8 +87,12 @@
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
 
-    -fx-spacing: 10px;
+    -fx-spacing: 15px;
     -fx-padding: 10px;
+
+    /* set min and max widht */
+    -fx-min-width: 130px;
+    -fx-max-width: 130px;
 
 }
 
@@ -97,13 +101,14 @@
     -fx-font-size: 15px;
     -fx-text-fill: #ffffff;
     /* set min and max widht */
+    -fx-min-width: 75px;
+    -fx-max-width: 75px;
 }
 
 .rankingScore-label {
     -fx-font-family: "Simsun";
     -fx-font-size: 15px;
     -fx-text-fill: #FD8C2A;
-    -fx-padding: 0 0 0 15px;
 }
 
 .powerup-button {

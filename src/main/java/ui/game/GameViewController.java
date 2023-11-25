@@ -525,6 +525,7 @@ public class GameViewController implements Initializable {
      */
     private void loadRanking() {
         ArrayList<String> playersRanking = fileManager.loadPlayers();
+        rankingVBox.setPrefWidth(130);
 
         for (String player : playersRanking) {
             String[] playerInfo = player.split(":");
