@@ -280,9 +280,15 @@ public class GraphAL<K, V> implements IGraph<K, V> {
         return true;
     }
 
-    /*
-     * This method returns the total weight of the minimum spanning tree
-     * performed with the DFS algorithm.
+
+    /**
+     * The DFS function performs a depth-first search on a given graph and returns the total weight of the
+     * visited edges.
+     * 
+     * @param mst The parameter `mst` is an object of type `IGraph<K, V>`, which represents a graph. It is
+     * used to perform depth-first search (DFS) on the graph and calculate the total weight of the graph.
+     * @return The method is returning an integer value, which represents the total weight of the minimum
+     * spanning tree (MST) found using Depth First Search (DFS) algorithm.
      */
     @Override
     public int DFS(IGraph<K, V> mst) {
@@ -308,11 +314,17 @@ public class GraphAL<K, V> implements IGraph<K, V> {
     }
 
     /**
-     * Performs a depth-first search (DFS) visit starting from the given vertex.
-     * Returns the total weight of the visited vertices.
-     *
-     * @param vertex the starting vertex for the DFS visit
-     * @return the total weight of the visited vertices
+     * The function performs a depth-first search on a vertex, adding the weights of visited edges to a
+     * total weight and marking the vertex as black.
+     * 
+     * @param vertex The vertex parameter represents the current vertex being visited in the Depth-First
+     * Search algorithm.
+     * @param visited The "visited" parameter is a set of edges that have already been visited during the
+     * Depth-First Search traversal.
+     * @param mst The parameter "mst" is of type IGraph<K, V>, which represents the minimum spanning tree
+     * (MST) of the graph. It is used to check if an edge is present in the MST or not.
+     * @return The method is returning an integer value, which represents the total weight of the visited
+     * edges.
      */
     private int DFSVisit(Vertex<K, V> vertex, Set<Edge<K, V>> visited, IGraph<K, V> mst) {
         int totalWeight = 0;
