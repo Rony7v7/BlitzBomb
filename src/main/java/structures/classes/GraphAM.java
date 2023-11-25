@@ -338,12 +338,19 @@ public class GraphAM<K, V> implements IGraph<K, V> {
 
     }
 
+
     /**
-     * Performs a Depth First Search (DFS) visit starting from the given vertex.
-     * This method recursively explores the graph, visiting each vertex and accumulating the total weight of the edges traversed.
-     *
-     * @param vertex the starting vertex for the DFS visit
-     * @return the total weight of the edges traversed during the DFS visit
+     * The DFSVisit function performs a depth-first search on a graph, updating the visited set and
+     * calculating the total weight of edges in the minimum spanning tree.
+     * 
+     * @param vertex The vertex parameter is an instance of the Vertex class, representing the current
+     * vertex being visited in the depth-first search algorithm.
+     * @param visited The "visited" parameter is a set of vertices that have already been visited during
+     * the Depth-First Search traversal.
+     * @param mst mst is an instance of the IGraph interface, which represents a minimum spanning tree. It
+     * contains a list of edges that make up the minimum spanning tree.
+     * @return The method is returning the total weight of the edges in the minimum spanning tree (mst)
+     * that are adjacent to the given vertex and have not been visited yet.
      */
     private int DFSVisit(Vertex<K, V> vertex, Set<Vertex<K, V>> visited, IGraph<K, V> mst) {
         int totalWeight = 0;
