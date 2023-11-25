@@ -397,16 +397,14 @@ public class GameViewController implements Initializable {
     }
 
     /**
-     * Este es el metodo encargado de poner el peso de la arista en el canvas
-     * Calcula el peso del vertice y luego se lo pinta en las cordiandas del vertice
+     * Draws the weight of an edge on the game canvas.
      * 
-     * @param edge la arista a la que se le va a poner el peso
+     * @param edge The edge whose weight is to be drawn.
      */
     private void drawEdgeWeight(Edge<String, BombWrapper> edge) {
         double targetX = edge.getVertex2().getValue().X;
         double targetY = edge.getVertex2().getValue().Y;
 
-        // Como se va a ver el texto
         Text text = new Text(edge.getWeight() + "");
         text.setFill(Color.RED);
         text.setFont(new Font(32));
