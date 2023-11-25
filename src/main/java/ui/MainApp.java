@@ -72,6 +72,11 @@ public class MainApp extends Application {
         loadCss(scene);
         stage.setTitle(title);
         stage.setScene(scene);
+
+        // Center window in current screen
+        stage.setX(Screen.getPrimary().getVisualBounds().getMaxX() / 2 - stage.getWidth() / 2);
+        stage.setY(Screen.getPrimary().getVisualBounds().getMaxY() / 2 - stage.getHeight() / 2);
+
         stage.show();
 
         return loader;
@@ -113,6 +118,7 @@ public class MainApp extends Application {
         auxStage = new Stage();
         Scene scene = new Scene(loadFXML(fxml).load());
         auxStage.setScene(scene);
+        auxStage.setResizable(false);
         auxStage.show();
     }
 
