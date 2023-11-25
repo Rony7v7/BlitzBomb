@@ -10,7 +10,10 @@ import model.enums.TypeOfNode;
  */
 public class BombWrapper {
     private Bomb bomb;
+    
     private Image idle;
+    private Image onBomb;
+    private Image detonated;
 
     public double X;
     public double Y;
@@ -29,11 +32,13 @@ public class BombWrapper {
         }
         this.radius = radius;
         this.idle = new Image(getClass().getResource("/assets/Graph/Empty_Vertex.png").toExternalForm());
+        this.onBomb = new Image(getClass().getResource("/assets/Graph/bomb.png").toExternalForm());
+        this.detonated = new Image(getClass().getResource("/assets/Graph/activated_vertex.png").toExternalForm());
     }
 
     public void detonateBomb() {
         this.bomb.setDetonated(true);
-        this.idle = new Image(getClass().getResource("/assets/Graph/activated_vertex.png").toExternalForm());
+        this.idle = detonated;
     }
 
     public Image getIdle() {
@@ -78,7 +83,7 @@ public class BombWrapper {
     public void setBomb(Bomb bomb) {
         if (bomb != null) {
             this.type = TypeOfNode.BOMB;
-            this.idle = new Image(getClass().getResource("/assets/Graph/bomb.png").toExternalForm());
+            this.idle = onBomb;
         }
         this.bomb = bomb;
     }
